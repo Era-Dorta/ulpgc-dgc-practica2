@@ -1,0 +1,25 @@
+#define WALK_SPEED 35
+#define INBOX 1
+#define OUTBOX 5
+#define SERVERBOX 1
+#define NXTBOX 0
+
+task main(){
+	//Move pen to paint
+	//OnFwd(OUT_A, 15);
+	string msg;
+     while(true){
+
+		ClearScreen();
+
+        while( ReceiveMessage( NXTBOX, true, msg ) ){
+			TextOut(0,LCD_LINE3,"Waiting for server ...");
+		 }
+
+		 ClearScreen();
+		 TextOut(0,LCD_LINE1,"Got msg");
+		 TextOut(0,LCD_LINE2,msg);
+		 Wait(15*1000);
+     }
+}
+
