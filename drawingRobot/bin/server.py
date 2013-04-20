@@ -20,18 +20,21 @@ if sys.argv[1] == 'send':
     print "Message sent"
 else:
     print "Got wait"
-    times = sys.argv[2]
-    print "wait "  + times
+    times = int(sys.argv[2])
+    print "wait "  + str(times)
     msg = "0"
     i = 0
-    while msg == "0":
+    while msg == "0" and i < times:
         try:
             i += 1
             local_box, msg = b.message_read(server_box, server_box, True)
         except nxt.error.DirProtError, e:
             i += 1
             msg = "0"
-    print "Got confirmation after " + str(i)
+    if i < times:
+        print "Got confirmation after " + str(i)
+    else:
+        print "Tired of waiting for brick"
 
 print "Closing conection "
 s.close()

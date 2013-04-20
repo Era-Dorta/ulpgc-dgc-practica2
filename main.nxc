@@ -4,6 +4,34 @@
 #define SERVERBOX 1
 #define NXTBOX 0
 
+int currentPostion[2];
+int penState;
+int nextPosition[2];
+int nextPenState;
+
+//From msg fills nextPosition and nextPenState
+void parseMsg(string msg){
+    string aux = "0000";
+    int i;
+    int msgLength = StrLen(msg);
+
+    i = 0;
+    while( msg[i] != ',' ){
+        i++;
+    }
+    currentPostion[0] = StrToNum(Copy(msg, 0, i ));
+
+    aux = SubStr(msg, i + 1, msgLength - i);
+    i = 0;
+    while(aux[i] != ',' ){
+        i++;
+    }
+    currentPostion[1] = StrToNum(Copy(aux, 0, i ));
+
+    aux = SubStr(msg, msgLength - 1, 1);
+    nextPenState = StrToNum(aux);
+}
+
 task main(){
 	//Move pen to paint
 	//OnFwd(OUT_A, 15);
@@ -19,6 +47,7 @@ task main(){
 		 ClearScreen();
 		 TextOut(0,LCD_LINE1,"Got msg");
 		 TextOut(0,LCD_LINE2,msg);
+		 parseMsg(msg);
 		 Wait(15*1000);
 		 SendMessage(SERVERBOX,"DONE");
      }

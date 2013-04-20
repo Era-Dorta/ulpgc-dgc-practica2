@@ -2,8 +2,7 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
-    cout << "Hola holita\n";
-    sendMessage(10,25,1);
+    sendMessage(100,225,0);
     waitAck();
 }
 
