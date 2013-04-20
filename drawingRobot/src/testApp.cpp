@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
-    sendMessage(100,225,0);
+    sendMessage(100,225,PEN_UP);
     waitAck();
 }
 

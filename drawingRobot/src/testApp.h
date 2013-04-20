@@ -8,6 +8,8 @@
 using namespace std;
 
 #define WAIT_TIME 2000
+#define PEN_UP 1
+#define PEN_DOWN 0
 
 class testApp : public ofBaseApp{
 

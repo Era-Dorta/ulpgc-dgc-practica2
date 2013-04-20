@@ -3,11 +3,38 @@
 #define OUTBOX 5
 #define SERVERBOX 1
 #define NXTBOX 0
+#define PEN_UP 1
+#define PEN_DOWN 0
+#define PEN_OFFSET_TIME 500
+#define PEN_MOTOR_STRENGTH 15
 
 int currentPostion[2];
 int penState;
 int nextPosition[2];
 int nextPenState;
+
+void initialize(){
+    penState = PEN_UP;
+    currentPostion[0] = 0;
+    currentPostion[1] = 0;
+}
+
+void movePen(){
+    if( nextPenState == penState ){
+        return;
+    }
+
+    if(nextPenState == PEN_UP){
+        //Move pen to paint
+        OnRev(OUT_A, PEN_MOTOR_STRENGTH);
+    }else{
+        //Move pen to paint
+        OnFwd(OUT_A, PEN_MOTOR_STRENGTH);
+    }
+    penState = nextPenState;
+    Wait( PEN_OFFSET_TIME );
+    Off( OUT_A );
+}
 
 //From msg fills nextPosition and nextPenState
 void parseMsg(string msg){
@@ -33,8 +60,9 @@ void parseMsg(string msg){
 }
 
 task main(){
-	//Move pen to paint
-	//OnFwd(OUT_A, 15);
+
+	initialize();
+
 	string msg;
      while(true){
 
@@ -48,7 +76,8 @@ task main(){
 		 TextOut(0,LCD_LINE1,"Got msg");
 		 TextOut(0,LCD_LINE2,msg);
 		 parseMsg(msg);
-		 Wait(15*1000);
+		 movePen();
+		 Wait(10*1000);
 		 SendMessage(SERVERBOX,"DONE");
      }
 }
