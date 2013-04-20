@@ -20,6 +20,7 @@ task main(){
 		 TextOut(0,LCD_LINE1,"Got msg");
 		 TextOut(0,LCD_LINE2,msg);
 		 Wait(15*1000);
+		 SendMessage(SERVERBOX,"DONE");
      }
 }
 

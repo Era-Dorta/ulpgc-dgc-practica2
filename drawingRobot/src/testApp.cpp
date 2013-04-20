@@ -3,7 +3,8 @@
 //--------------------------------------------------------------
 void testApp::setup(){
     cout << "Hola holita\n";
-    system("echo \"Hola desde bash\" ");
+    sendMessage(10,25,1);
+    waitAck();
 }
 
 //--------------------------------------------------------------
@@ -58,4 +59,18 @@ void testApp::gotMessage(ofMessage msg){
 //--------------------------------------------------------------
 void testApp::dragEvent(ofDragInfo dragInfo){
 
+}
+
+//--------------------------------------------------------------
+void testApp::sendMessage( const int x, const int y, const int pen_up ) const{
+    char command[200];
+    sprintf(command, "python server.py send %d %d %d", x, y, pen_up);
+    system(command);
+}
+
+//--------------------------------------------------------------
+void testApp::waitAck() const{
+    char command[200];
+    sprintf(command, "python server.py wait %d", WAIT_TIME);
+    system(command);
 }
