@@ -43,7 +43,7 @@ void testApp::mousePressed(int x, int y, int button){
         // v = toPolar(x,y);
         //Rotate
         // angle = v[R] - brickPosition[R];
-        //sendMessage( angle, angle, PEN_UP );
+        //sendMessage( angle, -angle, PEN_UP );
         //brickPosition = v[R];
         //Move
         // r = v[A] - brickPosition[A];
