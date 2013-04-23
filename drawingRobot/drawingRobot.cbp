@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
@@ -39,6 +39,8 @@
 		<Unit filename="src/testApp.h">
 			<Option virtualFolder="src/" />
 		</Unit>
+		<Unit filename="src/vertex.cpp" />
+		<Unit filename="src/vertex.hpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
