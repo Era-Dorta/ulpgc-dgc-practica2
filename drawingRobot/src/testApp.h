@@ -1,8 +1,10 @@
 #pragma once
 
 #include "ofMain.h"
+#include "vertex.hpp"
 #include <iostream>
 #include <cstdlib>
+#include <cmath>
 #include <string>
 #include <sstream>
 using namespace std;
@@ -10,11 +12,17 @@ using namespace std;
 #define WAIT_TIME 2000
 #define PEN_UP 1
 #define PEN_DOWN 0
+#define L_MOUSE 0
+#define R_MOUSE 2
 
 class testApp : public ofBaseApp{
 
     private:
-
+        //Angle in polar coordinates, first argument is
+        // module, second is angle
+        Vertex brickPosition;
+        Vertex lastLineEnd;
+        Vertex currentLineBegin;
 
 	public:
 		void setup();
@@ -34,4 +42,7 @@ class testApp : public ofBaseApp{
 	private:
         void sendMessage( const int leftMotor, const int rightMotor, const int pen_up ) const;
         void waitAck() const;
+        Vertex toPolar(const int x, const int y);
+        void rotate();
+        void move();
 };
