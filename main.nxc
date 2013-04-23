@@ -8,17 +8,40 @@
 #define PEN_OFFSET_TIME 500
 #define PEN_MOTOR_STRENGTH 15
 
-int currentPostion[2];
+int moveLeftMotor;
+int moveRightMotor;
 int penState;
-int nextPosition[2];
 int nextPenState;
 
 void initialize(){
     penState = PEN_UP;
-    currentPostion[0] = 0;
-    currentPostion[1] = 0;
+    moveLeftMotor = 0;
+    moveRightMotor = 0;
 }
 
+//Moves the brick the time set by command
+void moveBrick(){
+    //Negative time means on reverse
+    if(moveLeftMotor > 0){
+        OnFwd(OUT_C, WALK_SPEED);
+    }else{
+        moveLeftMotor = -moveLeftMotor;
+        OnRev(OUT_C, WALK_SPEED);
+    }
+
+    //Negative time means on reverse
+    if(moveRightMotor > 0){
+        OnFwd(OUT_B, WALK_SPEED);
+    }else{
+        OnRev(OUT_B, WALK_SPEED);
+    }
+
+    Wait(moveLeftMotor);
+    Off( OUT_C );
+    Off( OUT_B );
+}
+
+//Move pen up or down
 void movePen(){
     if( nextPenState == penState ){
         return;
@@ -46,14 +69,14 @@ void parseMsg(string msg){
     while( msg[i] != ',' ){
         i++;
     }
-    currentPostion[0] = StrToNum(Copy(msg, 0, i ));
+    moveLeftMotor = StrToNum(Copy(msg, 0, i ));
 
     aux = SubStr(msg, i + 1, msgLength - i);
     i = 0;
     while(aux[i] != ',' ){
         i++;
     }
-    currentPostion[1] = StrToNum(Copy(aux, 0, i ));
+    moveRightMotor = StrToNum(Copy(aux, 0, i ));
 
     aux = SubStr(msg, msgLength - 1, 1);
     nextPenState = StrToNum(aux);
@@ -77,7 +100,8 @@ task main(){
 		 TextOut(0,LCD_LINE2,msg);
 		 parseMsg(msg);
 		 movePen();
-		 Wait(10*1000);
+		 moveBrick();
+		 Wait(2*1000);
 		 SendMessage(SERVERBOX,"DONE");
      }
 }

@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
-    sendMessage(100,225,PEN_UP);
+    sendMessage(1000,1000,PEN_UP);
     waitAck();
 }
 
@@ -61,9 +61,9 @@ void testApp::dragEvent(ofDragInfo dragInfo){
 }
 
 //--------------------------------------------------------------
-void testApp::sendMessage( const int x, const int y, const int pen_up ) const{
+void testApp::sendMessage( const int leftMotor, const int rightMotor, const int pen_up ) const{
     char command[200];
-    sprintf(command, "python server.py send %d %d %d", x, y, pen_up);
+    sprintf(command, "python server.py send %d %d %d", leftMotor, rightMotor, pen_up);
     system(command);
 }
 

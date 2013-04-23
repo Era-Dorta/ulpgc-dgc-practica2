@@ -32,6 +32,6 @@ class testApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 
 	private:
-        void sendMessage( const int x, const int y, const int pen_up ) const;
+        void sendMessage( const int leftMotor, const int rightMotor, const int pen_up ) const;
         void waitAck() const;
 };
