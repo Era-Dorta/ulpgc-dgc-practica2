@@ -19,6 +19,9 @@ void initialize(){
     moveRightMotor = 0;
 }
 
+//Puede ser interesante usar esta funcion en lugar de las
+//onFwd onRev, nota, toman el angulo en grados, habrria que transformarlo
+//RotateMotor( OUT_B, ROT_SPEED, rotation_angle * 2 );
 //Moves the brick the time set by command
 void moveBrick(){
     //Negative time means on reverse
