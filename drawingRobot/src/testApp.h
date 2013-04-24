@@ -1,13 +1,9 @@
+#ifndef TEST_APP_H
+#define TEST_APP_H
+
 #pragma once
 
-#include "ofMain.h"
-#include "vertex.hpp"
-#include <iostream>
-#include <cstdlib>
-#include <cmath>
-#include <string>
-#include <sstream>
-using namespace std;
+#include "polygon.h"
 
 #define WAIT_TIME 2000
 #define PEN_UP 1
@@ -23,6 +19,8 @@ class testApp : public ofBaseApp{
         Vertex brickPosition;
         Vertex lastLineEnd;
         Vertex currentLineBegin;
+
+        Polygon polygon;
 
 	public:
 		void setup();
@@ -46,3 +44,7 @@ class testApp : public ofBaseApp{
         void rotate();
         void move();
 };
+
+
+#endif
+// TEST_APP_H

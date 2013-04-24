@@ -11,7 +11,7 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-
+    polygon.Draw();
 }
 
 //--------------------------------------------------------------
@@ -38,6 +38,7 @@ void testApp::mouseDragged(int x, int y, int button){
 void testApp::mousePressed(int x, int y, int button){
     switch(button){
     case L_MOUSE:
+        polygon.AddVertex( x, y );
         currentLineBegin.set( x, y );
         //On draw line
         // v = toPolar(x,y);
