@@ -1,8 +1,21 @@
 #include "testApp.h"
+#include <thread>
+#include <memory>
+using namespace std;
 
 //--------------------------------------------------------------
+
+void task1(string msg)
+{
+    cout << "task1: hola" << endl;
+}
+
 void testApp::setup(){
     brickPosition.set(0,0);
+    thread t1(task1);
+    t1.join();
+
+    addPolygon();
 }
 
 //--------------------------------------------------------------
@@ -11,7 +24,12 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-    polygon.Draw();
+    std::vector< class Polygon >::iterator it = polygons.begin();
+
+    for( ; it != polygons.end(); ++it ){
+        it->draw();
+    }
+    //polygon.Draw();
 }
 
 //--------------------------------------------------------------
@@ -35,10 +53,19 @@ void testApp::mouseDragged(int x, int y, int button){
 }
 
 //--------------------------------------------------------------
+void testApp::addPolygon(){
+    class Polygon polygon;
+
+    currentPolygon = polygons.insert( polygons.end(), polygon );
+}
+
+//--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
     switch(button){
     case L_MOUSE:
-        polygon.AddVertex( x, y );
+        cout << "L_MOUSE 1" << endl;
+        currentPolygon->addVertex( x, y );
+        cout << "L_MOUSE 2" << endl;
         currentLineBegin.set( x, y );
         //On draw line
         // v = toPolar(x,y);
@@ -52,7 +79,13 @@ void testApp::mousePressed(int x, int y, int button){
         //brickPosition = v[A];
         break;
     case R_MOUSE:
+        cout << "R_MOUSE" << endl;
         lastLineEnd.set( x, y );
+
+        if( !currentPolygon->getSize() ){
+            currentPolygon->addVertex( x, y );
+            addPolygon();
+        }
         break;
     default:
         break;

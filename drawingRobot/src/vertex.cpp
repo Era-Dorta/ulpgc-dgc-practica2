@@ -23,7 +23,7 @@ Vertex::Vertex( const Vertex& b )
 
 Vertex::Vertex( float x, float y )
 {
-    v = new float[2];
+    v = new float[3];
 	set( x, y );
 }
 

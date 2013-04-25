@@ -20,7 +20,8 @@ class testApp : public ofBaseApp{
         Vertex lastLineEnd;
         Vertex currentLineBegin;
 
-        Polygon polygon;
+        std::vector< class Polygon >::iterator currentPolygon;
+        std::vector< class Polygon > polygons;
 
 	public:
 		void setup();
@@ -43,6 +44,8 @@ class testApp : public ofBaseApp{
         Vertex toPolar(const int x, const int y);
         void rotate();
         void move();
+
+        void addPolygon();
 };
 
 

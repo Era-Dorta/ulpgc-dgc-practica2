@@ -12,15 +12,16 @@ class Polygon
 
     public:
 
-        void AddVertex( const float& x, const float& y );
+        void addVertex( const float& x, const float& y );
 
-        void DrawOpen() const;
-        void Draw() const;
+        void draw() const;
 
-        static void SetOrigin( const float& ox, const float& oy );
+        static void setOrigin( const float& ox, const float& oy );
+
+        unsigned int getSize() const;
 
     private:
-        void DrawLine( const Vertex& v0, const Vertex& vy ) const;
+        void drawLine( const Vertex& v0, const Vertex& vy ) const;
 };
 
 
