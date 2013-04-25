@@ -1,11 +1,15 @@
 #include "testApp.h"
 #define WHEEL_R 2.8
+#define ROTATION_R 5.6
 
 //--------------------------------------------------------------
 void testApp::setup(){
     brickPosition.set(0,0);
-    float wheelPerimeter = 2*M_PI*WHEEL_R;
-    moveFactor = 360/wheelPerimeter;
+    float perimeter = 2*M_PI*WHEEL_R;
+    moveFactor = 360/perimeter;
+
+    rotationFactor = ROTATION_R/(float)WHEEL_R;
+    cout << "rotationFactor " << rotationFactor << endl;
 }
 
 //--------------------------------------------------------------
@@ -42,7 +46,7 @@ void testApp::mousePressed(int x, int y, int button){
     switch(button){
     case L_MOUSE:
         currentLineBegin.set( x, y );
-        sendMessage( moveFactor, moveFactor, PEN_UP );
+        sendMessage( 180*rotationFactor, -180*rotationFactor, PEN_UP );
         //On draw line
         // v = toPolar(x,y);
         //Rotate

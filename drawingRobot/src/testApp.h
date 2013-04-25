@@ -24,6 +24,7 @@ class testApp : public ofBaseApp{
         Vertex lastLineEnd;
         Vertex currentLineBegin;
         float moveFactor;
+        float rotationFactor;
 
 	public:
 		void setup();
