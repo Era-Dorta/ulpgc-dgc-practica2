@@ -39,6 +39,7 @@ void testApp::mousePressed(int x, int y, int button){
     switch(button){
     case L_MOUSE:
         currentLineBegin.set( x, y );
+        sendMessage( 1*1600, -1*1600, PEN_DOWN );
         //On draw line
         // v = toPolar(x,y);
         //Rotate

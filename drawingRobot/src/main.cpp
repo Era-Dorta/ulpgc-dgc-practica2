@@ -6,7 +6,9 @@
 int main( ){
 
     ofAppGlutWindow window;
-	ofSetupOpenGL(&window, 1024,768, OF_WINDOW);			// <-------- setup the GL context
+    //Tamanno de la pizarra en cm 165.5 cm de ancho por 117.7
+    //Multiplicando por 4
+	ofSetupOpenGL(&window, 662,470, OF_WINDOW);			// <-------- setup the GL context
 
 	// this kicks off the running of my app
 	// can be OF_WINDOW or OF_FULLSCREEN

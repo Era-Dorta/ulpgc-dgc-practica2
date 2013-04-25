@@ -1,4 +1,4 @@
-#define WALK_SPEED 35
+#define WALK_SPEED 20
 #define INBOX 1
 #define OUTBOX 5
 #define SERVERBOX 1
@@ -102,7 +102,7 @@ task main(){
         ClearScreen();
         TextOut(10,LCD_LINE3,"Got order:");
         TextOut(10,LCD_LINE4,msg);
-        Wait(10*1000);
+        //Wait(10*1000);
         parseMsg(msg);
         movePen();
         moveBrick();
