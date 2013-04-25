@@ -122,42 +122,26 @@ void testApp::moveForNextPoint(){
     Vertex finalVector(1,-1);
     finalVector.normalize();
     Vertex auxPosition = finalPosition - penOffset*finalVector;
-        cout << "finalPosition " << finalPosition << endl;
-        cout << "auxposition " << auxPosition << endl;
+
     float distanceToAux = brickPosition.distance(auxPosition);
-        cout << "distanceToAux " << distanceToAux << endl;
+
     Vertex currentToFinal = finalPosition - brickPosition;
-        cout << "currentToFinal " << currentToFinal << endl;
     currentToFinal.normalize();
-        cout << "currentToFinal " << currentToFinal << endl;
     Vertex currentToAux =  auxPosition - brickPosition;
-        cout << "currentToAux " << currentToAux << endl;
     currentToAux.normalize();
-        cout << "currentToAux " << currentToAux << endl;
-        cout << "dotProduct(currentToFinal,currentToAux) " << dotProduct(currentToFinal,currentToAux) << endl;
-        cout << "acos " << acos(dotProduct(currentToFinal,currentToAux)) << endl;
     float auxAngle = 180 - acos(dotProduct(currentToFinal,currentToAux))*TO_DEGREES;
-        cout << "auxAngle antes " << auxAngle << endl;
     Vertex currentToFront = brickAngle + brickPosition;
     currentToFront.normalize();
     auxAngle += acos(dotProduct(currentToFront,currentToAux))*TO_DEGREES;
-        cout << "auxAngle despues " << auxAngle << endl;
 
     sendMessage( auxAngle*ROTATION_FACTOR, -auxAngle*ROTATION_FACTOR, PEN_UP );
-    cout << "mandando moverse " << distanceToAux << endl;
     sendMessage( -distanceToAux*MOVE_FACTOR, -distanceToAux*MOVE_FACTOR, PEN_UP );
 
     Vertex auxToFinal = finalPosition - auxPosition;
-        cout << "auxToFinal " << auxToFinal << endl;
     auxToFinal.normalize();
-        cout << "auxToFinal " << auxToFinal << endl;
     Vertex auxToCurrent = finalPosition - brickPosition;
-        cout << "auxToCurrent " << auxToCurrent << endl;
     auxToCurrent.normalize();
-        cout << "auxToCurrent " << auxToCurrent << endl;
-        cout << "dotProduct(auxToFinal,auxToCurrent) " << dotProduct(auxToFinal,auxToCurrent) << endl;
     auxAngle = acos(dotProduct(auxToFinal,auxToCurrent))*TO_DEGREES;
-        cout << "auxAngle siguiente " << auxAngle << endl;
     sendMessage( -auxAngle*ROTATION_FACTOR, auxAngle*ROTATION_FACTOR, PEN_UP );
 }
 
