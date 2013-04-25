@@ -58,13 +58,13 @@ Vertex Vertex::operator + (const Vertex& b) const
 
 Vertex Vertex::operator - (const Vertex& b) const
 {
-    Vertex c( b[X]-v[X], b[Y]-v[Y], b[Z]-v[Z] );
+    Vertex c( v[X]-b[X], v[Y]-b[Y], v[Z]-b[Z] );
     return c;
 }
 
 Vertex Vertex::operator * (const Vertex& b) const
 {
-    Vertex c( v[Y]*b[Z]-v[Z]*b[Y], v[Z]*b[X]-v[X]*b[Z], v[X]*b[Y]-v[Y]*b[X] );
+    Vertex c( v[X]*b[X], v[Y]*b[Y], v[Z]*b[Z] );
     return c;
 }
 
@@ -88,15 +88,21 @@ float Vertex::getNorm() const
 
 Vertex Vertex::getUnitVector() const
 {
-    float norm = getNorm();
-    Vertex res( v[X]/norm, v[Y]/norm, v[Z]/norm );
+    float invNorm = 1.0/getNorm();
+    Vertex res( v[X]*invNorm, v[Y]*invNorm, v[Z]*invNorm );
 
     return res;
 }
 
 void Vertex::normalize(){
-    float norm = getNorm();
-    set( v[X]/norm, v[Y]/norm, v[Z]/norm );
+    float invNorm = 1.0/getNorm();
+    set( v[X]*invNorm, v[Y]*invNorm, v[Z]*invNorm);
+}
+
+float Vertex::distance( const Vertex& b ) const{
+    return sqrt( (v[X] - b[X])*(v[X] - b[X]) +
+                (v[Y] - b[Y])*(v[Y] - b[Y]) +
+                (v[Z] - b[Z])*(v[Z] - b[Z]));
 }
 
 /*                                 3. << operator                            */

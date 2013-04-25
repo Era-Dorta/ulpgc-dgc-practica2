@@ -42,6 +42,7 @@ class Vertex {
         float getNorm() const ;
 		Vertex getUnitVector() const ;
 		void normalize();
+		float distance( const Vertex& b ) const;
 
         // 3. << operator
 		friend ostream& operator<< (ostream &out, const Vertex &vertex);

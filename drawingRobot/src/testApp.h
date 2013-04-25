@@ -20,8 +20,10 @@ class testApp : public ofBaseApp{
     private:
         //Angle in polar coordinates, first argument is
         // module, second is angle
+        Vertex brickPositionPolar;
         Vertex brickPosition;
-        Vertex penPosition;
+        Vertex brickAngle;
+        Vertex penOffset;
         Vertex lastLineEnd;
         Vertex currentLineBegin;
 
@@ -44,6 +46,7 @@ class testApp : public ofBaseApp{
         void sendMessage( const int leftMotor, const int rightMotor, const int pen_up ) const;
         void waitAck() const;
         Vertex toPolar(const int x, const int y);
+        void moveForNextPoint();
         void rotate();
         void move();
 };
