@@ -27,7 +27,11 @@ void moveBrick(){
     if( moveLeftMotor > 0 && moveRightMotor < 0 ||
        moveLeftMotor < 0 && moveRightMotor > 0 ){
         //Rotate
-        RotateMotorEx(OUT_BC, WALK_SPEED, moveLeftMotor, 100, true, true );
+        if(moveLeftMotor > 0){
+            RotateMotorEx(OUT_BC, WALK_SPEED, moveLeftMotor, 100, true, true );
+        }else{
+            RotateMotorEx(OUT_BC, WALK_SPEED, moveLeftMotor, -100, true, true );
+        }
     }else{
         //Move
         RotateMotor( OUT_BC, WALK_SPEED, moveLeftMotor );

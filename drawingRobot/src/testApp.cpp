@@ -50,7 +50,7 @@ void testApp::mousePressed(int x, int y, int button){
     switch(button){
     case L_MOUSE:
         moveForNextPoint();
-        currentLineBegin.set( x, y );
+        //currentLineBegin.set( x, y );
         //sendMessage( 90*ROTATION_FACTOR, -90*ROTATION_FACTOR, PEN_UP );
         //sendMessage( 20*MOVE_FACTOR, 20*MOVE_FACTOR, PEN_UP );
         //On draw line
@@ -139,7 +139,7 @@ void testApp::moveForNextPoint(){
 
     Vertex auxToFinal = finalPosition - auxPosition;
     auxToFinal.normalize();
-    Vertex auxToCurrent = finalPosition - brickPosition;
+    Vertex auxToCurrent = brickPosition - auxPosition;
     auxToCurrent.normalize();
     auxAngle = acos(dotProduct(auxToFinal,auxToCurrent))*TO_DEGREES;
     sendMessage( -auxAngle*ROTATION_FACTOR, auxAngle*ROTATION_FACTOR, PEN_UP );
