@@ -1,11 +1,11 @@
 #include "testApp.h"
-
-#define ROTATION_OFFSET 18
-#define MOVE_OFFSET 18
+#define WHEEL_R 2.8
 
 //--------------------------------------------------------------
 void testApp::setup(){
     brickPosition.set(0,0);
+    float wheelPerimeter = 2*M_PI*WHEEL_R;
+    moveFactor = 360/wheelPerimeter;
 }
 
 //--------------------------------------------------------------
@@ -42,7 +42,7 @@ void testApp::mousePressed(int x, int y, int button){
     switch(button){
     case L_MOUSE:
         currentLineBegin.set( x, y );
-        sendMessage( 90*ROTATION_OFFSET, -90*ROTATION_OFFSET, PEN_DOWN );
+        sendMessage( moveFactor, moveFactor, PEN_UP );
         //On draw line
         // v = toPolar(x,y);
         //Rotate

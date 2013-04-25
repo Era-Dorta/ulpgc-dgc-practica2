@@ -23,6 +23,7 @@ class testApp : public ofBaseApp{
         Vertex brickPosition;
         Vertex lastLineEnd;
         Vertex currentLineBegin;
+        float moveFactor;
 
 	public:
 		void setup();

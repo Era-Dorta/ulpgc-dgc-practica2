@@ -19,29 +19,19 @@ void initialize(){
     moveRightMotor = 0;
 }
 
-//Puede ser interesante usar esta funcion en lugar de las
-//onFwd onRev, nota, toman el angulo en grados, habrria que transformarlo
-//RotateMotor( OUT_B, ROT_SPEED, rotation_angle * 2 );
-//Moves the brick the time set by command
+//Moves or rotates the brick with arguments sent by command
 void moveBrick(){
-    //Negative time means on reverse
-    if(moveLeftMotor > 0){
-        OnFwd(OUT_C, WALK_SPEED);
-    }else{
-        moveLeftMotor = -moveLeftMotor;
-        OnRev(OUT_C, WALK_SPEED);
-    }
 
-    //Negative time means on reverse
-    if(moveRightMotor > 0){
-        OnFwd(OUT_B, WALK_SPEED);
-    }else{
-        OnRev(OUT_B, WALK_SPEED);
-    }
+    ResetAllTachoCounts(OUT_BC);
 
-    Wait(moveLeftMotor);
-    Off( OUT_C );
-    Off( OUT_B );
+    if( moveLeftMotor > 0 && moveRightMotor < 0 ||
+       moveLeftMotor < 0 && moveRightMotor > 0 ){
+        //Rotate
+        RotateMotorEx(OUT_BC, WALK_SPEED, moveLeftMotor, 100, true, true );
+    }else{
+        //Move
+        RotateMotor( OUT_BC, WALK_SPEED, moveLeftMotor );
+    }
 }
 
 //Move pen up or down
