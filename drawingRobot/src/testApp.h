@@ -21,10 +21,9 @@ class testApp : public ofBaseApp{
         //Angle in polar coordinates, first argument is
         // module, second is angle
         Vertex brickPosition;
+        Vertex penPosition;
         Vertex lastLineEnd;
         Vertex currentLineBegin;
-        float moveFactor;
-        float rotationFactor;
 
 	public:
 		void setup();

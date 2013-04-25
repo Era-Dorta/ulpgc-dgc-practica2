@@ -1,4 +1,4 @@
-#define WALK_SPEED 20
+#define WALK_SPEED 35
 #define INBOX 1
 #define OUTBOX 5
 #define SERVERBOX 1

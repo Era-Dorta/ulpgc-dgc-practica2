@@ -1,15 +1,14 @@
 #include "testApp.h"
 #define WHEEL_R 2.8
 #define ROTATION_R 5.6
+#define MOVE_FACTOR 360.0/(2*M_PI*WHEEL_R)
+#define EXTRA_ROTATION 1.02
+#define ROTATION_FACTOR (ROTATION_R/WHEEL_R)*EXTRA_ROTATION
 
 //--------------------------------------------------------------
 void testApp::setup(){
-    brickPosition.set(0,0);
-    float perimeter = 2*M_PI*WHEEL_R;
-    moveFactor = 360/perimeter;
-
-    rotationFactor = ROTATION_R/(float)WHEEL_R;
-    cout << "rotationFactor " << rotationFactor << endl;
+    brickPosition = toPolar(10,10);
+    cout << "rotationFactor " << ROTATION_FACTOR << endl;
 }
 
 //--------------------------------------------------------------
@@ -46,7 +45,8 @@ void testApp::mousePressed(int x, int y, int button){
     switch(button){
     case L_MOUSE:
         currentLineBegin.set( x, y );
-        sendMessage( 180*rotationFactor, -180*rotationFactor, PEN_UP );
+        sendMessage( 90*ROTATION_FACTOR, -90*ROTATION_FACTOR, PEN_UP );
+        sendMessage( 20*MOVE_FACTOR, 20*MOVE_FACTOR, PEN_UP );
         //On draw line
         // v = toPolar(x,y);
         //Rotate
