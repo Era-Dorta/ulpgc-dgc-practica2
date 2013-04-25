@@ -23,6 +23,7 @@ class testApp : public ofBaseApp{
         Vertex brickPositionPolar;
         Vertex brickPosition;
         Vertex brickAngle;
+        Vertex penPosition;
         Vertex penOffset;
         Vertex lastLineEnd;
         Vertex currentLineBegin;

@@ -14,6 +14,7 @@ void testApp::setup(){
     brickAngle.set(0,1);
     //When mesured, pen position is shifted 4cm, 8.5cm
     penOffset.set( 4, 8.5);
+    penPosition = brickPosition + penOffset;
 }
 
 //--------------------------------------------------------------
@@ -123,8 +124,7 @@ void testApp::moveForNextPoint(){
     finalVector.normalize();
     Vertex auxPosition = finalPosition - penOffset*finalVector;
 
-    float distanceToAux = brickPosition.distance(auxPosition);
-
+    float distanceToAux = brickPosition.distance(auxPosition + penOffset);
     Vertex currentToFinal = finalPosition - brickPosition;
     currentToFinal.normalize();
     Vertex currentToAux =  auxPosition - brickPosition;
