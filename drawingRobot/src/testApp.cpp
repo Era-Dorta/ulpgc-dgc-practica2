@@ -1,5 +1,8 @@
 #include "testApp.h"
 
+#define ROTATION_OFFSET 18
+#define MOVE_OFFSET 18
+
 //--------------------------------------------------------------
 void testApp::setup(){
     brickPosition.set(0,0);
@@ -39,7 +42,7 @@ void testApp::mousePressed(int x, int y, int button){
     switch(button){
     case L_MOUSE:
         currentLineBegin.set( x, y );
-        sendMessage( 1*1600, -1*1600, PEN_DOWN );
+        sendMessage( 90*ROTATION_OFFSET, -90*ROTATION_OFFSET, PEN_DOWN );
         //On draw line
         // v = toPolar(x,y);
         //Rotate
