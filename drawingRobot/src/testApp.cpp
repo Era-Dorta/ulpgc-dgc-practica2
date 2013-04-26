@@ -129,16 +129,13 @@ void testApp::moveForNextPoint(){
     Vertex currentToAux =  auxPosition - brickPosition;
     currentToAux.normalize();
     float auxAngle = acos(dotProduct(brickAngle,currentToAux))*TO_DEGREES;
-
     sendMessage( auxAngle*ROTATION_FACTOR, -auxAngle*ROTATION_FACTOR, PEN_UP );
     sendMessage( distanceToAux*MOVE_FACTOR, distanceToAux*MOVE_FACTOR, PEN_UP );
 
     Vertex auxToFinal = finalPosition - auxPosition;
     auxToFinal.normalize();
-    Vertex auxToCurrent = brickPosition - auxPosition;
-    auxToCurrent.normalize();
-    auxAngle = 180 + acos(dotProduct(auxToFinal,auxToCurrent))*TO_DEGREES;
-    sendMessage( -auxAngle*ROTATION_FACTOR, auxAngle*ROTATION_FACTOR, PEN_UP );
+    auxAngle = acos(dotProduct(auxToFinal,currentToAux))*TO_DEGREES;
+    sendMessage( auxAngle*ROTATION_FACTOR, -auxAngle*ROTATION_FACTOR, PEN_UP );
 
     brickPosition = auxPosition;
     brickAngle = finalVector;
