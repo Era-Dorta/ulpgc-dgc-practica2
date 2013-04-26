@@ -12,8 +12,8 @@ void testApp::setup(){
     brickPositionPolar = toPolar(10,10);
     brickPosition.set(10,10);
     brickAngle.set(0,1);
-    //When mesured, pen position is shifted 4cm, 8.5cm
-    penOffset.set( 4, 8.5);
+    //When mesured, pen position is shifted 4cm, 9cm
+    penOffset.set( 4, 9);
     penPosition = brickPosition + penOffset;
 }
 
@@ -119,30 +119,29 @@ Vertex testApp::toPolar(const int x, const int y){
 
 
 void testApp::moveForNextPoint(){
-    Vertex finalPosition(14, 18.5);
+    Vertex finalPosition(14, 19);
     Vertex finalVector(1,-1);
-    finalVector.normalize();
+    //TODO El vector si hay que normalizarlo y hacer lo de rotar la
+    //posicion del rotulador pa saber cuanto se le resta a aux position
+    //finalVector.normalize();
     Vertex auxPosition = finalPosition - penOffset*finalVector;
-
-    float distanceToAux = brickPosition.distance(auxPosition + penOffset);
-    Vertex currentToFinal = finalPosition - brickPosition;
-    currentToFinal.normalize();
+    float distanceToAux = brickPosition.distance(auxPosition);
     Vertex currentToAux =  auxPosition - brickPosition;
     currentToAux.normalize();
-    float auxAngle = 180 - acos(dotProduct(currentToFinal,currentToAux))*TO_DEGREES;
-    Vertex currentToFront = brickAngle + brickPosition;
-    currentToFront.normalize();
-    auxAngle += acos(dotProduct(currentToFront,currentToAux))*TO_DEGREES;
+    float auxAngle = acos(dotProduct(brickAngle,currentToAux))*TO_DEGREES;
 
     sendMessage( auxAngle*ROTATION_FACTOR, -auxAngle*ROTATION_FACTOR, PEN_UP );
-    sendMessage( -distanceToAux*MOVE_FACTOR, -distanceToAux*MOVE_FACTOR, PEN_UP );
+    sendMessage( distanceToAux*MOVE_FACTOR, distanceToAux*MOVE_FACTOR, PEN_UP );
 
     Vertex auxToFinal = finalPosition - auxPosition;
     auxToFinal.normalize();
     Vertex auxToCurrent = brickPosition - auxPosition;
     auxToCurrent.normalize();
-    auxAngle = acos(dotProduct(auxToFinal,auxToCurrent))*TO_DEGREES;
+    auxAngle = 180 + acos(dotProduct(auxToFinal,auxToCurrent))*TO_DEGREES;
     sendMessage( -auxAngle*ROTATION_FACTOR, auxAngle*ROTATION_FACTOR, PEN_UP );
+
+    brickPosition = auxPosition;
+    brickAngle = finalVector;
 }
 
 //--------------------------------------------------------------
