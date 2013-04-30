@@ -1,6 +1,11 @@
 #ifndef VERTEX_HPP
 #define VERTEX_HPP
 
+#include "ofMain.h"
+#include <cstdlib>
+#include <cmath>
+#include <string>
+#include <sstream>
 #include <ostream>
 #include <cmath>
 using namespace std;
@@ -8,7 +13,7 @@ using namespace std;
 enum COORDINATES {
     X = 0,
     Y,
-    Z
+    H
 };
 
 enum POLAR {
@@ -25,21 +30,20 @@ class Vertex {
         Vertex( const Vertex& b );
         ~Vertex();
 
-		Vertex( float x, float y, float z = 0);
-		void set( float x, float y, float z = 0);
+		Vertex( float x, float y );
+		void set( float x, float y );
 
         // 2. Operators
         void operator = (const Vertex& b);
         Vertex operator + (const Vertex& b ) const ;
         Vertex operator - (const Vertex& b ) const ;
-        Vertex operator * (const Vertex& b ) const ; // Cross product.
+        Vertex operator * (const Vertex& b ) const ;
         Vertex operator * (const float& b ) const ;
         Vertex operator / (const float& b ) const ;
         bool operator == (const Vertex& b ) const ;
         float operator[](int i) const { return v[i]; }
 		float& operator[](int i){ return v[i]; }
 		Vertex rotate( const float angle ) const;
-
 
         float getNorm() const ;
 		Vertex getUnitVector() const ;

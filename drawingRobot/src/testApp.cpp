@@ -6,8 +6,17 @@
 #define ROTATION_FACTOR (ROTATION_R/WHEEL_R)*EXTRA_ROTATION
 #define TO_RADIANS M_PI/180.0
 #define TO_DEGREES 180.0/M_PI
+#include <thread>
+#include <memory>
+using namespace std;
 
 //--------------------------------------------------------------
+
+void task1(string msg)
+{
+    cout << "task1: hola" << endl;
+}
+
 void testApp::setup(){
     brickPositionPolar = toPolar(10,10);
     brickPosition.set(10,10);
@@ -16,6 +25,12 @@ void testApp::setup(){
     //When mesured, pen position is shifted 4cm, 9cm
     penOffset.set( 4, 9);
     penPosition = brickPosition + penOffset;
+
+
+    thread t1(task1);
+    t1.join();
+
+    addPolygon();
 }
 
 //--------------------------------------------------------------
@@ -24,7 +39,12 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
+    std::vector< class Polygon >::iterator it = polygons.begin();
 
+    for( ; it != polygons.end(); ++it ){
+        it->draw();
+    }
+    //polygon.Draw();
 }
 
 //--------------------------------------------------------------
@@ -48,26 +68,30 @@ void testApp::mouseDragged(int x, int y, int button){
 }
 
 //--------------------------------------------------------------
+void testApp::addPolygon(){
+    class Polygon polygon;
+
+    currentPolygon = polygons.insert( polygons.end(), polygon );
+}
+
+//--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
     switch(button){
     case L_MOUSE:
         moveForNextPoint();
-        //currentLineBegin.set( x, y );
-        //sendMessage( 90*ROTATION_FACTOR, -90*ROTATION_FACTOR, PEN_UP );
-        //sendMessage( 20*MOVE_FACTOR, 20*MOVE_FACTOR, PEN_UP );
-        //On draw line
-        // v = toPolar(x,y);
-        //Rotate
-        // angle = v[R] - brickPosition[R];
-        //sendMessage( angle, -angle, PEN_UP );
-        //brickPosition = v[R];
-        //Move
-        // r = v[A] - brickPosition[A];
-        //sendMessage( r, r, PEN_UP );
-        //brickPosition = v[A];
+        cout << "L_MOUSE 1" << endl;
+        currentPolygon->addVertex( x, y );
+        cout << "L_MOUSE 2" << endl;
+        currentLineBegin.set( x, y );
         break;
     case R_MOUSE:
+        cout << "R_MOUSE" << endl;
         lastLineEnd.set( x, y );
+
+        if( !currentPolygon->getSize() ){
+            currentPolygon->addVertex( x, y );
+            addPolygon();
+        }
         break;
     default:
         break;
