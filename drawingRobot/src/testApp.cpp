@@ -12,6 +12,7 @@ void testApp::setup(){
     brickPositionPolar = toPolar(10,10);
     brickPosition.set(10,10);
     brickAngle.set(0,1);
+    brickAngle.normalize();
     //When mesured, pen position is shifted 4cm, 9cm
     penOffset.set( 4, 9);
     penPosition = brickPosition + penOffset;
@@ -119,7 +120,7 @@ Vertex testApp::toPolar(const int x, const int y){
 
 
 void testApp::moveForNextPoint(){
-    Vertex finalPosition(14, 19);
+    Vertex finalPosition(14,24);
     Vertex finalVector(1,1);
     Vertex yAxis(0,1);
 
@@ -158,20 +159,18 @@ void testApp::moveForNextPoint(){
     //Calculate the angle between where the brick is looking and
     //currentToAux vector
     float auxAngle = acos(dotProduct(brickAngle,currentToAux))*TO_DEGREES;
-
+        cout << "auxPosition " << auxPosition << endl;
+        cout << "auxAngle " << auxAngle << endl;
+        cout << "distanceToAux " << distanceToAux << endl;
     //To go to auxPosition the brick must rotate auxAngle
     sendMessage( auxAngle*ROTATION_FACTOR, -auxAngle*ROTATION_FACTOR, PEN_UP );
     //Go forward the distance to auxPosition
     sendMessage( distanceToAux*MOVE_FACTOR, distanceToAux*MOVE_FACTOR, PEN_UP );
 
-    //Vector from auxPosition to penPosition
-    Vertex auxToFinal = finalPosition - auxPosition;
-    auxToFinal.normalize();
-
     //Calculate the angle between where the brick is looking now, after auxAngle
     //rotation, and vector auxToFinal
-    auxAngle = acos(dotProduct(auxToFinal,currentToAux))*TO_DEGREES;
-
+    auxAngle = acos(dotProduct(finalVector,currentToAux))*TO_DEGREES;
+        cout << "auxAngle " << auxAngle << endl;
     //Rotate the brick to look in finalVector direction
     sendMessage( auxAngle*ROTATION_FACTOR, -auxAngle*ROTATION_FACTOR, PEN_UP );
 
