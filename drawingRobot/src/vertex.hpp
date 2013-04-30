@@ -35,8 +35,10 @@ class Vertex {
         Vertex operator * (const Vertex& b ) const ; // Cross product.
         Vertex operator * (const float& b ) const ;
         Vertex operator / (const float& b ) const ;
+        bool operator == (const Vertex& b ) const ;
         float operator[](int i) const { return v[i]; }
 		float& operator[](int i){ return v[i]; }
+		Vertex rotate( const float angle ) const;
 
 
         float getNorm() const ;

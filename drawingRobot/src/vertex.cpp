@@ -64,7 +64,7 @@ Vertex Vertex::operator - (const Vertex& b) const
 
 Vertex Vertex::operator * (const Vertex& b) const
 {
-    Vertex c( v[X]*b[X], v[Y]*b[Y], v[Z]*b[Z] );
+    Vertex c( v[Y]*b[Z]-v[Z]*b[Y], v[Z]*b[X]-v[X]*b[Z], v[X]*b[Y]-v[Y]*b[X] );
     return c;
 }
 
@@ -78,6 +78,29 @@ Vertex Vertex::operator / (const float& b) const
 {
     Vertex c( v[X]/b, v[Y]/b, v[Z]/b );
     return c;
+}
+
+bool Vertex::operator == (const Vertex& b) const
+{
+    return (v[X] == b[X] && v[Y] == b[Y] && v[Z] == b[Z]);
+}
+
+Vertex Vertex::rotate( const float angle ) const
+{
+    Vertex res;
+    float cosVal = cos(angle), sinVal = sin(angle);
+    float rotationMatrix[3][3] = {
+        {cosVal, -sinVal, 0},
+        {sinVal, cosVal, 0},
+        {0,     0,      1}
+    };
+
+    for( unsigned int i = 0; i < 2; i++){
+        for( unsigned int j = 0; j < 2; j++){
+            res[i] += v[j]*rotationMatrix[j][i];
+        }
+    }
+    return res;
 }
 
 

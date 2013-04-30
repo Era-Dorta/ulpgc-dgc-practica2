@@ -120,23 +120,62 @@ Vertex testApp::toPolar(const int x, const int y){
 
 void testApp::moveForNextPoint(){
     Vertex finalPosition(14, 19);
-    Vertex finalVector(1,-1);
-    //TODO El vector si hay que normalizarlo y hacer lo de rotar la
-    //posicion del rotulador pa saber cuanto se le resta a aux position
-    //finalVector.normalize();
-    Vertex auxPosition = finalPosition - penOffset*finalVector;
+    Vertex finalVector(1,1);
+    Vertex yAxis(0,1);
+
+    finalVector.normalize();
+
+    //Dot product between final vector and yAxis, because
+    //penOffset is defined on yAxis
+    Vertex aux = finalVector*yAxis;
+
+    //Arc sin gives us the angle between the vectors
+    float finalAngle = asin(aux.getNorm());
+
+    //Use third coordinate to control if it is clockwise or
+    //anticlockwise
+    if(aux[Z] < 0){
+        finalAngle = -finalAngle;
+    }
+
+    //If angle is 0 but vectors are different then is a 180 degrees angle
+    if(finalAngle == 0 && !(finalVector == yAxis) ){
+        finalAngle = 180*TO_RADIANS;
+    }
+
+    //Rotate penOffset that angle
+    Vertex currentPenOffset = penOffset.rotate(finalAngle);
+
+    //Substract the rotated penOffset to the final position to obtain the
+    //brick final position
+    Vertex auxPosition = finalPosition - currentPenOffset;
     float distanceToAux = brickPosition.distance(auxPosition);
+
+    //Vector from brick current position to final brick position
     Vertex currentToAux =  auxPosition - brickPosition;
     currentToAux.normalize();
+
+    //Calculate the angle between where the brick is looking and
+    //currentToAux vector
     float auxAngle = acos(dotProduct(brickAngle,currentToAux))*TO_DEGREES;
+
+    //To go to auxPosition the brick must rotate auxAngle
     sendMessage( auxAngle*ROTATION_FACTOR, -auxAngle*ROTATION_FACTOR, PEN_UP );
+    //Go forward the distance to auxPosition
     sendMessage( distanceToAux*MOVE_FACTOR, distanceToAux*MOVE_FACTOR, PEN_UP );
 
+    //Vector from auxPosition to penPosition
     Vertex auxToFinal = finalPosition - auxPosition;
     auxToFinal.normalize();
+
+    //Calculate the angle between where the brick is looking now, after auxAngle
+    //rotation, and vector auxToFinal
     auxAngle = acos(dotProduct(auxToFinal,currentToAux))*TO_DEGREES;
+
+    //Rotate the brick to look in finalVector direction
     sendMessage( auxAngle*ROTATION_FACTOR, -auxAngle*ROTATION_FACTOR, PEN_UP );
 
+    //Update brick position and direction
     brickPosition = auxPosition;
     brickAngle = finalVector;
 }
