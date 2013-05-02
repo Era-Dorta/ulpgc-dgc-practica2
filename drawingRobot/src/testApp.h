@@ -46,6 +46,7 @@ class testApp : public ofBaseApp{
         void sendMessage( const int leftMotor, const int rightMotor, const int pen_up ) const;
         void waitAck() const;
         Vertex toPolar(const int x, const int y);
+        float calculateAngle( const Vertex vector0, const Vertex vector1) const;
         void moveForNextPoint();
         void rotate();
         void move();
