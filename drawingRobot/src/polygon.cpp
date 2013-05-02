@@ -1,5 +1,5 @@
 #include "polygon.h"
-
+#include <iostream>
 int Polygon::ox = 0;
 int Polygon::oy = 0;
 
@@ -52,4 +52,10 @@ const Vertex Polygon::getVertex(const int& i) const{
 
 const Vertex Polygon::getVector(const int& i) const{
     return vectors[i];
+}
+
+void Polygon::showPolygon() const{
+    for( unsigned int i=0; i<v.size(); i++ ){
+        cout << "v[" << i << "] " << v[i] << " vector " << vectors[i] << endl;
+    }
 }

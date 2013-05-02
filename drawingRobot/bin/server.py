@@ -31,6 +31,8 @@ else:
             msg = "0"
     if i < times:
         #print "\t Server: Got brick confirmation after " + str(i)
+        #Nop operation
+        i = 0
     else:
         print "\t Server: Tired of waiting for brick"
 

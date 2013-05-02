@@ -25,6 +25,8 @@ class Polygon
 
         const Vertex getVector(const int& i) const;
 
+        void showPolygon() const;
+
     private:
         void drawLine( const Vertex& v0, const Vertex& vy ) const;
 };
