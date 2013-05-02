@@ -120,7 +120,6 @@ void testApp::dragEvent(ofDragInfo dragInfo){
 //--------------------------------------------------------------
 void testApp::sendMessage( const int leftMotor, const int rightMotor, const int pen_up ) const{
     char command[200];
-    cout << "send mess " << leftMotor << " " << rightMotor << endl;
     sprintf(command, "python server.py send %d %d %d", leftMotor, rightMotor, pen_up);
     system(command);
     waitAck();
@@ -148,15 +147,13 @@ float testApp::calculateAngle( const Vertex vector0, const Vertex vector1) const
     Vertex vertexCopy0 = vector0, vertexCopy1 = vector1;
     vertexCopy0[H] = 0;
     vertexCopy1[H] = 0;
-    cout << "vertexCopy0 " << vertexCopy0<< endl;
-    cout << "vertexCopy1 " << vertexCopy1<< endl;
+
     //Cross product between final vector0 and vector1
     Vertex aux = vertexCopy0*vertexCopy1;
-    cout << "aux " << aux << endl;
+
     //Arc sin gives us the angle between the vectors
     float resAngle = asin(aux.getNorm3());
-    cout << "aux.getNorm3() " << aux.getNorm3() << endl;
-cout << "resAngle " << resAngle << endl;
+
     //Use third coordinate to control if it is clockwise or
     //anticlockwise
     if(aux[H] > 0){
@@ -167,7 +164,7 @@ cout << "resAngle " << resAngle << endl;
     if(resAngle == 0 && !(vertexCopy0 == vertexCopy1) ){
         return resAngle = 180;
     }
-    cout << "angulo vale" << resAngle*TO_DEGREES << endl;
+
     return resAngle*TO_DEGREES;
 }
 
@@ -185,13 +182,13 @@ void testApp::moveForNextPoint(){
 
     //Rotate penOffset that angle
     Vertex currentPenOffset = penOffset.rotate(finalAngle*TO_RADIANS);
-    cout << "currentPenOffset " << currentPenOffset << endl;
+
     //Substract the rotated penOffset to the final position to obtain the
     //brick final position
     Vertex auxPosition = finalPosition - currentPenOffset;
 
+    //If position and angle are the same then do nothing
     if(auxPosition == brickPosition && finalVector == brickAngle){
-        cout << "Me voyyyyy\n";
         return;
     }
 
@@ -200,13 +197,11 @@ void testApp::moveForNextPoint(){
     //Vector from brick current position to final brick position
     Vertex currentToAux =  auxPosition - brickPosition;
     currentToAux.normalize();
-cout << "currentToAux " << currentToAux << endl;
+
     //Calculate the angle between where the brick is looking and
     //currentToAux vector
     float rotationAngle = calculateAngle(brickAngle, currentToAux);
-        cout << "auxPosition " << auxPosition << endl;
-        cout << "rotationAngle " << rotationAngle << endl;
-        cout << "distanceToAux " << distanceToAux << endl;
+
     //To go to auxPosition the brick must rotate rotationAngle
     sendMessage( rotationAngle*ROTATION_FACTOR, -rotationAngle*ROTATION_FACTOR, PEN_UP );
     //Go forward the distance to auxPosition
@@ -215,7 +210,7 @@ cout << "currentToAux " << currentToAux << endl;
     //Calculate the angle between where the brick is looking now, after rotationAngle
     //rotation, and vector auxToFinal
     rotationAngle = calculateAngle(currentToAux, finalVector);
-        cout << "rotationAngle " << rotationAngle << endl;
+
     //Rotate the brick to look in finalVector direction
     sendMessage( rotationAngle*ROTATION_FACTOR, -rotationAngle*ROTATION_FACTOR, PEN_UP );
 
