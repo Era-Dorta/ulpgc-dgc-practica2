@@ -18,8 +18,9 @@ void task1(string msg)
 }
 
 void testApp::setup(){
+    yAxis.set(0,1);
     brickPositionPolar = toPolar(10,10);
-    brickPosition.set(10,10);
+    brickPosition.set(0,0);
     brickAngle.set(0,1);
     brickAngle.normalize();
     //When mesured, pen position is shifted 4cm, 9cm
@@ -76,9 +77,10 @@ void testApp::addPolygon(){
 
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
+    Vertex position, vector, currentVertex, prevVertex;
+    float distance;
     switch(button){
     case L_MOUSE:
-        moveForNextPoint();
         cout << "L_MOUSE 1" << endl;
         currentPolygon->addVertex( x, y );
         cout << "L_MOUSE 2" << endl;
@@ -87,6 +89,17 @@ void testApp::mousePressed(int x, int y, int button){
     case R_MOUSE:
         cout << "R_MOUSE" << endl;
         lastLineEnd.set( x, y );
+        prevVertex = currentPolygon->getVertex(0);
+        cout << "Move to " << prevVertex << "with vector " << currentPolygon->getVector(0) << endl;
+        //moveForNextPoint(prevVertex, currentPolygon->getVector(0));
+        for(unsigned int i = 1; i < currentPolygon->getSize(); i++){
+            currentVertex = currentPolygon->getVertex(i);
+            distance = prevVertex.distance(currentVertex);
+            //sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
+            //moveForNextPoint(currentVertex, currentPolygon->getVector(i));
+            cout << "Move to " << currentVertex << "with vector " << currentPolygon->getVector(i) << endl;
+            prevVertex = currentVertex;
+        }
 
         if( !currentPolygon->getSize() ){
             currentPolygon->addVertex( x, y );
@@ -142,7 +155,7 @@ Vertex testApp::toPolar(const int x, const int y){
 }
 
 //--------------------------------------------------------------
-float testApp::calculateAngle( const Vertex vector0, const Vertex vector1) const{
+float testApp::calculateAngle( const Vertex& vector0, const Vertex& vector1) const{
 
     Vertex vertexCopy0 = vector0, vertexCopy1 = vector1;
     vertexCopy0[H] = 0;
@@ -168,14 +181,7 @@ float testApp::calculateAngle( const Vertex vector0, const Vertex vector1) const
     return resAngle*TO_DEGREES;
 }
 
-void testApp::moveForNextPoint(){
-    Vertex finalPosition(14,19);
-    Vertex finalVector(1,1);
-    Vertex yAxis(0,1);
-
-    finalVector.normalize();
-
-
+void testApp::moveForNextPoint( const Vertex& finalPosition, const Vertex& finalVector ){
     //Angle between final vector and yAxis, because
     //penOffset is defined on yAxis
     float finalAngle = calculateAngle(yAxis, finalVector);

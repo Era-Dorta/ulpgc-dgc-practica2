@@ -23,6 +23,7 @@ class testApp : public ofBaseApp{
         Vertex penOffset;
         Vertex lastLineEnd;
         Vertex currentLineBegin;
+        Vertex yAxis;
 
         std::vector< class Polygon >::iterator currentPolygon;
         std::vector< class Polygon > polygons;
@@ -46,8 +47,8 @@ class testApp : public ofBaseApp{
         void sendMessage( const int leftMotor, const int rightMotor, const int pen_up ) const;
         void waitAck() const;
         Vertex toPolar(const int x, const int y);
-        float calculateAngle( const Vertex vector0, const Vertex vector1) const;
-        void moveForNextPoint();
+        float calculateAngle( const Vertex& vector0, const Vertex& vector1) const;
+        void moveForNextPoint(const Vertex& finalPosition, const Vertex& finalVector);
         void rotate();
         void move();
 

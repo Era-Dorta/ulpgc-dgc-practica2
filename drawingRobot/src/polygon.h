@@ -9,6 +9,7 @@ class Polygon
     private:
         static int ox, oy;
         std::vector< Vertex > v;
+        std::vector< Vertex > vectors;
 
     public:
 
@@ -19,6 +20,10 @@ class Polygon
         static void setOrigin( const float& ox, const float& oy );
 
         unsigned int getSize() const;
+
+        const Vertex getVertex(const int& i) const;
+
+        const Vertex getVector(const int& i) const;
 
     private:
         void drawLine( const Vertex& v0, const Vertex& vy ) const;
