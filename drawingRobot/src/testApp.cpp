@@ -6,6 +6,7 @@
 #define ROTATION_FACTOR (ROTATION_R/WHEEL_R)*EXTRA_ROTATION
 #define TO_RADIANS M_PI/180.0
 #define TO_DEGREES 180.0/M_PI
+#define BOARD_SCALATION 0.25
 //#include <thread>
 #include <memory>
 using namespace std;
@@ -91,12 +92,12 @@ void testApp::mousePressed(int x, int y, int button){
         lastLineEnd.set( x, y );
         prevVertex = currentPolygon->getVertex(0);
         cout << "Move to " << prevVertex << "with vector " << currentPolygon->getVector(0) << endl;
-        //moveForNextPoint(prevVertex, currentPolygon->getVector(0));
+        moveForNextPoint(prevVertex, currentPolygon->getVector(0));
         for(unsigned int i = 1; i < currentPolygon->getSize(); i++){
             currentVertex = currentPolygon->getVertex(i);
-            distance = prevVertex.distance(currentVertex);
-            //sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
-            //moveForNextPoint(currentVertex, currentPolygon->getVector(i));
+            distance = prevVertex.distance(currentVertex)*BOARD_SCALATION;
+            sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
+            moveForNextPoint(currentVertex, currentPolygon->getVector(i));
             cout << "Move to " << currentVertex << "with vector " << currentPolygon->getVector(i) << endl;
             prevVertex = currentVertex;
         }
@@ -198,7 +199,7 @@ void testApp::moveForNextPoint( const Vertex& finalPosition, const Vertex& final
         return;
     }
 
-    float distanceToAux = brickPosition.distance(auxPosition);
+    float distanceToAux = brickPosition.distance(auxPosition)*BOARD_SCALATION;
 
     //Vector from brick current position to final brick position
     Vertex currentToAux =  auxPosition - brickPosition;
