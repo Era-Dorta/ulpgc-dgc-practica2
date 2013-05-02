@@ -1,12 +1,12 @@
 #include "testApp.h"
 #define WHEEL_R 2.8
 #define ROTATION_R 5.6
+#define BOARD_SCALATION 0.25
 #define MOVE_FACTOR 360.0/(2*M_PI*WHEEL_R)
 #define EXTRA_ROTATION 1.02
 #define ROTATION_FACTOR (ROTATION_R/WHEEL_R)*EXTRA_ROTATION
 #define TO_RADIANS M_PI/180.0
 #define TO_DEGREES 180.0/M_PI
-#define BOARD_SCALATION 0.25
 //#include <thread>
 #include <memory>
 using namespace std;
@@ -140,7 +140,7 @@ void testApp::dragEvent(ofDragInfo dragInfo){
 void testApp::sendMessage( const int leftMotor, const int rightMotor, const int pen_up ) const{
     char command[200];
     sprintf(command, "python server.py send %d %d %d", leftMotor, rightMotor, pen_up);
-    //system(command);
+    system(command);
     waitAck();
 }
 
@@ -148,7 +148,7 @@ void testApp::sendMessage( const int leftMotor, const int rightMotor, const int 
 void testApp::waitAck() const{
     char command[200];
     sprintf(command, "python server.py wait %d", WAIT_TIME);
-    //system(command);
+    system(command);
 }
 
 //First argument is module, second is angle in radians
@@ -171,19 +171,13 @@ float testApp::calculateAngle( const Vertex& vector0, const Vertex& vector1) con
     Vertex aux = vertexCopy0*vertexCopy1;
 
     //Arc sin gives us the angle between the vectors
-    float resAngle = asin(aux.getNorm3());
+    float resAngle = acos(dotProduct(vertexCopy0, vertexCopy1));
 
     //Use third coordinate to control if it is clockwise or
     //anticlockwise
     if(aux[H] > 0){
         resAngle = -resAngle;
     }
-
-    //If angle is 0 but vectors are different then is a 180 degrees angle
-    if(resAngle == 0 && !(vertexCopy0 == vertexCopy1) ){
-        return resAngle = 180;
-    }
-
     return resAngle*TO_DEGREES;
 }
 
