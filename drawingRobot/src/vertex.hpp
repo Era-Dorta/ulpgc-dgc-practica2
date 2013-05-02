@@ -30,8 +30,8 @@ class Vertex {
         Vertex( const Vertex& b );
         ~Vertex();
 
-		Vertex( float x, float y );
-		void set( float x, float y );
+		Vertex( float x, float y, float h = 1 );
+		void set( float x, float y, float h = 1);
 
         // 2. Operators
         void operator = (const Vertex& b);

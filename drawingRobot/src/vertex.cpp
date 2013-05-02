@@ -21,10 +21,10 @@ Vertex::Vertex( const Vertex& b )
 	}
 }
 
-Vertex::Vertex( float x, float y )
+Vertex::Vertex( float x, float y, float h )
 {
     v = new float[3];
-	set( x, y );
+	set( x, y , h);
 }
 
 Vertex::~Vertex()
@@ -32,11 +32,11 @@ Vertex::~Vertex()
     delete [] v;
 }
 
-void Vertex::set( float x, float y )
+void Vertex::set( float x, float y, float h )
 {
 	v[0] = x;
 	v[1] = y;
-	v[2] = 1;
+	v[2] = h;
 }
 
 
@@ -126,10 +126,7 @@ void Vertex::normalize(){
 
 float Vertex::distance( const Vertex& b ) const{
     return sqrt( (v[X] - b[X])*(v[X] - b[X]) +
-                (v[Y] - b[Y])*(v[Y] - b[Y]) +
-                (v[H] - b[H])*(v[H] - b[H]));
-    float norm = getNorm();
-    set( v[X]/norm, v[Y]/norm );
+                (v[Y] - b[Y])*(v[Y] - b[Y]) );
 }
 
 /*                                 3. << operator                            */

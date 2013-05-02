@@ -6,7 +6,7 @@
 #define ROTATION_FACTOR (ROTATION_R/WHEEL_R)*EXTRA_ROTATION
 #define TO_RADIANS M_PI/180.0
 #define TO_DEGREES 180.0/M_PI
-#include <thread>
+//#include <thread>
 #include <memory>
 using namespace std;
 
@@ -27,8 +27,8 @@ void testApp::setup(){
     penPosition = brickPosition + penOffset;
 
 
-    thread t1(task1);
-    t1.join();
+    //thread t1(task1);
+    //t1.join();
 
     addPolygon();
 }
@@ -159,7 +159,7 @@ void testApp::moveForNextPoint(){
 
     //Use third coordinate to control if it is clockwise or
     //anticlockwise
-    if(aux[Z] < 0){
+    if(aux[H] < 0){
         finalAngle = -finalAngle;
     }
 
