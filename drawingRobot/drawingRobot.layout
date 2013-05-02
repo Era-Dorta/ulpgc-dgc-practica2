@@ -5,15 +5,15 @@
 		<Cursor position="15" topLine="0" />
 	</File>
 	<File name="src/testApp.cpp" open="1" top="1" tabpos="1">
-		<Cursor position="3291" topLine="111" />
+		<Cursor position="4257" topLine="149" />
 	</File>
 	<File name="src/testApp.h" open="1" top="0" tabpos="2">
-		<Cursor position="496" topLine="3" />
+		<Cursor position="1298" topLine="27" />
 	</File>
 	<File name="src/vertex.cpp" open="1" top="0" tabpos="3">
-		<Cursor position="1631" topLine="72" />
+		<Cursor position="2249" topLine="98" />
 	</File>
 	<File name="src/vertex.hpp" open="1" top="0" tabpos="4">
-		<Cursor position="173" topLine="15" />
+		<Cursor position="1195" topLine="25" />
 	</File>
 </CodeBlocks_layout_file>

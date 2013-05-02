@@ -146,14 +146,16 @@ float testApp::calculateAngle( const Vertex vector0, const Vertex vector1) const
 
     //Cross product between final vector0 and vector1
     Vertex aux = vector0*vector1;
-
+    cout << "aux vale " << aux << endl;
     //Arc sin gives us the angle between the vectors
     float resAngle = asin(aux.getNorm3());
 
     //Use third coordinate to control if it is clockwise or
     //anticlockwise
-    if(aux[H] < 0){
+    if(aux[H] > 0){
+        cout << "Cambiando el angulo " << resAngle << endl;
         resAngle = -resAngle;
+        cout << "Cambiando el angulo " << resAngle << endl;
     }
 
     //If angle is 0 but vectors are different then is a 180 degrees angle
@@ -164,7 +166,7 @@ float testApp::calculateAngle( const Vertex vector0, const Vertex vector1) const
 }
 
 void testApp::moveForNextPoint(){
-    Vertex finalPosition(14,24);
+    Vertex finalPosition(14,19);
     Vertex finalVector(1,1);
     Vertex yAxis(0,1);
 
@@ -199,7 +201,7 @@ void testApp::moveForNextPoint(){
 
     //Calculate the angle between where the brick is looking now, after rotationAngle
     //rotation, and vector auxToFinal
-    rotationAngle = calculateAngle(finalVector,currentToAux);
+    rotationAngle = calculateAngle(currentToAux, finalVector);
         cout << "rotationAngle " << rotationAngle << endl;
     //Rotate the brick to look in finalVector direction
     sendMessage( rotationAngle*ROTATION_FACTOR, -rotationAngle*ROTATION_FACTOR, PEN_UP );
