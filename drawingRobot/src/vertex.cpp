@@ -104,12 +104,12 @@ Vertex Vertex::rotate( const float angle ) const
 
 float Vertex::getNorm() const
 {
-    return( sqrt( v[X]*v[X]+v[Y]*v[Y]+v[H]*v[H] ) );
+    return( sqrt( v[X]*v[X]+v[Y]*v[Y] ) );
 }
 
 float Vertex::getNorm3() const
 {
-    return( sqrt( v[X]*v[X]+v[Y]*v[Y] ) );
+    return( sqrt( v[X]*v[X]+v[Y]*v[Y]+v[H]*v[H] ) );
 }
 
 Vertex Vertex::getUnitVector() const
@@ -121,7 +121,7 @@ Vertex Vertex::getUnitVector() const
 
 void Vertex::normalize(){
     float invNorm = 1.0/getNorm();
-    set( v[X]*invNorm, v[Y]*invNorm, v[H]*invNorm);
+    set( v[X]*invNorm, v[Y]*invNorm);
 }
 
 float Vertex::distance( const Vertex& b ) const{

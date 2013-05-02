@@ -7,7 +7,7 @@ robot = '00:16:53:01:80:04'
 server_box = 1
 nxt_box = 0
 
-print "Starting server with " +  sys.argv[1] + " command"
+print "\t Server: Starting server with " +  sys.argv[1] + " command"
 
 s = nxt.bluesock.BlueSock(robot)
 b = s.connect()
@@ -30,9 +30,9 @@ else:
             i += 1
             msg = "0"
     if i < times:
-        print "Got brick confirmation after " + str(i)
+        print "\t Server: Got brick confirmation after " + str(i)
     else:
-        print "Tired of waiting for brick"
+        print "\t Server: Tired of waiting for brick"
 
-print "Ending server "
+print "\t Server: Ending server "
 s.close()

@@ -120,6 +120,7 @@ void testApp::dragEvent(ofDragInfo dragInfo){
 //--------------------------------------------------------------
 void testApp::sendMessage( const int leftMotor, const int rightMotor, const int pen_up ) const{
     char command[200];
+    cout << "send mess " << leftMotor << " " << rightMotor << endl;
     sprintf(command, "python server.py send %d %d %d", leftMotor, rightMotor, pen_up);
     system(command);
     waitAck();
@@ -144,24 +145,29 @@ Vertex testApp::toPolar(const int x, const int y){
 //--------------------------------------------------------------
 float testApp::calculateAngle( const Vertex vector0, const Vertex vector1) const{
 
+    Vertex vertexCopy0 = vector0, vertexCopy1 = vector1;
+    vertexCopy0[H] = 0;
+    vertexCopy1[H] = 0;
+    cout << "vertexCopy0 " << vertexCopy0<< endl;
+    cout << "vertexCopy1 " << vertexCopy1<< endl;
     //Cross product between final vector0 and vector1
-    Vertex aux = vector0*vector1;
-    cout << "aux vale " << aux << endl;
+    Vertex aux = vertexCopy0*vertexCopy1;
+    cout << "aux " << aux << endl;
     //Arc sin gives us the angle between the vectors
     float resAngle = asin(aux.getNorm3());
-
+    cout << "aux.getNorm3() " << aux.getNorm3() << endl;
+cout << "resAngle " << resAngle << endl;
     //Use third coordinate to control if it is clockwise or
     //anticlockwise
     if(aux[H] > 0){
-        cout << "Cambiando el angulo " << resAngle << endl;
         resAngle = -resAngle;
-        cout << "Cambiando el angulo " << resAngle << endl;
     }
 
     //If angle is 0 but vectors are different then is a 180 degrees angle
-    if(resAngle == 0 && !(vector0 == vector1) ){
+    if(resAngle == 0 && !(vertexCopy0 == vertexCopy1) ){
         return resAngle = 180;
     }
+    cout << "angulo vale" << resAngle*TO_DEGREES << endl;
     return resAngle*TO_DEGREES;
 }
 
@@ -172,22 +178,29 @@ void testApp::moveForNextPoint(){
 
     finalVector.normalize();
 
+
     //Angle between final vector and yAxis, because
     //penOffset is defined on yAxis
-    float finalAngle = calculateAngle(finalVector, yAxis);
+    float finalAngle = calculateAngle(yAxis, finalVector);
 
     //Rotate penOffset that angle
     Vertex currentPenOffset = penOffset.rotate(finalAngle*TO_RADIANS);
-
+    cout << "currentPenOffset " << currentPenOffset << endl;
     //Substract the rotated penOffset to the final position to obtain the
     //brick final position
     Vertex auxPosition = finalPosition - currentPenOffset;
+
+    if(auxPosition == brickPosition && finalVector == brickAngle){
+        cout << "Me voyyyyy\n";
+        return;
+    }
+
     float distanceToAux = brickPosition.distance(auxPosition);
 
     //Vector from brick current position to final brick position
     Vertex currentToAux =  auxPosition - brickPosition;
     currentToAux.normalize();
-
+cout << "currentToAux " << currentToAux << endl;
     //Calculate the angle between where the brick is looking and
     //currentToAux vector
     float rotationAngle = calculateAngle(brickAngle, currentToAux);
