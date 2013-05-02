@@ -150,12 +150,12 @@ void testApp::moveForNextPoint(){
 
     finalVector.normalize();
 
-    //Dot product between final vector and yAxis, because
+    //Cross product between final vector and yAxis, because
     //penOffset is defined on yAxis
     Vertex aux = finalVector*yAxis;
 
     //Arc sin gives us the angle between the vectors
-    float finalAngle = asin(aux.getNorm());
+    float finalAngle = asin(aux.getNorm3());
 
     //Use third coordinate to control if it is clockwise or
     //anticlockwise

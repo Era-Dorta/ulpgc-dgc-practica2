@@ -102,10 +102,14 @@ Vertex Vertex::rotate( const float angle ) const
     return res;
 }
 
-
 float Vertex::getNorm() const
 {
     return( sqrt( v[X]*v[X]+v[Y]*v[Y]+v[H]*v[H] ) );
+}
+
+float Vertex::getNorm3() const
+{
+    return( sqrt( v[X]*v[X]+v[Y]*v[Y] ) );
 }
 
 Vertex Vertex::getUnitVector() const

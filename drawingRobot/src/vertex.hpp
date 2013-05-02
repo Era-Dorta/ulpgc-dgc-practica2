@@ -46,6 +46,7 @@ class Vertex {
 		Vertex rotate( const float angle ) const;
 
         float getNorm() const ;
+        float getNorm3() const ;
 		Vertex getUnitVector() const ;
 		void normalize();
 		float distance( const Vertex& b ) const;
