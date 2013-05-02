@@ -49,8 +49,6 @@ class testApp : public ofBaseApp{
         Vertex toPolar(const int x, const int y);
         float calculateAngle( const Vertex& vector0, const Vertex& vector1) const;
         void moveForNextPoint(const Vertex& finalPosition, const Vertex& finalVector);
-        void rotate();
-        void move();
 
         void addPolygon();
 };

@@ -90,20 +90,14 @@ void testApp::mousePressed(int x, int y, int button){
         currentPolygon->showPolygon();
         lastLineEnd.set( x, y );
         prevVertex = currentPolygon->getVertex(0);
-        cout << "Brick Position " << brickPosition << " Brick Angle " << brickAngle << endl;
-        cout << "Move to " << prevVertex << " with vector " << currentPolygon->getVector(0) << endl;
         moveForNextPoint(prevVertex, currentPolygon->getVector(0));
-        cout << "Brick Position " << brickPosition << " Brick Angle " << brickAngle << endl;
         for(unsigned int i = 1; i < currentPolygon->getSize(); i++){
             currentVertex = currentPolygon->getVertex(i);
             distance = prevVertex.distance(currentVertex);
             sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
             brickPosition[X] += brickAngle[X]*distance;
             brickPosition[Y] += brickAngle[Y]*distance;
-            cout << "Brick Position " << brickPosition << " Brick Angle " << brickAngle << " distance " <<  distance << endl;
-            cout << "Move to " << currentVertex << " with vector " << currentPolygon->getVector(i) << endl;
             moveForNextPoint(currentVertex, currentPolygon->getVector(i));
-            cout << "Brick Position " << brickPosition << " Brick Angle " << brickAngle << endl;
             prevVertex = currentVertex;
         }
 
@@ -185,16 +179,12 @@ void testApp::moveForNextPoint( const Vertex& finalPosition, const Vertex& final
     //Angle between final vector and yAxis, because
     //penOffset is defined on yAxis
     float finalAngle = calculateAngle(yAxis, finalVector);
-    cout << "yAxis " << yAxis << endl;
-    cout << "finalVector " << finalVector << endl;
 
-cout << "finalAngle " << finalAngle << endl;
     //Rotate penOffset that angle
     Vertex currentPenOffset = penOffset.rotate(finalAngle*TO_RADIANS);
 
     //Substract the rotated penOffset to the final position to obtain the
     //brick final position
-    cout << "currentpenoffset " << currentPenOffset << endl;
     Vertex auxPosition = finalPosition - currentPenOffset;
 
     //If position and angle are the same then do nothing
@@ -227,17 +217,4 @@ cout << "finalAngle " << finalAngle << endl;
     //Update brick position and direction
     brickPosition = auxPosition;
     brickAngle = finalVector;
-}
-
-//--------------------------------------------------------------
-void testApp::rotate(){
-    //Necesito
-    //vector actual
-    //vector objectivo
-    //Si hacemos el producto vectorial, podemos mirar el signo de la z
-    //y con eso ya sabemos si es hacia derecha o i entre los dos nos da
-}
-
-//--------------------------------------------------------------
-void testApp::move(){
 }
