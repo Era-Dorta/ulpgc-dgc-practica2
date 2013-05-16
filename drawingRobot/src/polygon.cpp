@@ -17,6 +17,7 @@ void Polygon::addVertex( const float& x, const float& y )
         vectors.back().set( aux[X], aux[Y] );
     }
     v.push_back( vertex );
+    vScalated.push_back(vertex*0.25);
     Vertex vector( 0, 1 );
     vectors.push_back(vector);
 }
@@ -47,7 +48,7 @@ unsigned int Polygon::getSize() const
 }
 
 const Vertex Polygon::getVertex(const int& i) const{
-    return v[i];
+    return vScalated[i];
 }
 
 const Vertex Polygon::getVector(const int& i) const{

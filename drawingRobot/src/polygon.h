@@ -9,6 +9,7 @@ class Polygon
     private:
         static int ox, oy;
         std::vector< Vertex > v;
+        std::vector< Vertex > vScalated;
         std::vector< Vertex > vectors;
 
     public:
