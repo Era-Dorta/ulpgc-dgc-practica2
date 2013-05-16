@@ -1,4 +1,6 @@
 #define WALK_SPEED 35
+#define ROTATE_SPEED 20
+#define ROTATE_ANGLE 20
 #define INBOX 1
 #define OUTBOX 5
 #define SERVERBOX 1
@@ -14,7 +16,7 @@ int penState;
 int nextPenState;
 
 void initialize(){
-    penState = PEN_UP;
+    penState = PEN_DOWN;
     moveLeftMotor = 0;
     moveRightMotor = 0;
 }
@@ -46,14 +48,13 @@ void movePen(){
 
     if(nextPenState == PEN_UP){
         //Move pen to paint
-        OnRev(OUT_A, PEN_MOTOR_STRENGTH);
+        //Move
+        RotateMotor( OUT_A, ROTATE_SPEED, -ROTATE_ANGLE);
     }else{
         //Move pen to paint
-        OnFwd(OUT_A, PEN_MOTOR_STRENGTH);
+        RotateMotor( OUT_A, ROTATE_SPEED, ROTATE_ANGLE );
     }
     penState = nextPenState;
-    Wait( PEN_OFFSET_TIME );
-    Off( OUT_A );
 }
 
 //From msg fills nextPosition and nextPenState
@@ -100,7 +101,6 @@ task main(){
         parseMsg(msg);
         movePen();
         moveBrick();
-
         SendMessage(SERVERBOX,"Done");
     }
 }
