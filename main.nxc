@@ -48,7 +48,6 @@ void movePen(){
 
     if(nextPenState == PEN_UP){
         //Move pen to paint
-        //Move
         RotateMotor( OUT_A, ROTATE_SPEED, -ROTATE_ANGLE);
     }else{
         //Move pen to paint
