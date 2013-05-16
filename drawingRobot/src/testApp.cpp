@@ -101,10 +101,7 @@ void testApp::mousePressed(int x, int y, int button){
             prevVertex = currentVertex;
         }
 
-        if( !currentPolygon->getSize() ){
-            currentPolygon->addVertex( x, y );
-            addPolygon();
-        }
+        addPolygon();
         break;
     default:
         break;
