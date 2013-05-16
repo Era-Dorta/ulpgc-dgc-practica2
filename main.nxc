@@ -34,7 +34,7 @@ void moveBrick(){
         }
     }else{
         //Move
-        RotateMotor( OUT_BC, WALK_SPEED, moveLeftMotor );
+        RotateMotorEx( OUT_BC, WALK_SPEED, moveLeftMotor, 0, true, true );
     }
 }
 
