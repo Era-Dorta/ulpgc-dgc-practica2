@@ -95,20 +95,16 @@ void testApp::mousePressed(int x, int y, int button){
         y = prevY;
     }
     Vertex position, vector, currentVertex, prevVertex;
-    //float distance;
     switch(button){
     case L_MOUSE:
         cout << "L_MOUSE 1" << endl;
         currentPolygon->addVertex( x, y );
         cout << "L_MOUSE 2" << endl;
-        //currentLineBegin.set( x, y );
         appMode = MODE_POLYGON_CREATION;
         break;
     case R_MOUSE:
         cout << "R_MOUSE" << endl;
         currentPolygon->showPolygon();
-        //lastLineEnd.set( x, y );
-
 
         server->drawPolygon( &(*currentPolygon) );
 

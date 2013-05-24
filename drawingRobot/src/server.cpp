@@ -27,16 +27,6 @@ Server* Server::getInstance()
     return instance;
 }
 
-//First argument is module, second is angle in radians
-//--------------------------------------------------------------
-Vertex Server::toPolar(const int x, const int y)
-{
-    Vertex res;
-    res[R] = sqrt(x*x + y*y);
-    res[A] = atan2(x,y);
-    return res;
-}
-
 //--------------------------------------------------------------
 float Server::calculateAngle( const Vertex& vector0, const Vertex& vector1) const
 {
@@ -118,17 +108,6 @@ void Server::waitAck() const
     sprintf(command, "python server.py wait %d", WAIT_TIME);
     system(command);
 }
-/*
-src/server.cpp|121|error: pasar ‘const Server’ como el argumento ‘this’ de ‘void Server::moveForNextPoint(const Vertex&, const Vertex&)’ descarta a los calificadores [-fpermissive]|
-src/server.cpp|123|error: ‘currentVertex’ no se declaró en este ámbito|
-src/server.cpp|125|error: operadores inválidos de tipos ‘<unresolved overloaded function type>’ y ‘double’ para el binario ‘operator*’|
-src/server.cpp|125|error: operadores inválidos de tipos ‘<unresolved overloaded function type>’ y ‘double’ para el binario ‘operator*’|
-src/server.cpp|126|error: operadores inválidos de tipos ‘float’ y ‘<unresolved overloaded function type>’ para el binario ‘operator*’|
-src/server.cpp|127|error: operadores inválidos de tipos ‘float’ y ‘<unresolved overloaded function type>’ para el binario ‘operator*’|
-||=== Build finished: 6 errors, 0 warnings ===|
-*/
-
-//void Server::moveForNextPoint( const Vertex& finalPosition, const Vertex& finalVector )
 
 void Server::drawPolygon( const Polygon* currentPolygon )
 {
