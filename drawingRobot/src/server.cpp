@@ -9,7 +9,6 @@ Server::Server()
     //serverScript = "server.py"
 
     yAxis.set(0,1);
-    //brickPositionPolar = toPolar(10,10);
     brickPosition.set(0,0);
     brickAngle.set(0,1);
     brickAngle.normalize();
@@ -115,14 +114,27 @@ void Server::drawPolygon( const Polygon* currentPolygon )
     Vertex prevVertex = currentPolygon->getVertex(0);
     float distance;
 
+    //Place brick in the first position of the poligon
     moveForNextPoint(prevVertex, currentPolygon->getVector(0) );
-    for(unsigned int i = 1; i < currentPolygon->getSize(); i++){
+    unsigned int i = 1;
+    //Iterate for all other vertices, but last one
+    for(; i < currentPolygon->getSize() - 1; i++){
+        //Advance until next vertex
         currentVertex = currentPolygon->getVertex(i);
         distance = prevVertex.distance(currentVertex);
         sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
         brickPosition[X] += brickAngle[X]*distance;
         brickPosition[Y] += brickAngle[Y]*distance;
+
+        //Move the brick so it can draw next line
         moveForNextPoint(currentVertex, currentPolygon->getVector(i));
         prevVertex = currentVertex;
     }
+
+    //Advance to draw the last line
+    currentVertex = currentPolygon->getVertex(i);
+    distance = prevVertex.distance(currentVertex);
+    sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
+    brickPosition[X] += brickAngle[X]*distance;
+    brickPosition[Y] += brickAngle[Y]*distance;
 }

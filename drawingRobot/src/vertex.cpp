@@ -57,7 +57,7 @@ Vertex Vertex::operator + (const Vertex& b) const
 
 Vertex Vertex::operator - (const Vertex& b) const
 {
-    Vertex c( v[X]-b[X], -v[Y]+b[Y] );
+    Vertex c( v[X]-b[X], v[Y]-b[Y] );
     return c;
 }
 

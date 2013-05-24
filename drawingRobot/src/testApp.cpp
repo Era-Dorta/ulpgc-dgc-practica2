@@ -66,7 +66,8 @@ void testApp::mouseMoved(int x, int y ){
     }
     currentMousePos.set( x, y );
 
-    currentMousePos = currentMousePos - Polygon::getOrigin();
+    currentMousePos.set(currentMousePos[X] - Polygon::getOrigin()[X],
+                        - currentMousePos[Y] + Polygon::getOrigin()[Y]);
     prevX = x;
     prevY = y;
 }
