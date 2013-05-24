@@ -1,4 +1,4 @@
-#include "polygon.h"
+#include "polygon.hpp"
 #include <iostream>
 int Polygon::ox = 0;
 int Polygon::oy = 0;
