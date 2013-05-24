@@ -2,6 +2,7 @@
 #define VERTEX_HPP
 
 #include "ofMain.h"
+#include "matrix.hpp"
 #include <cstdlib>
 #include <cmath>
 #include <string>
@@ -35,6 +36,7 @@ class Vertex {
 
         // 2. Operators
         void operator = (const Vertex& b);
+        Vertex operator * (const Matrix& m) const ;
         Vertex operator + (const Vertex& b ) const ;
         Vertex operator - (const Vertex& b ) const ;
         Vertex operator * (const Vertex& b ) const ;

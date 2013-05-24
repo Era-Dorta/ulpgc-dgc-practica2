@@ -49,6 +49,18 @@ void Vertex::operator = (const Vertex& b)
     }
 }
 
+Vertex Vertex::operator * (const Matrix& m) const
+{
+	Vertex vRes;
+	vRes[2] = 0;
+	for( int i=0; i<3; i++ ){
+		for( int j=0; j<3; j++ ){
+			vRes[i] += v[j]*m(j,i);
+		}
+	}
+	return vRes;
+}
+
 Vertex Vertex::operator + (const Vertex& b) const
 {
     Vertex c( b[X]+v[X], b[Y]+v[Y] );
