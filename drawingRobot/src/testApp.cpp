@@ -19,6 +19,8 @@ void task1(string msg)
 }
 
 void testApp::setup(){
+    prevX = 60;
+    prevY = 60;
     yAxis.set(0,1);
     brickPositionPolar = toPolar(10,10);
     brickPosition.set(0,0);
@@ -66,9 +68,20 @@ void testApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void testApp::mouseMoved(int x, int y ){
+    //Do not allow to paint more than 15 cm closer to the
+    //edges, since the brick could fall off the board
+    //Since canvas is world cm*4, then 15*4 = 60 pixels in canvas
+    if(x < 60 || x > 602){
+        x = prevX;
+    }
+    if(y < 60 || y > 410){
+        y = prevY;
+    }
     currentMousePos.set( x, y );
 
     currentMousePos = currentMousePos - Polygon::getOrigin();
+    prevX = x;
+    prevY = y;
 }
 
 //--------------------------------------------------------------
@@ -85,6 +98,15 @@ void testApp::addPolygon(){
 
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
+    //Do not allow to paint more than 15 cm closer to the
+    //edges, since the brick could fall off the board
+    //Since canvas is world cm*4, then 15*4 = 60 pixels in canvas
+    if(x < 60 || x > 602){
+        x = prevX;
+    }
+    if(y < 60 || y > 410){
+        y = prevY;
+    }
     Vertex position, vector, currentVertex, prevVertex;
     float distance;
     switch(button){

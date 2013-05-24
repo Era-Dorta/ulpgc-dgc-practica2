@@ -29,6 +29,8 @@ class testApp : public ofBaseApp{
         Vertex lastLineEnd;
         Vertex currentLineBegin;
         Vertex yAxis;
+        int prevX;
+        int prevY;
 
         std::vector< class Polygon >::iterator currentPolygon;
         std::vector< class Polygon > polygons;
