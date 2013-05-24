@@ -16,7 +16,11 @@ enum AppMode {
 
 class testApp : public ofBaseApp{
 
+
     private:
+        int prevX;
+        int prevY;
+
         std::vector< class Polygon >::iterator currentPolygon;
         std::vector< class Polygon > polygons;
 
