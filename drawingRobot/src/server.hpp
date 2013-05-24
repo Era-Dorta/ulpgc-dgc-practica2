@@ -22,9 +22,6 @@ class Server
     private:
         //String serverScript;
 
-        //Angle in polar coordinates, first argument is
-        // module, second is angle
-        Vertex brickPositionPolar;
         Vertex brickPosition;
         Vertex brickAngle;
         Vertex penPosition;
@@ -42,8 +39,6 @@ class Server
 
     public:
         static Server* getInstance();
-
-        Vertex toPolar(const int x, const int y);
 
         float calculateAngle( const Vertex& vector0, const Vertex& vector1) const ;
 

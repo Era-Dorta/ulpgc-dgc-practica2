@@ -9,7 +9,6 @@ Server::Server()
     //serverScript = "server.py"
 
     yAxis.set(0,1);
-    //brickPositionPolar = toPolar(10,10);
     brickPosition.set(0,0);
     brickAngle.set(0,1);
     brickAngle.normalize();
@@ -25,16 +24,6 @@ Server* Server::getInstance()
         instance = new Server;
     }
     return instance;
-}
-
-//First argument is module, second is angle in radians
-//--------------------------------------------------------------
-Vertex Server::toPolar(const int x, const int y)
-{
-    Vertex res;
-    res[R] = sqrt(x*x + y*y);
-    res[A] = atan2(x,y);
-    return res;
 }
 
 //--------------------------------------------------------------
@@ -118,17 +107,6 @@ void Server::waitAck() const
     sprintf(command, "python server.py wait %d", WAIT_TIME);
     system(command);
 }
-/*
-src/server.cpp|121|error: pasar ‘const Server’ como el argumento ‘this’ de ‘void Server::moveForNextPoint(const Vertex&, const Vertex&)’ descarta a los calificadores [-fpermissive]|
-src/server.cpp|123|error: ‘currentVertex’ no se declaró en este ámbito|
-src/server.cpp|125|error: operadores inválidos de tipos ‘<unresolved overloaded function type>’ y ‘double’ para el binario ‘operator*’|
-src/server.cpp|125|error: operadores inválidos de tipos ‘<unresolved overloaded function type>’ y ‘double’ para el binario ‘operator*’|
-src/server.cpp|126|error: operadores inválidos de tipos ‘float’ y ‘<unresolved overloaded function type>’ para el binario ‘operator*’|
-src/server.cpp|127|error: operadores inválidos de tipos ‘float’ y ‘<unresolved overloaded function type>’ para el binario ‘operator*’|
-||=== Build finished: 6 errors, 0 warnings ===|
-*/
-
-//void Server::moveForNextPoint( const Vertex& finalPosition, const Vertex& finalVector )
 
 void Server::drawPolygon( const Polygon* currentPolygon )
 {
@@ -136,14 +114,27 @@ void Server::drawPolygon( const Polygon* currentPolygon )
     Vertex prevVertex = currentPolygon->getVertex(0);
     float distance;
 
+    //Place brick in the first position of the poligon
     moveForNextPoint(prevVertex, currentPolygon->getVector(0) );
-    for(unsigned int i = 1; i < currentPolygon->getSize(); i++){
+    unsigned int i = 1;
+    //Iterate for all other vertices, but last one
+    for(; i < currentPolygon->getSize() - 1; i++){
+        //Advance until next vertex
         currentVertex = currentPolygon->getVertex(i);
         distance = prevVertex.distance(currentVertex);
         sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
         brickPosition[X] += brickAngle[X]*distance;
         brickPosition[Y] += brickAngle[Y]*distance;
+
+        //Move the brick so it can draw next line
         moveForNextPoint(currentVertex, currentPolygon->getVector(i));
         prevVertex = currentVertex;
     }
+
+    //Advance to draw the last line
+    currentVertex = currentPolygon->getVertex(i);
+    distance = prevVertex.distance(currentVertex);
+    sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
+    brickPosition[X] += brickAngle[X]*distance;
+    brickPosition[Y] += brickAngle[Y]*distance;
 }

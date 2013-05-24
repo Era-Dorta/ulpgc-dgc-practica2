@@ -166,7 +166,6 @@ void testApp::mousePressed(int x, int y, int button)
     //Polygon::PixelToWorld( x, y );
 
     Vertex position, vector, currentVertex, prevVertex;
-    //float distance;
     switch(button){
     case L_MOUSE:
         cout << "L_MOUSE 1" << endl;
