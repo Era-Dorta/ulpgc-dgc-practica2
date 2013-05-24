@@ -34,7 +34,9 @@
 			<Option virtualFolder="src/" />
 		</Unit>
 		<Unit filename="src/polygon.cpp" />
-		<Unit filename="src/polygon.h" />
+		<Unit filename="src/polygon.hpp" />
+		<Unit filename="src/server.cpp" />
+		<Unit filename="src/server.hpp" />
 		<Unit filename="src/testApp.cpp">
 			<Option virtualFolder="src/" />
 		</Unit>

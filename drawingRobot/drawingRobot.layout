@@ -4,22 +4,28 @@
 	<File name="src/main.cpp" open="1" top="0" tabpos="1">
 		<Cursor position="288" topLine="0" />
 	</File>
-	<File name="src/polygon.cpp" open="1" top="0" tabpos="7">
-		<Cursor position="997" topLine="0" />
+	<File name="src/polygon.cpp" open="1" top="0" tabpos="6">
+		<Cursor position="767" topLine="18" />
 	</File>
-	<File name="src/polygon.h" open="1" top="0" tabpos="6">
-		<Cursor position="211" topLine="0" />
+	<File name="src/polygon.hpp" open="1" top="0" tabpos="9">
+		<Cursor position="0" topLine="0" />
 	</File>
-	<File name="src/testApp.cpp" open="1" top="0" tabpos="3">
-		<Cursor position="1868" topLine="31" />
+	<File name="src/server.cpp" open="1" top="0" tabpos="8">
+		<Cursor position="153" topLine="0" />
 	</File>
-	<File name="src/testApp.h" open="1" top="1" tabpos="2">
+	<File name="src/server.hpp" open="1" top="0" tabpos="7">
+		<Cursor position="867" topLine="0" />
+	</File>
+	<File name="src/testApp.cpp" open="1" top="1" tabpos="3">
+		<Cursor position="2552" topLine="60" />
+	</File>
+	<File name="src/testApp.h" open="1" top="0" tabpos="2">
 		<Cursor position="629" topLine="0" />
 	</File>
 	<File name="src/vertex.cpp" open="1" top="0" tabpos="4">
-		<Cursor position="1768" topLine="61" />
+		<Cursor position="923" topLine="18" />
 	</File>
 	<File name="src/vertex.hpp" open="1" top="0" tabpos="5">
-		<Cursor position="1311" topLine="22" />
+		<Cursor position="1311" topLine="0" />
 	</File>
 </CodeBlocks_layout_file>
