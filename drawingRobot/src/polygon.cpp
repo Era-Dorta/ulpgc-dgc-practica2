@@ -30,7 +30,7 @@ void Polygon::draw() const
 }
 
 
-void Polygon::drawLine( const Vertex& v0, const Vertex& v1 ) const
+void Polygon::drawLine( const Vertex& v0, const Vertex& v1 )
 {
     ofLine( v0[X]+ox, -v0[Y]+oy, v1[X]+ox, -v1[Y]+oy );
 }
@@ -39,6 +39,11 @@ void Polygon::setOrigin( const float& ox, const float& oy )
 {
     Polygon::ox = ox;
     Polygon::oy = oy;
+}
+
+Vertex Polygon::getOrigin()
+{
+    return Vertex( ox, oy );
 }
 
 
@@ -59,4 +64,9 @@ void Polygon::showPolygon() const{
     for( unsigned int i=0; i<v.size(); i++ ){
         cout << "v[" << i << "] " << v[i] << " vector " << vectors[i] << endl;
     }
+}
+
+Vertex Polygon::getLastVertex() const
+{
+    return v[v.size()-1];
 }

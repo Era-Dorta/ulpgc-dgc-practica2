@@ -11,6 +11,11 @@
 #define L_MOUSE 0
 #define R_MOUSE 2
 
+enum AppMode {
+    MODE_VISUALIZATION = 0,
+    MODE_POLYGON_CREATION
+};
+
 class testApp : public ofBaseApp{
 
     private:
@@ -27,6 +32,10 @@ class testApp : public ofBaseApp{
 
         std::vector< class Polygon >::iterator currentPolygon;
         std::vector< class Polygon > polygons;
+
+        AppMode appMode;
+
+        Vertex currentMousePos;
 
 	public:
 		void setup();

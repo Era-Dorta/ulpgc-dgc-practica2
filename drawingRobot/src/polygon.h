@@ -19,6 +19,7 @@ class Polygon
         void draw() const;
 
         static void setOrigin( const float& ox, const float& oy );
+        static Vertex getOrigin();
 
         unsigned int getSize() const;
 
@@ -28,8 +29,10 @@ class Polygon
 
         void showPolygon() const;
 
-    private:
-        void drawLine( const Vertex& v0, const Vertex& vy ) const;
+        static void drawLine( const Vertex& v0, const Vertex& vy );
+
+        Vertex getLastVertex() const;
+
 };
 
 

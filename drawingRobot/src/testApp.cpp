@@ -31,6 +31,9 @@ void testApp::setup(){
     //t1.join();
 
     addPolygon();
+
+
+    appMode = MODE_VISUALIZATION;
 }
 
 //--------------------------------------------------------------
@@ -43,6 +46,10 @@ void testApp::draw(){
 
     for( ; it != polygons.end(); ++it ){
         it->draw();
+    }
+
+    if( appMode == MODE_POLYGON_CREATION ){
+        Polygon::drawLine( currentPolygon->getLastVertex(), currentMousePos );
     }
     //polygon.Draw();
 }
@@ -59,7 +66,9 @@ void testApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void testApp::mouseMoved(int x, int y ){
+    currentMousePos.set( x, y );
 
+    currentMousePos = currentMousePos - Polygon::getOrigin();
 }
 
 //--------------------------------------------------------------
@@ -84,12 +93,14 @@ void testApp::mousePressed(int x, int y, int button){
         currentPolygon->addVertex( x, y );
         cout << "L_MOUSE 2" << endl;
         currentLineBegin.set( x, y );
+        appMode = MODE_POLYGON_CREATION;
         break;
     case R_MOUSE:
         cout << "R_MOUSE" << endl;
         currentPolygon->showPolygon();
         lastLineEnd.set( x, y );
         prevVertex = currentPolygon->getVertex(0);
+        /*
         moveForNextPoint(prevVertex, currentPolygon->getVector(0));
         for(unsigned int i = 1; i < currentPolygon->getSize(); i++){
             currentVertex = currentPolygon->getVertex(i);
@@ -100,8 +111,10 @@ void testApp::mousePressed(int x, int y, int button){
             moveForNextPoint(currentVertex, currentPolygon->getVector(i));
             prevVertex = currentVertex;
         }
-
+        */
         addPolygon();
+
+        appMode = MODE_VISUALIZATION;
         break;
     default:
         break;
