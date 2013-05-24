@@ -11,12 +11,15 @@
 
 enum AppMode {
     MODE_VISUALIZATION = 0,
-    MODE_POLYGON_CREATION
+    MODE_CREATE,
+    MODE_POLYGON_CREATION,
+    MODE_TRANSLATION,
+    MODE_ROTATION,
+    MODE_SCALE
 };
 
-class testApp : public ofBaseApp{
-
-
+class testApp : public ofBaseApp
+{
     private:
         int prevX;
         int prevY;
@@ -29,6 +32,8 @@ class testApp : public ofBaseApp{
         Server* server;
 
         Vertex currentMousePos;
+
+        int lastMouseX, lastMouseY;
 
 	public:
 		void setup();

@@ -8,11 +8,11 @@ int main( int argc, char* argv[] )
 {
     ofAppGlutWindow window;
 
-    Test test;
+    //Test test;
 
-    test.testAll();
+    //test.testAll();
 
-    return 0;
+    //return 0;
 
     //Tamanno de la pizarra en cm 165.5 cm de ancho por 117.7
     //Multiplicando por 4

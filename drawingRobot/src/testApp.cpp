@@ -22,7 +22,7 @@ void testApp::setup()
 
     addPolygon();
 
-    appMode = MODE_VISUALIZATION;
+    appMode = MODE_POLYGON_CREATION;
 }
 
 //--------------------------------------------------------------
@@ -37,15 +37,23 @@ void testApp::draw(){
         it->draw();
     }
 
-    if( appMode == MODE_POLYGON_CREATION ){
+    if( (appMode == MODE_POLYGON_CREATION) && currentPolygon->getSize() ){
         Polygon::drawLine( currentPolygon->getLastVertex(), currentMousePos );
     }
+
     //polygon.Draw();
 }
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
-
+    switch( key ){
+        case 'c':
+            appMode = MODE_POLYGON_CREATION;
+        break;
+        case 't':
+            appMode = MODE_TRANSLATION;
+        break;
+    }
 }
 
 //--------------------------------------------------------------
@@ -72,8 +80,42 @@ void testApp::mouseMoved(int x, int y ){
 }
 
 //--------------------------------------------------------------
-void testApp::mouseDragged(int x, int y, int button){
+void testApp::mouseDragged(int x, int y, int button)
+{
+    float aux;
 
+	if( !polygons.size() ){
+	     return;
+	}
+
+    // Convert (x, y) from screen space to world space.
+    //Vertex origin = Polygon::getOrigin();
+    //x = x+origin[X];
+    //y = y+origin[Y];
+	//renderer->PointToSpace( x, y );
+
+    // Set one transformation or another according to pressed key.
+    switch( appMode ){
+		case MODE_TRANSLATION:
+		    currentPolygon->Translate( x-lastMouseX, y-lastMouseY );
+		break;
+        case MODE_ROTATION:
+            aux = x-lastMouseX;
+            currentPolygon->Rotate( aux );
+        break;
+        case MODE_SCALE:
+            aux = x-lastMouseX;
+
+            aux = aux ? 1+aux*0.01 : 1;
+            currentPolygon->Scale( aux, aux );
+        break;
+        default:
+        break;
+    }
+
+    // Register last mouse location.
+    lastMouseX = x;
+    lastMouseY = y;
 }
 
 //--------------------------------------------------------------
@@ -88,6 +130,11 @@ void testApp::mousePressed(int x, int y, int button){
     //Do not allow to paint more than 15 cm closer to the
     //edges, since the brick could fall off the board
     //Since canvas is world cm*4, then 15*4 = 60 pixels in canvas
+
+    if( appMode != MODE_POLYGON_CREATION ){
+        return;
+    }
+
     if(x < 60 || x > 602){
         x = prevX;
     }
@@ -102,7 +149,7 @@ void testApp::mousePressed(int x, int y, int button){
         currentPolygon->addVertex( x, y );
         cout << "L_MOUSE 2" << endl;
         //currentLineBegin.set( x, y );
-        appMode = MODE_POLYGON_CREATION;
+        //appMode = MODE_POLYGON_CREATION;
         break;
     case R_MOUSE:
         cout << "R_MOUSE" << endl;
@@ -114,7 +161,8 @@ void testApp::mousePressed(int x, int y, int button){
 
         addPolygon();
 
-        appMode = MODE_VISUALIZATION;
+        //appMode = MODE_VISUALIZATION;
+        cout << "R_MOUSE 2" << endl;
         break;
     default:
         break;

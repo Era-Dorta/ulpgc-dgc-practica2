@@ -9,8 +9,11 @@ class Polygon
     private:
         static int ox, oy;
         std::vector< Vertex > v;
+        std::vector< Vertex > transV;
         std::vector< Vertex > vScalated;
         std::vector< Vertex > vectors;
+
+        Matrix transMatrix;
 
     public:
 
@@ -33,6 +36,12 @@ class Polygon
 
         Vertex getLastVertex() const;
 
+        // Transformations
+        void Translate( int tx, int ty );
+        void Rotate( float angle );
+        void Scale( float sx, float sy );
+
+        void Update();
 };
 
 

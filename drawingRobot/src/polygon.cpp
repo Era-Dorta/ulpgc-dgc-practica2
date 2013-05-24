@@ -17,6 +17,7 @@ void Polygon::addVertex( const float& x, const float& y )
         vectors.back().set( aux[X], aux[Y] );
     }
     v.push_back( vertex );
+    transV.push_back( vertex );
     vScalated.push_back(vertex*0.25);
     Vertex vector( 0, 1 );
     vectors.push_back(vector);
@@ -25,7 +26,7 @@ void Polygon::addVertex( const float& x, const float& y )
 void Polygon::draw() const
 {
     for( unsigned int i=1; i<v.size(); i++ ){
-        drawLine( v[i-1], v[i] );
+        drawLine( transV[i-1], transV[i] );
     }
 }
 
@@ -69,4 +70,42 @@ void Polygon::showPolygon() const{
 Vertex Polygon::getLastVertex() const
 {
     return v[v.size()-1];
+}
+
+
+void Polygon::Translate( int tx, int ty )
+{
+    Matrix translationMatrix;
+    translationMatrix.setTranslation( tx, ty );
+    transMatrix = transMatrix*translationMatrix;
+
+    Update();
+}
+
+void Polygon::Rotate( float angle )
+{
+    Matrix rotMatrix;
+    rotMatrix.setRotation( angle );
+    transMatrix = transMatrix*rotMatrix;
+
+    Update();
+}
+
+void Polygon::Scale( float sx, float sy )
+{
+    Matrix scaleMatrix;
+    scaleMatrix.setScale( sx, sy );
+    transMatrix = transMatrix*scaleMatrix;
+
+    Update();
+}
+
+
+void Polygon::Update()
+{
+    unsigned int i;
+
+    for( i=0; i<v.size(); i++ ){
+        transV[i] = v[i]*transMatrix;
+    }
 }
