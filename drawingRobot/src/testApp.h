@@ -11,7 +11,6 @@
 
 enum AppMode {
     MODE_VISUALIZATION = 0,
-    MODE_CREATE,
     MODE_POLYGON_CREATION,
     MODE_TRANSLATION,
     MODE_ROTATION,
@@ -31,7 +30,11 @@ class testApp : public ofBaseApp
 
         Server* server;
 
+        Polygon tempPolygon;
+
+        //Vertex lastMousePress;
         Vertex currentMousePos;
+        Vertex currentMouseWorldPos;
 
         int lastMouseX, lastMouseY;
 
@@ -50,6 +53,8 @@ class testApp : public ofBaseApp
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
+		void drawGUI();
+
 	private:
         /*
         void sendMessage( const int leftMotor, const int rightMotor, const int pen_up ) const;
@@ -59,7 +64,8 @@ class testApp : public ofBaseApp
         void moveForNextPoint(const Vertex& finalPosition, const Vertex& finalVector);
         */
 
-        void addPolygon();
+        void addPolygon( Polygon polygon );
+        void deleteLastPolygon();
 };
 
 

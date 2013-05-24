@@ -36,6 +36,9 @@ class Polygon
 
         Vertex getLastVertex() const;
 
+        static void PixelToWorld( float& x, float &y );
+        void clear();
+
         // Transformations
         void Translate( int tx, int ty );
         void Rotate( float angle );

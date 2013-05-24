@@ -13,14 +13,14 @@ void task1(string msg)
 
 void testApp::setup()
 {
-    prevX = 60;
-    prevY = 60;
+    lastMouseX = 60;
+    lastMouseY = 60;
     server = Server::getInstance();
 
     //thread t1(task1);
     //t1.join();
 
-    addPolygon();
+    //addPolygon();
 
     appMode = MODE_POLYGON_CREATION;
 }
@@ -37,11 +37,17 @@ void testApp::draw(){
         it->draw();
     }
 
-    if( (appMode == MODE_POLYGON_CREATION) && currentPolygon->getSize() ){
-        Polygon::drawLine( currentPolygon->getLastVertex(), currentMousePos );
+    tempPolygon.draw();
+    Vertex origin = Polygon::getOrigin();
+
+    Vertex currentMouseWorldPos( currentMousePos[X]-origin[X], -currentMousePos[Y]+origin[Y]  );
+
+    if( (appMode == MODE_POLYGON_CREATION) && tempPolygon.getSize() ){
+        Polygon::drawLine( tempPolygon.getLastVertex(), currentMouseWorldPos );
     }
 
     //polygon.Draw();
+    drawGUI();
 }
 
 //--------------------------------------------------------------
@@ -52,6 +58,12 @@ void testApp::keyPressed(int key){
         break;
         case 't':
             appMode = MODE_TRANSLATION;
+        break;
+        case 'r':
+            appMode = MODE_ROTATION;
+        break;
+        case 's':
+            appMode = MODE_SCALE;
         break;
     }
 }
@@ -67,16 +79,17 @@ void testApp::mouseMoved(int x, int y ){
     //edges, since the brick could fall off the board
     //Since canvas is world cm*4, then 15*4 = 60 pixels in canvas
     if(x < 60 || x > 602){
-        x = prevX;
+        x = lastMouseX;
     }
     if(y < 60 || y > 410){
-        y = prevY;
+        y = lastMouseY;
     }
+
     currentMousePos.set( x, y );
 
-    currentMousePos = currentMousePos - Polygon::getOrigin();
-    prevX = x;
-    prevY = y;
+    //currentMousePos = currentMousePos - Polygon::getOrigin();
+    lastMouseX = x;
+    lastMouseY = y;
 }
 
 //--------------------------------------------------------------
@@ -88,16 +101,16 @@ void testApp::mouseDragged(int x, int y, int button)
 	     return;
 	}
 
-    // Convert (x, y) from screen space to world space.
-    //Vertex origin = Polygon::getOrigin();
-    //x = x+origin[X];
-    //y = y+origin[Y];
+    //Convert (x, y) from screen space to world space.
+    //Polygon::PixelToWorld( x, y );
+
 	//renderer->PointToSpace( x, y );
 
     // Set one transformation or another according to pressed key.
     switch( appMode ){
 		case MODE_TRANSLATION:
-		    currentPolygon->Translate( x-lastMouseX, y-lastMouseY );
+            cout << "Traslating (" << x-lastMouseX << ", " << -y+lastMouseY << ")" << endl;
+		    currentPolygon->Translate( x-lastMouseX, -y+lastMouseY );
 		break;
         case MODE_ROTATION:
             aux = x-lastMouseX;
@@ -119,47 +132,58 @@ void testApp::mouseDragged(int x, int y, int button)
 }
 
 //--------------------------------------------------------------
-void testApp::addPolygon(){
-    class Polygon polygon;
-
+void testApp::addPolygon( Polygon polygon ){
     currentPolygon = polygons.insert( polygons.end(), polygon );
 }
 
+void testApp::deleteLastPolygon()
+{
+    polygons.pop_back();
+}
+
 //--------------------------------------------------------------
-void testApp::mousePressed(int x, int y, int button){
-    //Do not allow to paint more than 15 cm closer to the
-    //edges, since the brick could fall off the board
-    //Since canvas is world cm*4, then 15*4 = 60 pixels in canvas
+void testApp::mousePressed(int x, int y, int button)
+{
+    // Register last mouse location.
+    lastMouseX = x;
+    lastMouseY = y;
+
 
     if( appMode != MODE_POLYGON_CREATION ){
         return;
     }
 
+    //Do not allow to paint more than 15 cm closer to the
+    //edges, since the brick could fall off the board
+    //Since canvas is world cm*4, then 15*4 = 60 pixels in canvas
     if(x < 60 || x > 602){
-        x = prevX;
+        x = lastMouseX;
     }
     if(y < 60 || y > 410){
-        y = prevY;
+        y = lastMouseY;
     }
+
+    //Polygon::PixelToWorld( x, y );
+
     Vertex position, vector, currentVertex, prevVertex;
     //float distance;
     switch(button){
     case L_MOUSE:
         cout << "L_MOUSE 1" << endl;
-        currentPolygon->addVertex( x, y );
+        tempPolygon.addVertex( x, y );
         cout << "L_MOUSE 2" << endl;
         //currentLineBegin.set( x, y );
         //appMode = MODE_POLYGON_CREATION;
         break;
     case R_MOUSE:
         cout << "R_MOUSE" << endl;
-        currentPolygon->showPolygon();
+        tempPolygon.showPolygon();
         //lastLineEnd.set( x, y );
 
+        server->drawPolygon( &(tempPolygon) );
 
-        server->drawPolygon( &(*currentPolygon) );
-
-        addPolygon();
+        addPolygon( tempPolygon );
+        tempPolygon.clear();
 
         //appMode = MODE_VISUALIZATION;
         cout << "R_MOUSE 2" << endl;
@@ -189,7 +213,39 @@ void testApp::dragEvent(ofDragInfo dragInfo){
 }
 
 //--------------------------------------------------------------
+void testApp::drawGUI()
+{
+    const int X_ = 10;
+    const int Y_ = 20;
+    unsigned int i=0;
+    char currentMode[255];
 
+    ofSetColor( 255, 255, 255 );
+
+    // Display current app mode.
+    strcpy( currentMode, "Current mode: " );
+    switch( appMode ){
+        case MODE_VISUALIZATION:
+            strcat( currentMode, "Visualization" );
+        break;
+        case MODE_POLYGON_CREATION:
+            strcat( currentMode, "Create polygon" );
+        break;
+		case MODE_TRANSLATION:
+            strcat( currentMode, "Translation" );
+		break;
+        case MODE_ROTATION:
+            strcat( currentMode, "Rotation" );
+        break;
+		case MODE_SCALE:
+            strcat( currentMode, "Scale" );
+		break;
+    }
+    ofDrawBitmapString( currentMode, X_, Y_+i*20 );
+    i++;
+
+    //ofDrawBitmapString( "Keep key 'h' pressed to access help", 20, h_-15 );
+}
 
 //--------------------------------------------------------------
 
