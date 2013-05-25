@@ -49,6 +49,8 @@ class Server
         void waitAck() const ;
 
         void drawPolygon( const Polygon* currentPolygon ) ;
+
+        void drawBrick() const;
 };
 
 

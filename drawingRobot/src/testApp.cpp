@@ -46,6 +46,7 @@ void testApp::draw(){
         Polygon::drawLine( tempPolygon.getLastVertex(), currentMouseWorldPos );
     }
 
+    server->drawBrick();
     //polygon.Draw();
     drawGUI();
 }
