@@ -1,11 +1,19 @@
 #include "ofMain.h"
 #include "testApp.h"
+#include "tests.hpp"
 #include "ofAppGlutWindow.h"
 
 //========================================================================
 int main( int argc, char* argv[] )
 {
     ofAppGlutWindow window;
+
+    //Test test;
+
+    //test.testAll();
+
+    //return 0;
+
     //Tamanno de la pizarra en cm 165.5 cm de ancho por 117.7
     //Multiplicando por 4
 	ofSetupOpenGL(&window, 662,470, OF_WINDOW);			// <-------- setup the GL context

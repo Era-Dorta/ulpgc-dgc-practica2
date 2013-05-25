@@ -3,12 +3,10 @@
 int Polygon::ox = 0;
 int Polygon::oy = 0;
 
+
 void Polygon::addVertex( const float& x, const float& y )
 {
     Vertex vertex( x-ox, -(y-oy) );
-    cout << "push_back 1" << endl;
-
-    cout << "push_back 2" << endl;
 
     if(vectors.size() > 0){
         Vertex aux;
@@ -17,6 +15,7 @@ void Polygon::addVertex( const float& x, const float& y )
         vectors.back().set( aux[X], aux[Y] );
     }
     v.push_back( vertex );
+    transV.push_back( vertex );
     vScalated.push_back(vertex*0.25);
     Vertex vector( 0, 1 );
     vectors.push_back(vector);
@@ -24,8 +23,8 @@ void Polygon::addVertex( const float& x, const float& y )
 
 void Polygon::draw() const
 {
-    for( unsigned int i=1; i<v.size(); i++ ){
-        drawLine( v[i-1], v[i] );
+    for( unsigned int i=1; i<transV.size(); i++ ){
+        drawLine( transV[i-1], transV[i] );
     }
 }
 
@@ -69,4 +68,60 @@ void Polygon::showPolygon() const{
 Vertex Polygon::getLastVertex() const
 {
     return v[v.size()-1];
+}
+
+
+void Polygon::PixelToWorld( float& x, float &y )
+{
+    x = x-ox;
+    y = -y+oy;
+}
+
+void Polygon::clear()
+{
+    v.clear();
+    transV.clear();
+    vectors.clear();
+
+    transMatrix.setIdentity();
+}
+
+
+void Polygon::Translate( int tx, int ty )
+{
+    Matrix translationMatrix;
+    translationMatrix.setTranslation( tx, ty );
+    transMatrix = transMatrix*translationMatrix;
+
+    cout << transMatrix << endl;
+
+    Update();
+}
+
+void Polygon::Rotate( float angle )
+{
+    Matrix rotMatrix;
+    rotMatrix.setRotation( angle );
+    transMatrix = transMatrix*rotMatrix;
+
+    Update();
+}
+
+void Polygon::Scale( float sx, float sy )
+{
+    Matrix scaleMatrix;
+    scaleMatrix.setScale( sx, sy );
+    transMatrix = transMatrix*scaleMatrix;
+
+    Update();
+}
+
+
+void Polygon::Update()
+{
+    unsigned int i;
+
+    for( i=0; i<v.size(); i++ ){
+        transV[i] = v[i]*transMatrix;
+    }
 }
