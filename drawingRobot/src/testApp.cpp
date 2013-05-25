@@ -4,6 +4,12 @@
 #include <memory>
 using namespace std;
 
+
+// Indexes for handle left arrow and right arrow key strokes (tested in
+// Ubuntu).
+const unsigned int KEY_LEFT_ARROW = 356;
+const unsigned int KEY_RIGHT_ARROW = 358;
+
 //--------------------------------------------------------------
 
 void task1(string msg)
@@ -34,7 +40,13 @@ void testApp::draw(){
     std::vector< class Polygon >::iterator it = polygons.begin();
 
     for( ; it != polygons.end(); ++it ){
+        if( it == currentPolygon ){
+            ofSetColor( 255, 255, 255 );
+        }else{
+            ofSetColor( 150, 150, 150 );
+        }
         it->draw();
+        ofSetColor( 255, 255, 255 );
     }
 
     tempPolygon.draw();
@@ -64,6 +76,21 @@ void testApp::keyPressed(int key){
         break;
         case 's':
             appMode = MODE_SCALE;
+        break;
+        case KEY_LEFT_ARROW:
+            if( currentPolygon == polygons.begin() ){
+                currentPolygon = polygons.end();
+            }
+            currentPolygon--;
+        break;
+        case KEY_RIGHT_ARROW:
+            currentPolygon++;
+            if( currentPolygon == polygons.end() ){
+                currentPolygon = polygons.begin();
+            }
+        break;
+        default:
+            cout << "key: " << key << endl;
         break;
     }
 }
@@ -109,7 +136,6 @@ void testApp::mouseDragged(int x, int y, int button)
     // Set one transformation or another according to pressed key.
     switch( appMode ){
 		case MODE_TRANSLATION:
-            cout << "Traslating (" << x-lastMouseX << ", " << -y+lastMouseY << ")" << endl;
 		    currentPolygon->Translate( x-lastMouseX, -y+lastMouseY );
 		break;
         case MODE_ROTATION:
@@ -147,7 +173,6 @@ void testApp::mousePressed(int x, int y, int button)
     // Register last mouse location.
     lastMouseX = x;
     lastMouseY = y;
-
 
     if( appMode != MODE_POLYGON_CREATION ){
         return;

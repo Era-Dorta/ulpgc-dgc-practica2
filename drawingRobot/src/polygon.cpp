@@ -93,8 +93,6 @@ void Polygon::Translate( int tx, int ty )
     translationMatrix.setTranslation( tx, ty );
     transMatrix = transMatrix*translationMatrix;
 
-    cout << transMatrix << endl;
-
     Update();
 }
 
