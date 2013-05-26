@@ -15,6 +15,8 @@ Server::Server()
     penPosition = brickPosition + penOffset;
     //When mesured, pen position is shifted 4cm, 9cm
     penOffset.set(3.5,12);
+    currentPolygon = NULL;
+    toErase = false;
 }
 
 
@@ -94,6 +96,7 @@ cout << "finalPosition  " << finalPosition[X] << ", " <<  finalPosition[Y] << en
     cout << "brickPosition  " << brickPosition[X] << ", " <<  brickPosition[Y] << endl;
     brickAngle = finalVector;
     cout << "brickAngle  " << brickAngle[X] << ", " <<  brickAngle[Y] << endl;
+    sleep(1000);
 }
 
 
@@ -111,17 +114,20 @@ void Server::waitAck() const
     system(command);
 }
 
-void Server::drawPolygon( const Polygon* currentPolygon )
+void Server::drawPolygon()
 {
     Vertex currentVertex;
     Vertex prevVertex = currentPolygon->getVertex(0);
     float distance;
 
+    if(currentPolygon == NULL){
+        cout << "Current es nulll fallote\n";
+    }
     //Place brick in the first position of the poligon
     moveForNextPoint(prevVertex, currentPolygon->getVector(0) );
     unsigned int i = 1;
     //Iterate for all other vertices, but last one
-    for(; i < currentPolygon->getSize() - 1; i++){
+    for(; i < currentPolygon->getSize(); i++){
         //Advance until next vertex
         currentVertex = currentPolygon->getVertex(i);
         distance = prevVertex.distance(currentVertex);
@@ -133,7 +139,7 @@ void Server::drawPolygon( const Polygon* currentPolygon )
         moveForNextPoint(currentVertex, currentPolygon->getVector(i));
         prevVertex = currentVertex;
     }
-
+/*
     //Advance to draw the last line
     currentVertex = currentPolygon->getVertex(i);
     distance = prevVertex.distance(currentVertex);
@@ -143,6 +149,7 @@ void Server::drawPolygon( const Polygon* currentPolygon )
     cout << "brickAngle  " << brickAngle[X] << ", " <<  brickAngle[Y] << endl;
     brickPosition[X] += brickAngle[X]*distance;
     brickPosition[Y] += brickAngle[Y]*distance;
+    */
     cout << "brickPosition  " << brickPosition[X] << ", " <<  brickPosition[Y] << endl;
 }
 
@@ -177,4 +184,31 @@ void Server::drawBrick() const
     aux1[Y] = aux1[Y] + 5;
     Polygon::drawLine(aux0, aux1);
     ofSetColor(ofColor::white);
+}
+
+void Server::threadedFunction()
+{
+    while( isThreadRunning() != 0 ){
+        cout << "Soy thread en paralelo\n";
+        if( lock() ){
+
+            if(toErase){
+                cout << "Borrando poligono\n";
+                polygons.erase(polygons.begin());
+                toErase = false;
+            }
+
+            if(polygons.size() > 0){
+                cout << "Dibujando poligono\n";
+                currentPolygon = polygons.front();
+                unlock();
+                toErase = true;
+                drawPolygon();
+                currentPolygon = NULL;
+            }else{
+                unlock();
+                ofSleepMillis(1 * 5000);
+            }
+        }
+    }
 }

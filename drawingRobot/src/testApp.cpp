@@ -1,6 +1,5 @@
 #include "testApp.h"
 
-//#include <thread>
 #include <memory>
 using namespace std;
 
@@ -16,9 +15,7 @@ void testApp::setup()
     lastMouseX = 60;
     lastMouseY = 60;
     server = Server::getInstance();
-
-    //thread t1(task1);
-    //t1.join();
+    server->startThread(true, false); // blocking, non verbose
 
     //addPolygon();
 
@@ -27,6 +24,18 @@ void testApp::setup()
 
 //--------------------------------------------------------------
 void testApp::update(){
+    cout << "Soy main thread\n";
+    if(toServerPolygons.size() > 0){
+        cout << "To server poligons > 0\n";
+        if(server->lock()){
+            cout << "Copying polygons to server\n";
+            for( unsigned int i = 0; i < toServerPolygons.size(); i++ ){
+                server->polygons.push_back(&(toServerPolygons[i]));
+            }
+            toServerPolygons.clear();
+            server->unlock();
+        }
+    }
 }
 
 //--------------------------------------------------------------
@@ -180,9 +189,10 @@ void testApp::mousePressed(int x, int y, int button)
         tempPolygon.showPolygon();
         //lastLineEnd.set( x, y );
 
-        server->drawPolygon( &(tempPolygon) );
-
         addPolygon( tempPolygon );
+
+        toServerPolygons.push_back(tempPolygon);
+
         tempPolygon.clear();
 
         //appMode = MODE_VISUALIZATION;
@@ -249,5 +259,10 @@ void testApp::drawGUI()
 
 //--------------------------------------------------------------
 
+//--------------------------------------------------------------
+void testApp::exit()
+{
+    server->stopThread();
+}
 
 
