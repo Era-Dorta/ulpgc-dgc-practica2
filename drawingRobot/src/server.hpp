@@ -17,7 +17,7 @@
 #define TO_RADIANS M_PI/180.0
 #define TO_DEGREES 180.0/M_PI
 
-class Server
+class Server : public ofThread
 {
     private:
         //String serverScript;
@@ -29,6 +29,8 @@ class Server
         Vertex lastLineEnd;
         Vertex currentLineBegin;
         Vertex yAxis;
+        Polygon* currentPolygon;
+        bool toErase;
 
         static Server* instance;
 
@@ -36,6 +38,10 @@ class Server
 
         Server(Server const&);              // Don't Implement
         void operator=(Server const&); // Don't implement
+
+    public:
+        std::vector< Polygon* > polygons;
+
 
     public:
         static Server* getInstance();
@@ -48,7 +54,11 @@ class Server
 
         void waitAck() const ;
 
-        void drawPolygon( const Polygon* currentPolygon ) ;
+        void drawPolygon() ;
+
+        void drawBrick() const;
+
+        void threadedFunction();
 };
 
 

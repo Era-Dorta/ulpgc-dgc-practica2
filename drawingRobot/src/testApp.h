@@ -25,6 +25,7 @@ class testApp : public ofBaseApp
 
         std::vector< class Polygon >::iterator currentPolygon;
         std::vector< class Polygon > polygons;
+        std::vector< class Polygon > toServerPolygons;
 
         AppMode appMode;
 
@@ -42,6 +43,7 @@ class testApp : public ofBaseApp
 		void setup();
 		void update();
 		void draw();
+		void exit();
 
 		void keyPressed  (int key);
 		void keyReleased(int key);

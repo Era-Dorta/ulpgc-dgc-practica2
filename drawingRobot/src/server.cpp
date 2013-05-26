@@ -14,7 +14,9 @@ Server::Server()
     brickAngle.normalize();
     penPosition = brickPosition + penOffset;
     //When mesured, pen position is shifted 4cm, 9cm
-    penOffset.set(4,9);
+    penOffset.set(3.5,12);
+    currentPolygon = NULL;
+    toErase = false;
 }
 
 
@@ -77,20 +79,24 @@ void Server::moveForNextPoint( const Vertex& finalPosition, const Vertex& finalV
     float rotationAngle = calculateAngle(brickAngle, currentToAux);
 
     //To go to auxPosition the brick must rotate rotationAngle
-    sendMessage( rotationAngle*ROTATION_FACTOR, -rotationAngle*ROTATION_FACTOR, PEN_UP );
+    //sendMessage( rotationAngle*ROTATION_FACTOR, -rotationAngle*ROTATION_FACTOR, PEN_UP );
     //Go forward the distance to auxPosition
-    sendMessage( distanceToAux*MOVE_FACTOR, distanceToAux*MOVE_FACTOR, PEN_UP );
+    //sendMessage( distanceToAux*MOVE_FACTOR, distanceToAux*MOVE_FACTOR, PEN_UP );
 
     //Calculate the angle between where the brick is looking now, after rotationAngle
     //rotation, and vector auxToFinal
     rotationAngle = calculateAngle(currentToAux, finalVector);
 
     //Rotate the brick to look in finalVector direction
-    sendMessage( rotationAngle*ROTATION_FACTOR, -rotationAngle*ROTATION_FACTOR, PEN_UP );
-
+    //sendMessage( rotationAngle*ROTATION_FACTOR, -rotationAngle*ROTATION_FACTOR, PEN_UP );
+cout << "brickPosition  " << brickPosition[X] << ", " <<  brickPosition[Y] << endl;
+cout << "finalPosition  " << finalPosition[X] << ", " <<  finalPosition[Y] << endl;
     //Update brick position and direction
     brickPosition = auxPosition;
+    cout << "brickPosition  " << brickPosition[X] << ", " <<  brickPosition[Y] << endl;
     brickAngle = finalVector;
+    cout << "brickAngle  " << brickAngle[X] << ", " <<  brickAngle[Y] << endl;
+    sleep(1000);
 }
 
 
@@ -108,21 +114,24 @@ void Server::waitAck() const
     system(command);
 }
 
-void Server::drawPolygon( const Polygon* currentPolygon )
+void Server::drawPolygon()
 {
     Vertex currentVertex;
     Vertex prevVertex = currentPolygon->getVertex(0);
     float distance;
 
+    if(currentPolygon == NULL){
+        cout << "Current es nulll fallote\n";
+    }
     //Place brick in the first position of the poligon
     moveForNextPoint(prevVertex, currentPolygon->getVector(0) );
     unsigned int i = 1;
     //Iterate for all other vertices, but last one
-    for(; i < currentPolygon->getSize() - 1; i++){
+    for(; i < currentPolygon->getSize(); i++){
         //Advance until next vertex
         currentVertex = currentPolygon->getVertex(i);
         distance = prevVertex.distance(currentVertex);
-        sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
+        //sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
         brickPosition[X] += brickAngle[X]*distance;
         brickPosition[Y] += brickAngle[Y]*distance;
 
@@ -130,11 +139,76 @@ void Server::drawPolygon( const Polygon* currentPolygon )
         moveForNextPoint(currentVertex, currentPolygon->getVector(i));
         prevVertex = currentVertex;
     }
-
+/*
     //Advance to draw the last line
     currentVertex = currentPolygon->getVertex(i);
     distance = prevVertex.distance(currentVertex);
-    sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
+    //sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
+    cout << "brickPosition  " << brickPosition[X] << ", " <<  brickPosition[Y] << endl;
+    cout << "currentVertex  " << currentVertex[X] << ", " <<  currentVertex[Y] << endl;
+    cout << "brickAngle  " << brickAngle[X] << ", " <<  brickAngle[Y] << endl;
     brickPosition[X] += brickAngle[X]*distance;
     brickPosition[Y] += brickAngle[Y]*distance;
+    */
+    cout << "brickPosition  " << brickPosition[X] << ", " <<  brickPosition[Y] << endl;
+}
+
+void Server::drawBrick() const
+{
+    ofSetColor(ofColor::red);
+    //Draw a cross in brick position
+    Vertex aux0 = brickPosition*4, aux1 = brickPosition*4;
+    aux0[X] = aux0[X] - 10;
+    aux1[X] = aux1[X] + 10;
+    Polygon::drawLine(aux0, aux1);
+    aux0 = brickPosition*4;
+    aux1 = brickPosition*4;
+    aux0[Y] = aux0[Y] - 10;
+    aux1[Y] = aux1[Y] + 10;
+    Polygon::drawLine(aux0, aux1);
+
+    //Draw a little cross in brick pen position
+    float finalAngle = calculateAngle(yAxis, brickAngle);
+
+    //Rotate penOffset that angle
+    Vertex currentPenOffset = penOffset.rotate(finalAngle*TO_RADIANS);
+
+    aux0 = brickPosition*4 + currentPenOffset*4;
+    aux1 = brickPosition*4 + currentPenOffset*4;
+    aux0[X] = aux0[X] - 5;
+    aux1[X] = aux1[X] + 5;
+    Polygon::drawLine(aux0, aux1);
+    aux0 = brickPosition*4 + currentPenOffset*4;
+    aux1 = brickPosition*4 + currentPenOffset*4;
+    aux0[Y] = aux0[Y] - 5;
+    aux1[Y] = aux1[Y] + 5;
+    Polygon::drawLine(aux0, aux1);
+    ofSetColor(ofColor::white);
+}
+
+void Server::threadedFunction()
+{
+    while( isThreadRunning() != 0 ){
+        cout << "Soy thread en paralelo\n";
+        if( lock() ){
+
+            if(toErase){
+                cout << "Borrando poligono\n";
+                polygons.erase(polygons.begin());
+                toErase = false;
+            }
+
+            if(polygons.size() > 0){
+                cout << "Dibujando poligono\n";
+                currentPolygon = polygons.front();
+                unlock();
+                toErase = true;
+                drawPolygon();
+                currentPolygon = NULL;
+            }else{
+                unlock();
+                ofSleepMillis(1 * 5000);
+            }
+        }
+    }
 }
