@@ -4,8 +4,30 @@
 #include "ofAppGlutWindow.h"
 
 //========================================================================
+
+#include <thread>
+#include <memory>
+#include <pthread.h>
+using namespace std;
+
+
+
 int main( int argc, char* argv[] )
 {
+    void *msg;
+
+    /*
+    pthread_t thread1;
+    pthread_create( &thread1, NULL, task1, msg );
+    pthread_join(thread1, NULL);
+    */
+
+    /*
+    std::thread t1(task1);
+    t1.join();
+    */
+    return 0;
+
     ofAppGlutWindow window;
 
     //Test test;

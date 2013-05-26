@@ -1,8 +1,6 @@
 #include "testApp.h"
 
-//#include <thread>
-#include <memory>
-using namespace std;
+
 
 
 // Indexes for handle left arrow and right arrow key strokes (tested in
@@ -12,10 +10,6 @@ const unsigned int KEY_RIGHT_ARROW = 358;
 
 //--------------------------------------------------------------
 
-void task1(string msg)
-{
-    cout << "task1: hola" << endl;
-}
 
 void testApp::setup()
 {
