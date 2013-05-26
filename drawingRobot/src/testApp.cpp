@@ -16,6 +16,8 @@ void testApp::setup()
     lastMouseX = 60;
     lastMouseY = 60;
     server = Server::getInstance();
+
+    // The server thread will be waiting for new polygons to send to the NXT.
     server->startThread(true, false); // blocking, non verbose
 
     //addPolygon();
@@ -25,13 +27,15 @@ void testApp::setup()
 
 //--------------------------------------------------------------
 void testApp::update(){
-    cout << "Soy main thread\n";
+    //cout << "Soy main thread\n";
+
+    // If there are polygons to copy to the server, copy them.
     if(toServerPolygons.size() > 0){
         cout << "To server poligons > 0\n";
         if(server->lock()){
             cout << "Copying polygons to server\n";
             for( unsigned int i = 0; i < toServerPolygons.size(); i++ ){
-                server->polygons.push_back(&(toServerPolygons[i]));
+                server->polygons.push_back(/*&*/(toServerPolygons[i]));
             }
             toServerPolygons.clear();
             server->unlock();

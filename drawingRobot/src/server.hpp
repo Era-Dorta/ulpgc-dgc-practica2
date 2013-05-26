@@ -29,7 +29,7 @@ class Server : public ofThread
         Vertex lastLineEnd;
         Vertex currentLineBegin;
         Vertex yAxis;
-        Polygon* currentPolygon;
+        //Polygon* currentPolygon;
         bool toErase;
 
         static Server* instance;
@@ -40,7 +40,7 @@ class Server : public ofThread
         void operator=(Server const&); // Don't implement
 
     public:
-        std::vector< Polygon* > polygons;
+        std::vector< Polygon/***/ > polygons;
 
 
     public:
@@ -54,7 +54,7 @@ class Server : public ofThread
 
         void waitAck() const ;
 
-        void drawPolygon() ;
+        void drawPolygon( Polygon* polygon ) ;
 
         void drawBrick() const;
 

@@ -153,7 +153,6 @@ ostream& operator << (ostream &out, const Vertex &vertex)
 }
 
 
-
 float dotProduct( const Vertex& a, const Vertex& b )
 {
     return a[X]*b[X]+a[Y]*b[Y];

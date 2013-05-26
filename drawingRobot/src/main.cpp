@@ -5,9 +5,9 @@
 
 //========================================================================
 
-#include <thread>
-#include <memory>
-#include <pthread.h>
+//#include <thread>
+//#include <memory>
+//#include <pthread.h>
 using namespace std;
 
 
@@ -26,7 +26,7 @@ int main( int argc, char* argv[] )
     std::thread t1(task1);
     t1.join();
     */
-    return 0;
+    //return 0;
 
     ofAppGlutWindow window;
 

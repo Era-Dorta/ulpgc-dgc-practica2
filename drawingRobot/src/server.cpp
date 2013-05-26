@@ -15,7 +15,7 @@ Server::Server()
     penPosition = brickPosition + penOffset;
     //When mesured, pen position is shifted 4cm, 9cm
     penOffset.set(3.5,12);
-    currentPolygon = NULL;
+    //currentPolygon = NULL;
     toErase = false;
 }
 
@@ -114,29 +114,36 @@ void Server::waitAck() const
     system(command);
 }
 
-void Server::drawPolygon()
+void Server::drawPolygon( Polygon* polygon )
 {
     Vertex currentVertex;
-    Vertex prevVertex = currentPolygon->getVertex(0);
+    Vertex prevVertex; //= currentPolygon->getVertex(0);
     float distance;
 
-    if(currentPolygon == NULL){
-        cout << "Current es nulll fallote\n";
+    if(polygon == NULL){
+        cout << "Polygon es nulll fallote\n";
+        return;
     }
-    //Place brick in the first position of the poligon
-    moveForNextPoint(prevVertex, currentPolygon->getVector(0) );
+
+
+    prevVertex = polygon->getVertex(0);
+
+    // Place brick in the first position of the poligon
+    moveForNextPoint(prevVertex, polygon->getVector(0) );
     unsigned int i = 1;
-    //Iterate for all other vertices, but last one
-    for(; i < currentPolygon->getSize(); i++){
+
+    // Iterate for all other vertices, but last one
+    for(; i < polygon->getSize(); i++){
         //Advance until next vertex
-        currentVertex = currentPolygon->getVertex(i);
+        currentVertex = polygon->getVertex(i);
         distance = prevVertex.distance(currentVertex);
+
         //sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
         brickPosition[X] += brickAngle[X]*distance;
         brickPosition[Y] += brickAngle[Y]*distance;
 
         //Move the brick so it can draw next line
-        moveForNextPoint(currentVertex, currentPolygon->getVector(i));
+        moveForNextPoint(currentVertex, polygon->getVector(i));
         prevVertex = currentVertex;
     }
 /*
@@ -189,26 +196,29 @@ void Server::drawBrick() const
 void Server::threadedFunction()
 {
     while( isThreadRunning() != 0 ){
-        cout << "Soy thread en paralelo\n";
-        if( lock() ){
+        cout << "Server: Soy thread en paralelo\n";
 
+        if( lock() ){
+            cout << "Server: tengo el lock!" << endl;
             if(toErase){
-                cout << "Borrando poligono\n";
+                cout << endl << endl << endl << "Server: Borrando poligono\n" << endl;
                 polygons.erase(polygons.begin());
                 toErase = false;
             }
 
-            if(polygons.size() > 0){
-                cout << "Dibujando poligono\n";
-                currentPolygon = polygons.front();
-                unlock();
+            if(polygons.size() > 0 && ! toErase ){
+                cout << "Server: Dibujando poligono\n";
+                //currentPolygon = polygons.front();
+                drawPolygon( &(polygons.front()) );
                 toErase = true;
-                drawPolygon();
-                currentPolygon = NULL;
+                unlock();
+                //currentPolygon = NULL;
             }else{
+                cout << "Server: Espero" << endl;
                 unlock();
                 ofSleepMillis(1 * 5000);
             }
         }
+
     }
 }
