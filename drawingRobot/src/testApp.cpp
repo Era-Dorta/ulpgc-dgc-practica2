@@ -18,14 +18,11 @@ void testApp::setup()
 
     //Creates the semaphore with permisions rw,r,r, and 0 tokens
     mutex = sem_open("mutexForServer", O_CREAT, 0644, 0);
-    int val;
-    sem_getvalue(mutex, &val);
-    cout << "testApp sem value is " << val << endl;
 
     if(mutex == SEM_FAILED) {
       perror("testApp: error creating semaphore");
       return;
-   }
+    }
 
     server = Server::getInstance();
 
@@ -39,8 +36,6 @@ void testApp::setup()
 
 //--------------------------------------------------------------
 void testApp::update(){
-    //cout << "Soy main thread\n";
-int val;
     // If there are polygons to copy to the server, copy them.
     if(toServerPolygons.size() > 0){
         cout << "To server poligons > 0\n";
@@ -53,12 +48,7 @@ int val;
                   perror("testApp: error on post semaphore");
                   return;
                 }
-
-
-                sem_getvalue(mutex, &val);
-                cout << "testApp sem value is " << val << endl;
             }
-            cout << "testApp antes de unlock\n";
             server->unlock();
             toServerPolygons.clear();
         }
