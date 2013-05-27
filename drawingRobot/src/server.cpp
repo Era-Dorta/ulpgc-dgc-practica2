@@ -125,7 +125,7 @@ void Server::drawPolygon( Polygon polygon )
     unsigned int i = 1;
 
     // Iterate for all other vertices, but last one
-    for(; i < polygon.getSize(); i++){
+    for(; i < polygon.getSize() - 1; i++){
         //Advance until next vertex
         currentVertex = polygon.getVertex(i);
         distance = prevVertex.distance(currentVertex);
@@ -138,17 +138,18 @@ void Server::drawPolygon( Polygon polygon )
         moveForNextPoint(currentVertex, polygon.getVector(i));
         prevVertex = currentVertex;
     }
-/*
+
     //Advance to draw the last line
-    currentVertex = currentPolygon->getVertex(i);
+    currentVertex = polygon.getVertex(i);
     distance = prevVertex.distance(currentVertex);
     //sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
+
     cout << "brickPosition  " << brickPosition[X] << ", " <<  brickPosition[Y] << endl;
     cout << "currentVertex  " << currentVertex[X] << ", " <<  currentVertex[Y] << endl;
     cout << "brickAngle  " << brickAngle[X] << ", " <<  brickAngle[Y] << endl;
     brickPosition[X] += brickAngle[X]*distance;
     brickPosition[Y] += brickAngle[Y]*distance;
-    */
+    sleep(1000);
     //cout << "brickPosition  " << brickPosition[X] << ", " <<  brickPosition[Y] << endl;
     if( lock() ){
         polygons.erase(polygons.begin());
