@@ -37,8 +37,8 @@ void testApp::update(){
             for( unsigned int i = 0; i < toServerPolygons.size(); i++ ){
                 server->polygons.push_back(/*&*/(toServerPolygons[i]));
             }
-            toServerPolygons.clear();
             server->unlock();
+            toServerPolygons.clear();
         }
     }
 }

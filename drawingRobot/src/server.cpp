@@ -87,13 +87,13 @@ void Server::moveForNextPoint( const Vertex& finalPosition, const Vertex& finalV
 
     //Rotate the brick to look in finalVector direction
     //sendMessage( rotationAngle*ROTATION_FACTOR, -rotationAngle*ROTATION_FACTOR, PEN_UP );
-cout << "brickPosition  " << brickPosition[X] << ", " <<  brickPosition[Y] << endl;
-cout << "finalPosition  " << finalPosition[X] << ", " <<  finalPosition[Y] << endl;
+//cout << "brickPosition  " << brickPosition[X] << ", " <<  brickPosition[Y] << endl;
+//cout << "finalPosition  " << finalPosition[X] << ", " <<  finalPosition[Y] << endl;
     //Update brick position and direction
     brickPosition = auxPosition;
-    cout << "brickPosition  " << brickPosition[X] << ", " <<  brickPosition[Y] << endl;
+    //cout << "brickPosition  " << brickPosition[X] << ", " <<  brickPosition[Y] << endl;
     brickAngle = finalVector;
-    cout << "brickAngle  " << brickAngle[X] << ", " <<  brickAngle[Y] << endl;
+    //cout << "brickAngle  " << brickAngle[X] << ", " <<  brickAngle[Y] << endl;
     sleep(1000);
 }
 
@@ -149,7 +149,7 @@ void Server::drawPolygon( Polygon polygon )
     brickPosition[X] += brickAngle[X]*distance;
     brickPosition[Y] += brickAngle[Y]*distance;
     */
-    cout << "brickPosition  " << brickPosition[X] << ", " <<  brickPosition[Y] << endl;
+    //cout << "brickPosition  " << brickPosition[X] << ", " <<  brickPosition[Y] << endl;
     if( lock() ){
         polygons.erase(polygons.begin());
         unlock();
@@ -203,6 +203,7 @@ void Server::threadedFunction()
                 cout << "Server: Dibujando poligono\n";
                 unlock();
                 //currentPolygon = polygons.front();
+                cout << "Server: y tiene " << polygons.front().getSize() << " vertices\n";
                 drawPolygon( polygons.front() );
                 //currentPolygon = NULL;
             }else{

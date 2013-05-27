@@ -81,6 +81,7 @@ void Polygon::clear()
 {
     v.clear();
     transV.clear();
+    vScalated.clear();
     vectors.clear();
 
     transMatrix.setIdentity();
