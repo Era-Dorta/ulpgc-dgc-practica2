@@ -18,6 +18,7 @@ class Polygon
     public:
 
         void addVertex( const float& x, const float& y );
+        void addVertex( const Vertex& vertex );
 
         void draw() const;
 

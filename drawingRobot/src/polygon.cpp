@@ -8,6 +8,11 @@ void Polygon::addVertex( const float& x, const float& y )
 {
     Vertex vertex( x-ox, -(y-oy) );
 
+    addVertex( vertex );
+}
+
+void Polygon::addVertex( const Vertex& vertex )
+{
     if(vectors.size() > 0){
         Vertex aux;
         aux = vertex - v.back();

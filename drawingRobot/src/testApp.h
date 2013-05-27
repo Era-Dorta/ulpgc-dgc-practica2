@@ -8,6 +8,7 @@
 
 #include "polygon.hpp"
 #include "server.hpp"
+#include "polygonsFile.hpp"
 
 enum AppMode {
     MODE_VISUALIZATION = 0,
