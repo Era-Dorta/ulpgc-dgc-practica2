@@ -15,8 +15,6 @@ Server::Server()
     penPosition = brickPosition + penOffset;
     //When mesured, pen position is shifted 4cm, 9cm
     penOffset.set(3.5,12);
-    //currentPolygon = NULL;
-    toErase = false;
 }
 
 
@@ -114,28 +112,22 @@ void Server::waitAck() const
     system(command);
 }
 
-void Server::drawPolygon( Polygon* polygon )
+void Server::drawPolygon( Polygon polygon )
 {
     Vertex currentVertex;
     Vertex prevVertex; //= currentPolygon->getVertex(0);
     float distance;
 
-    if(polygon == NULL){
-        cout << "Polygon es nulll fallote\n";
-        return;
-    }
-
-
-    prevVertex = polygon->getVertex(0);
+    prevVertex = polygon.getVertex(0);
 
     // Place brick in the first position of the poligon
-    moveForNextPoint(prevVertex, polygon->getVector(0) );
+    moveForNextPoint(prevVertex, polygon.getVector(0) );
     unsigned int i = 1;
 
     // Iterate for all other vertices, but last one
-    for(; i < polygon->getSize(); i++){
+    for(; i < polygon.getSize(); i++){
         //Advance until next vertex
-        currentVertex = polygon->getVertex(i);
+        currentVertex = polygon.getVertex(i);
         distance = prevVertex.distance(currentVertex);
 
         //sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
@@ -143,7 +135,7 @@ void Server::drawPolygon( Polygon* polygon )
         brickPosition[Y] += brickAngle[Y]*distance;
 
         //Move the brick so it can draw next line
-        moveForNextPoint(currentVertex, polygon->getVector(i));
+        moveForNextPoint(currentVertex, polygon.getVector(i));
         prevVertex = currentVertex;
     }
 /*
@@ -158,6 +150,13 @@ void Server::drawPolygon( Polygon* polygon )
     brickPosition[Y] += brickAngle[Y]*distance;
     */
     cout << "brickPosition  " << brickPosition[X] << ", " <<  brickPosition[Y] << endl;
+    if( lock() ){
+        polygons.erase(polygons.begin());
+        unlock();
+        cout << endl << endl << endl << "Server: Borrando poligono\n" << endl;
+    }else{
+        cout << "Server: se supone que son bloqueantes nooooo\n";
+    }
 }
 
 void Server::drawBrick() const
@@ -200,18 +199,11 @@ void Server::threadedFunction()
 
         if( lock() ){
             cout << "Server: tengo el lock!" << endl;
-            if(toErase){
-                cout << endl << endl << endl << "Server: Borrando poligono\n" << endl;
-                polygons.erase(polygons.begin());
-                toErase = false;
-            }
-
-            if(polygons.size() > 0 && ! toErase ){
+            if(polygons.size() > 0){
                 cout << "Server: Dibujando poligono\n";
-                //currentPolygon = polygons.front();
-                drawPolygon( &(polygons.front()) );
-                toErase = true;
                 unlock();
+                //currentPolygon = polygons.front();
+                drawPolygon( polygons.front() );
                 //currentPolygon = NULL;
             }else{
                 cout << "Server: Espero" << endl;
