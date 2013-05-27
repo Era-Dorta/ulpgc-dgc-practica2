@@ -4,6 +4,8 @@
 
 #include "polygon.hpp"
 
+#define USE_BRICK true
+
 #define WAIT_TIME 2000
 #define PEN_UP 1
 #define PEN_DOWN 0
@@ -48,7 +50,7 @@ class Server : public ofThread
 
         void moveForNextPoint( const Vertex& finalPosition, const Vertex& finalVector );
 
-        void sendMessage( const int leftMotor, const int rightMotor, const int pen_up ) const ;
+        void sendMessage( const int leftMotor, const int rightMotor, const int pen_up );
 
         void waitAck() const ;
 

@@ -94,11 +94,16 @@ void Server::moveForNextPoint( const Vertex& finalPosition, const Vertex& finalV
 }
 
 
-void Server::sendMessage( const int leftMotor, const int rightMotor, const int pen_up ) const{
-    char command[200];
-    sprintf(command, "python server.py send %d %d %d", leftMotor, rightMotor, pen_up);
-    system(command);
-    waitAck();
+void Server::sendMessage( const int leftMotor, const int rightMotor, const int pen_up ){
+    if(USE_BRICK){
+        char command[200];
+        sprintf(command, "python server.py send %d %d %d", leftMotor, rightMotor, pen_up);
+        system(command);
+        waitAck();
+    }else{
+        //Simulate brick calls with a sleep
+        sleep(500);
+    }
 }
 
 void Server::waitAck() const
