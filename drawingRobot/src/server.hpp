@@ -4,7 +4,7 @@
 
 #include "polygon.hpp"
 
-#define USE_BRICK true
+#define USE_BRICK false
 
 #define WAIT_TIME 2000
 #define PEN_UP 1

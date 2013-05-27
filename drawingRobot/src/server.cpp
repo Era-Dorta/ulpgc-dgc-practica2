@@ -78,8 +78,13 @@ void Server::moveForNextPoint( const Vertex& finalPosition, const Vertex& finalV
 
     //To go to auxPosition the brick must rotate rotationAngle
     sendMessage( rotationAngle*ROTATION_FACTOR, -rotationAngle*ROTATION_FACTOR, PEN_UP );
+    //Update brick angle
+    brickAngle = currentToAux;
+
     //Go forward the distance to auxPosition
     sendMessage( distanceToAux*MOVE_FACTOR, distanceToAux*MOVE_FACTOR, PEN_UP );
+    //Update brickposition
+    brickPosition = auxPosition;
 
     //Calculate the angle between where the brick is looking now, after rotationAngle
     //rotation, and vector auxToFinal
@@ -87,9 +92,7 @@ void Server::moveForNextPoint( const Vertex& finalPosition, const Vertex& finalV
 
     //Rotate the brick to look in finalVector direction
     sendMessage( rotationAngle*ROTATION_FACTOR, -rotationAngle*ROTATION_FACTOR, PEN_UP );
-
-    //Update brick position and direction
-    brickPosition = auxPosition;
+    //Update brick angle
     brickAngle = finalVector;
 }
 

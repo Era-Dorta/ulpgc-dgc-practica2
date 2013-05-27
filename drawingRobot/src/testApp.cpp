@@ -179,10 +179,6 @@ void testApp::deleteLastPolygon()
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button)
 {
-    // Register last mouse location.
-    lastMouseX = x;
-    lastMouseY = y;
-
     if( appMode != MODE_POLYGON_CREATION ){
         return;
     }
@@ -197,7 +193,9 @@ void testApp::mousePressed(int x, int y, int button)
         y = lastMouseY;
     }
 
-    //Polygon::PixelToWorld( x, y );
+    // Register last mouse location.
+    lastMouseX = x;
+    lastMouseY = y;
 
     Vertex position, vector, currentVertex, prevVertex;
     switch(button){
