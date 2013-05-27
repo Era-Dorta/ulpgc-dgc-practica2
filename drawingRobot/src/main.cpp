@@ -14,8 +14,6 @@ using namespace std;
 
 int main( int argc, char* argv[] )
 {
-    void *msg;
-
     /*
     pthread_t thread1;
     pthread_create( &thread1, NULL, task1, msg );

@@ -198,6 +198,7 @@ void Server::threadedFunction()
     while( isThreadRunning() != 0 ){
         cout << "Server: Soy thread en paralelo\n";
 
+
         if( lock() ){
             cout << "Server: tengo el lock!" << endl;
             if(toErase){
@@ -209,9 +210,10 @@ void Server::threadedFunction()
             if(polygons.size() > 0 && ! toErase ){
                 cout << "Server: Dibujando poligono\n";
                 //currentPolygon = polygons.front();
+                unlock();
+
                 drawPolygon( &(polygons.front()) );
                 toErase = true;
-                unlock();
                 //currentPolygon = NULL;
             }else{
                 cout << "Server: Espero" << endl;
@@ -219,6 +221,5 @@ void Server::threadedFunction()
                 ofSleepMillis(1 * 5000);
             }
         }
-
     }
 }

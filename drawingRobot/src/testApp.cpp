@@ -17,6 +17,14 @@ void testApp::setup()
     lastMouseY = 60;
     server = Server::getInstance();
 
+    PolygonsFile polygonsFile;
+
+    polygonsFile.load( "data/foo.txt", &polygons );
+    // TODO: Copiar tambien en toServerPolygons.
+
+    cout << "polygons.size: " << polygons.size() << endl;
+    currentPolygon = polygons.begin();
+
     // The server thread will be waiting for new polygons to send to the NXT.
     server->startThread(true, false); // blocking, non verbose
 
@@ -48,6 +56,7 @@ void testApp::draw(){
     std::vector< class Polygon >::iterator it = polygons.begin();
 
     for( ; it != polygons.end(); ++it ){
+        cout << "polygon.size: " << it->getSize() << endl;
         if( it == currentPolygon ){
             ofSetColor( 255, 255, 255 );
         }else{
