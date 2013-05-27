@@ -15,6 +15,18 @@ void testApp::setup()
 {
     lastMouseX = 60;
     lastMouseY = 60;
+
+    //Creates the semaphore with permisions rw,r,r, and 0 tokens
+    mutex = sem_open("mutexForServer", O_CREAT, 0644, 0);
+    int val;
+    sem_getvalue(mutex, &val);
+    cout << "testApp sem value is " << val << endl;
+
+    if(mutex == SEM_FAILED) {
+      perror("testApp: error creating semaphore");
+      return;
+   }
+
     server = Server::getInstance();
 
     // The server thread will be waiting for new polygons to send to the NXT.
@@ -28,15 +40,25 @@ void testApp::setup()
 //--------------------------------------------------------------
 void testApp::update(){
     //cout << "Soy main thread\n";
-
+int val;
     // If there are polygons to copy to the server, copy them.
     if(toServerPolygons.size() > 0){
         cout << "To server poligons > 0\n";
         if(server->lock()){
             cout << "Copying polygons to server\n";
             for( unsigned int i = 0; i < toServerPolygons.size(); i++ ){
-                server->polygons.push_back(/*&*/(toServerPolygons[i]));
+                server->polygons.push_back(toServerPolygons[i]);
+                //Increment semaphore one token for each polygon copied
+                if(sem_post(mutex) < 0) {
+                  perror("testApp: error on post semaphore");
+                  return;
+                }
+
+
+                sem_getvalue(mutex, &val);
+                cout << "testApp sem value is " << val << endl;
             }
+            cout << "testApp antes de unlock\n";
             server->unlock();
             toServerPolygons.clear();
         }
@@ -284,7 +306,12 @@ void testApp::drawGUI()
 //--------------------------------------------------------------
 void testApp::exit()
 {
+    cout << "cerrando 0\n";
+    server->exit();
     server->stopThread();
+    sem_close(mutex);
+    sem_unlink("mutexForServer");
+    cout << "cerrando 1\n";
 }
 
 

@@ -3,6 +3,8 @@
 #define SERVER_H
 
 #include "polygon.hpp"
+#include <semaphore.h>
+#include <fcntl.h> //O_CREAT and SEM_FAILED
 
 #define USE_BRICK false
 
@@ -34,6 +36,8 @@ class Server : public ofThread
 
         static Server* instance;
 
+        sem_t *mutex;
+
         Server();
 
         Server(Server const&);              // Don't Implement
@@ -59,6 +63,8 @@ class Server : public ofThread
         void drawBrick() const;
 
         void threadedFunction();
+
+        void exit();
 };
 
 

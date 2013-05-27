@@ -15,6 +15,16 @@ Server::Server()
     penPosition = brickPosition + penOffset;
     //When mesured, pen position is shifted 4cm, 9cm
     penOffset.set(3.5,12);
+
+    mutex = sem_open("mutexForServer", O_CREAT, 0644, 0);
+   if(mutex == SEM_FAILED) {
+      perror("server: error creating semaphore");
+      return;
+   }
+
+    int val;
+    sem_getvalue(mutex, &val);
+    cout << "server sem value is " << val << endl;
 }
 
 
@@ -194,21 +204,50 @@ void Server::drawBrick() const
 
 void Server::threadedFunction()
 {
+    int val;
     while( isThreadRunning() != 0 ){
         cout << "Server: Soy thread en paralelo\n";
 
         if( lock() ){
             cout << "Server: tengo el lock!" << endl;
             if(polygons.size() > 0){
-                cout << "Server: Dibujando poligono\n";
                 unlock();
+                cout << "Server: antes del sem_wait" << endl;
+                sem_getvalue(mutex, &val);
+                cout << "server: sem value is " << val << endl;
+                if(sem_wait(mutex) >= 0){
+                    cout << "Server: Dibujando poligono\n";
+                    drawPolygon( polygons.front() );
+                }else{
+                    perror("server: error on wait semaphore");
+                    return;
+                }
                 drawPolygon( polygons.front() );
             }else{
-                cout << "Server: Espero" << endl;
+                cout << "Server: no polygons to draw, going to sleep" << endl;
                 unlock();
-                ofSleepMillis(1 * 5000);
+                sem_getvalue(mutex, &val);
+                cout << "server: sem value is " << val << endl;
+                if(sem_wait(mutex) < 0){
+                    perror("server: error on wait semaphore");
+                    return;
+                }
+                cout << "Server: I have been waken up" << endl;
+                //Increment semaphore one token so in next check this thread
+                //will not sleep
+                if(sem_post(mutex) < 0) {
+                  perror("testApp: error on post semaphore");
+                  return;
+                }
+                sem_getvalue(mutex, &val);
+                cout << "server: sem value is " << val << endl;
             }
         }
 
     }
+}
+
+void Server::exit()
+{
+    sem_close(mutex);
 }

@@ -8,6 +8,8 @@
 
 #include "polygon.hpp"
 #include "server.hpp"
+#include <semaphore.h>
+#include <fcntl.h> //O_CREAT and SEM_FAILED
 
 enum AppMode {
     MODE_VISUALIZATION = 0,
@@ -38,6 +40,8 @@ class testApp : public ofBaseApp
         Vertex currentMouseWorldPos;
 
         int lastMouseX, lastMouseY;
+
+        sem_t *mutex;
 
 	public:
 		void setup();
