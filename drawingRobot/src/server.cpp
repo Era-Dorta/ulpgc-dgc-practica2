@@ -23,6 +23,23 @@ Server::Server()
     }
 }
 
+//--------------------------------------------------------------
+void Server::wait( sem_t* mutex_)
+{
+    if(sem_wait(mutex_) < 0){
+        perror("server: error on wait semaphore");
+        return;
+    }
+}
+
+//--------------------------------------------------------------
+void Server::release( sem_t* mutex_)
+{
+    if(sem_post(mutex) < 0) {
+      perror("server: error on post semaphore");
+      return;
+    }
+}
 
 Server* Server::getInstance()
 {
@@ -204,24 +221,14 @@ void Server::threadedFunction()
         if( lock() ){
             if(polygons.size() > 0){
                 unlock();
-                if(sem_wait(mutex) >= 0){
-                    drawPolygon( polygons.front() );
-                }else{
-                    perror("server: error on wait semaphore");
-                    return;
-                }
+                wait(mutex);
+                drawPolygon( polygons.front() );
             }else{
                 unlock();
-                if(sem_wait(mutex) < 0){
-                    perror("server: error on wait semaphore");
-                    return;
-                }
+                wait(mutex);
                 //Increment semaphore one token so in next check this thread
                 //will not sleep
-                if(sem_post(mutex) < 0) {
-                  perror("server: error on post semaphore");
-                  return;
-                }
+                release(mutex);
             }
         }
 

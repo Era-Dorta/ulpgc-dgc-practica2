@@ -43,6 +43,9 @@ class Server : public ofThread
         Server(Server const&);              // Don't Implement
         void operator=(Server const&); // Don't implement
 
+        void wait( sem_t * mutex_ );
+        void release( sem_t* mutex_ );
+
     public:
         std::vector< Polygon > polygons;
 

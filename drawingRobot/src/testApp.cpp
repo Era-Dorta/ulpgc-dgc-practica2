@@ -44,10 +44,7 @@ void testApp::update(){
             for( unsigned int i = 0; i < toServerPolygons.size(); i++ ){
                 server->polygons.push_back(toServerPolygons[i]);
                 //Increment semaphore one token for each polygon copied
-                if(sem_post(mutex) < 0) {
-                  perror("testApp: error on post semaphore");
-                  return;
-                }
+                release(mutex);
             }
             server->unlock();
             toServerPolygons.clear();
@@ -304,4 +301,12 @@ void testApp::exit()
     cout << "cerrando 1\n";
 }
 
+//--------------------------------------------------------------
+void testApp::release( sem_t* mutex_)
+{
+    if(sem_post(mutex) < 0) {
+      perror("main thread: error on post semaphore");
+      return;
+    }
+}
 

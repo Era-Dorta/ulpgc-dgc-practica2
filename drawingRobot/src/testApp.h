@@ -41,7 +41,7 @@ class testApp : public ofBaseApp
 
         int lastMouseX, lastMouseY;
 
-        sem_t *mutex;
+        sem_t* mutex;
 
 	public:
 		void setup();
@@ -72,6 +72,7 @@ class testApp : public ofBaseApp
 
         void addPolygon( Polygon polygon );
         void deleteLastPolygon();
+        void release(sem_t* mutex);
 };
 
 
