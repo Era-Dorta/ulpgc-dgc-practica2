@@ -202,17 +202,8 @@ void Server::threadedFunction()
             cout << "Server: tengo el lock!" << endl;
             if(polygons.size() > 0){
                 cout << "Server: Dibujando poligono\n";
-<<<<<<< HEAD
                 unlock();
                 drawPolygon( polygons.front() );
-=======
-                //currentPolygon = polygons.front();
-                unlock();
-
-                drawPolygon( &(polygons.front()) );
-                toErase = true;
-                //currentPolygon = NULL;
->>>>>>> moises
             }else{
                 cout << "Server: Espero" << endl;
                 unlock();

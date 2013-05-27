@@ -56,7 +56,6 @@ void testApp::draw(){
     std::vector< class Polygon >::iterator it = polygons.begin();
 
     for( ; it != polygons.end(); ++it ){
-        cout << "polygon.size: " << it->getSize() << endl;
         if( it == currentPolygon ){
             ofSetColor( 255, 255, 255 );
         }else{
