@@ -222,7 +222,6 @@ void Server::threadedFunction()
                     perror("server: error on wait semaphore");
                     return;
                 }
-                drawPolygon( polygons.front() );
             }else{
                 cout << "Server: no polygons to draw, going to sleep" << endl;
                 unlock();
