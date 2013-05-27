@@ -28,7 +28,7 @@ void Server::wait( sem_t* mutex_)
 {
     if(sem_wait(mutex_) < 0){
         perror("server: error on wait semaphore");
-        return;
+        _Exit(EXIT_FAILURE);
     }
 }
 
@@ -37,7 +37,7 @@ void Server::release( sem_t* mutex_)
 {
     if(sem_post(mutex) < 0) {
       perror("server: error on post semaphore");
-      return;
+      _Exit(EXIT_FAILURE);
     }
 }
 

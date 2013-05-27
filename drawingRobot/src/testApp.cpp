@@ -306,7 +306,7 @@ void testApp::release( sem_t* mutex_)
 {
     if(sem_post(mutex) < 0) {
       perror("main thread: error on post semaphore");
-      return;
+      _Exit(EXIT_FAILURE);
     }
 }
 

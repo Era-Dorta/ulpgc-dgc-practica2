@@ -5,6 +5,8 @@
 #include "polygon.hpp"
 #include <semaphore.h>
 #include <fcntl.h> //O_CREAT and SEM_FAILED
+#include <cstdlib> //exit function
+using namespace std;
 
 #define USE_BRICK false
 
