@@ -77,24 +77,20 @@ void Server::moveForNextPoint( const Vertex& finalPosition, const Vertex& finalV
     float rotationAngle = calculateAngle(brickAngle, currentToAux);
 
     //To go to auxPosition the brick must rotate rotationAngle
-    //sendMessage( rotationAngle*ROTATION_FACTOR, -rotationAngle*ROTATION_FACTOR, PEN_UP );
+    sendMessage( rotationAngle*ROTATION_FACTOR, -rotationAngle*ROTATION_FACTOR, PEN_UP );
     //Go forward the distance to auxPosition
-    //sendMessage( distanceToAux*MOVE_FACTOR, distanceToAux*MOVE_FACTOR, PEN_UP );
+    sendMessage( distanceToAux*MOVE_FACTOR, distanceToAux*MOVE_FACTOR, PEN_UP );
 
     //Calculate the angle between where the brick is looking now, after rotationAngle
     //rotation, and vector auxToFinal
     rotationAngle = calculateAngle(currentToAux, finalVector);
 
     //Rotate the brick to look in finalVector direction
-    //sendMessage( rotationAngle*ROTATION_FACTOR, -rotationAngle*ROTATION_FACTOR, PEN_UP );
-//cout << "brickPosition  " << brickPosition[X] << ", " <<  brickPosition[Y] << endl;
-//cout << "finalPosition  " << finalPosition[X] << ", " <<  finalPosition[Y] << endl;
+    sendMessage( rotationAngle*ROTATION_FACTOR, -rotationAngle*ROTATION_FACTOR, PEN_UP );
+
     //Update brick position and direction
     brickPosition = auxPosition;
-    //cout << "brickPosition  " << brickPosition[X] << ", " <<  brickPosition[Y] << endl;
     brickAngle = finalVector;
-    //cout << "brickAngle  " << brickAngle[X] << ", " <<  brickAngle[Y] << endl;
-    sleep(1000);
 }
 
 
@@ -130,7 +126,7 @@ void Server::drawPolygon( Polygon polygon )
         currentVertex = polygon.getVertex(i);
         distance = prevVertex.distance(currentVertex);
 
-        //sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
+        sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
         brickPosition[X] += brickAngle[X]*distance;
         brickPosition[Y] += brickAngle[Y]*distance;
 
@@ -142,21 +138,16 @@ void Server::drawPolygon( Polygon polygon )
     //Advance to draw the last line
     currentVertex = polygon.getVertex(i);
     distance = prevVertex.distance(currentVertex);
-    //sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
+    sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
 
-    cout << "brickPosition  " << brickPosition[X] << ", " <<  brickPosition[Y] << endl;
-    cout << "currentVertex  " << currentVertex[X] << ", " <<  currentVertex[Y] << endl;
-    cout << "brickAngle  " << brickAngle[X] << ", " <<  brickAngle[Y] << endl;
     brickPosition[X] += brickAngle[X]*distance;
     brickPosition[Y] += brickAngle[Y]*distance;
-    sleep(1000);
-    //cout << "brickPosition  " << brickPosition[X] << ", " <<  brickPosition[Y] << endl;
+
     if( lock() ){
         polygons.erase(polygons.begin());
         unlock();
-        cout << endl << endl << endl << "Server: Borrando poligono\n" << endl;
     }else{
-        cout << "Server: se supone que son bloqueantes nooooo\n";
+        cout << "Server: se supone que son bloqueantes error nooooo\n";
     }
 }
 
@@ -203,10 +194,7 @@ void Server::threadedFunction()
             if(polygons.size() > 0){
                 cout << "Server: Dibujando poligono\n";
                 unlock();
-                //currentPolygon = polygons.front();
-                cout << "Server: y tiene " << polygons.front().getSize() << " vertices\n";
                 drawPolygon( polygons.front() );
-                //currentPolygon = NULL;
             }else{
                 cout << "Server: Espero" << endl;
                 unlock();
