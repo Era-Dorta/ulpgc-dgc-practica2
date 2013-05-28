@@ -51,4 +51,34 @@ void PolygonsFile::load( string filePath, vector<Polygon>* polygons )
         currentPolygon.clear();
         cout << endl << endl;
     }
+
+    file.close();
+}
+
+
+void PolygonsFile::save( string filePath, vector<Polygon>* polygons )
+{
+    unsigned int i, j;
+    Vertex currentVertex;
+    Polygon currentPolygon;
+
+    ofstream file( filePath.c_str() );
+
+    if( !file.is_open() ){
+        throw runtime_error( "ERROR opening the file [" + filePath + "]" );
+    }
+
+    for( i=0; i<polygons->size(); i++ ){
+        currentPolygon = (*polygons)[i];
+
+        file << currentPolygon.getSize() << endl;
+
+        for( j=0; j<currentPolygon.getSize(); j++ ){
+            currentVertex = currentPolygon.getVertex( j );
+
+            file << currentVertex[X] << " " << currentVertex[Y] << endl;
+        }
+    }
+
+    file.close();
 }

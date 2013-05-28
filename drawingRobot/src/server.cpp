@@ -119,10 +119,10 @@ void Server::waitAck() const
 void Server::drawPolygon( Polygon polygon )
 {
     Vertex currentVertex;
-    Vertex prevVertex; //= currentPolygon->getVertex(0);
+    Vertex prevVertex; //= currentPolygon->getScalatedVertex(0);
     float distance;
 
-    prevVertex = polygon.getVertex(0);
+    prevVertex = polygon.getScalatedVertex(0);
 
     // Place brick in the first position of the poligon
     moveForNextPoint(prevVertex, polygon.getVector(0) );
@@ -131,7 +131,7 @@ void Server::drawPolygon( Polygon polygon )
     // Iterate for all other vertices, but last one
     for(; i < polygon.getSize() - 1; i++){
         //Advance until next vertex
-        currentVertex = polygon.getVertex(i);
+        currentVertex = polygon.getScalatedVertex(i);
         distance = prevVertex.distance(currentVertex);
 
         sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
@@ -144,7 +144,7 @@ void Server::drawPolygon( Polygon polygon )
     }
 
     //Advance to draw the last line
-    currentVertex = polygon.getVertex(i);
+    currentVertex = polygon.getScalatedVertex(i);
     distance = prevVertex.distance(currentVertex);
     sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
 

@@ -292,6 +292,8 @@ void testApp::drawGUI()
 //--------------------------------------------------------------
 void testApp::exit()
 {
+    PolygonsFile polygonsFile;
+    polygonsFile.save( "data/foo.txt", &polygons );
     server->stopThread();
 }
 

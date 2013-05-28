@@ -12,7 +12,7 @@ class PolygonsFile
         Vertex loadVertexFromLine( char* line );
     public:
         void load( string filePath, vector<Polygon>* polygons );
-
+        void save( string filePath, vector<Polygon>* polygons );
 };
 
 #endif // POLYGONS_FILE_H
