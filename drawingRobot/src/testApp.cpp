@@ -10,10 +10,16 @@ using namespace std;
 
 //--------------------------------------------------------------
 
+testApp::testApp( const unsigned int& w, const unsigned int& h, const unsigned int& guiW )
+{
+    appW = w;
+    appH = h;
+    this->guiW = guiW;
+}
 
 void testApp::setup()
 {
-    lastMouseX = 60;
+    lastMouseX = guiW+60;
     lastMouseY = 60;
     server = Server::getInstance();
 
@@ -30,7 +36,33 @@ void testApp::setup()
 
     //addPolygon();
 
+    setupGUI();
+
     appMode = MODE_POLYGON_CREATION;
+}
+
+
+void testApp::setupGUI()
+{
+    unsigned int i;
+
+    gui = new ofxUICanvas(0,0,guiW,appH);		//ofxUICanvas(float x, float y, float width, float height)
+
+    //gui->addWidgetDown(new ofxUILabel("OFXUI TUTORIAL", OFX_UI_FONT_LARGE));
+    //gui->addWidgetDown(new ofxUISlider(304,16,0.0,255.0,100.0,"BACKGROUND VALUE"));
+    //ofAddListener(gui->newGUIEvent, this, &testApp::guiEvent);
+
+    gui->addSpacer();
+    vector<string> vnames;
+    for( i=0; i<N_APP_MODES; i++ ){
+        vnames.push_back( appModeStr[i] );
+    }
+    gui->addLabel("APP MODE", OFX_UI_FONT_MEDIUM);
+    appModeSelector = gui->addRadio("VR", vnames, OFX_UI_ORIENTATION_VERTICAL);
+    appModeSelector->activateToggle( appModeStr[MODE_POLYGON_CREATION] );
+    gui->addSpacer();
+
+    //gui->loadSettings("GUI/guiSettings.xml");
 }
 
 //--------------------------------------------------------------
@@ -43,10 +75,17 @@ void testApp::update(){
         if(server->lock()){
             cout << "Copying polygons to server\n";
             for( unsigned int i = 0; i < toServerPolygons.size(); i++ ){
-                server->polygons.push_back(/*&*/(toServerPolygons[i]));
+                server->polygons.push_back(toServerPolygons[i]);
             }
             server->unlock();
             toServerPolygons.clear();
+        }
+    }
+
+    ofxUIToggle* appModeSelection = appModeSelector->getActive();
+    for( unsigned int i=0; i<N_APP_MODES; i++ ){
+        if( !appModeSelection->getName().compare( appModeStr[i] ) ){
+            appMode = (AppMode)i;
         }
     }
 }
@@ -76,7 +115,7 @@ void testApp::draw(){
 
     server->drawBrick();
     //polygon.Draw();
-    drawGUI();
+    //drawGUI();
 }
 
 //--------------------------------------------------------------
@@ -122,7 +161,7 @@ void testApp::mouseMoved(int x, int y ){
     //Do not allow to paint more than 15 cm closer to the
     //edges, since the brick could fall off the board
     //Since canvas is world cm*4, then 15*4 = 60 pixels in canvas
-    if(x < 60 || x > 602){
+    if(x < guiW+60 || x > guiW+602){
         x = lastMouseX;
     }
     if(y < 60 || y > 410){
@@ -187,6 +226,7 @@ void testApp::deleteLastPolygon()
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button)
 {
+    bool exit = false;
     if( appMode != MODE_POLYGON_CREATION ){
         return;
     }
@@ -194,16 +234,25 @@ void testApp::mousePressed(int x, int y, int button)
     //Do not allow to paint more than 15 cm closer to the
     //edges, since the brick could fall off the board
     //Since canvas is world cm*4, then 15*4 = 60 pixels in canvas
-    if(x < 60 || x > 602){
+    if(x < guiW+60 || x > guiW+602){
+        //return;
+        exit = true;
         x = lastMouseX;
     }
     if(y < 60 || y > 410){
+        //return;
+        exit = true;
         y = lastMouseY;
     }
 
     // Register last mouse location.
     lastMouseX = x;
     lastMouseY = y;
+
+    // TODO: Esto esta a boleo.
+    if( exit ){
+        return;
+    }
 
     Vertex position, vector, currentVertex, prevVertex;
     switch(button){
@@ -295,6 +344,17 @@ void testApp::exit()
     PolygonsFile polygonsFile;
     polygonsFile.save( "data/foo.txt", &polygons );
     server->stopThread();
+
+    //gui->saveSettings("GUI/guiSettings.xml");
+    delete gui;
 }
 
 
+void testApp::guiEvent(ofxUIEventArgs &e)
+{
+    if(e.widget->getName() == "BACKGROUND VALUE")
+    {
+        ofxUISlider *slider = (ofxUISlider *) e.widget;
+        ofBackground(slider->getScaledValue());
+    }
+}

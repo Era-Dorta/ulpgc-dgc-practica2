@@ -9,18 +9,38 @@
 #include "polygon.hpp"
 #include "server.hpp"
 #include "polygonsFile.hpp"
+#include "ofxUI.h"
+#include <string>
+
+#define OFX_UI_NO_XML
+
 
 enum AppMode {
     MODE_VISUALIZATION = 0,
     MODE_POLYGON_CREATION,
     MODE_TRANSLATION,
     MODE_ROTATION,
-    MODE_SCALE
+    MODE_SCALE,
+
+    N_APP_MODES
 };
+
+const string appModeStr[N_APP_MODES] =
+{
+    "Visualization",
+    "Create Polygon",
+    "Translate",
+    "Rotate",
+    "Scale"
+};
+
 
 class testApp : public ofBaseApp
 {
     private:
+        unsigned int appW, appH;
+        unsigned int guiW;
+
         int prevX;
         int prevY;
 
@@ -40,8 +60,15 @@ class testApp : public ofBaseApp
 
         int lastMouseX, lastMouseY;
 
+        ofxUICanvas *gui;
+        ofxUIRadio *appModeSelector;
+
 	public:
+        testApp( const unsigned int& w, const unsigned int& h, const unsigned int& guiW );
+
 		void setup();
+		void setupGUI();
+
 		void update();
 		void draw();
 		void exit();
@@ -69,6 +96,8 @@ class testApp : public ofBaseApp
 
         void addPolygon( Polygon polygon );
         void deleteLastPolygon();
+
+        void guiEvent(ofxUIEventArgs &e);
 };
 
 
