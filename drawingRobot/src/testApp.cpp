@@ -54,21 +54,9 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-    ofSetColor(ofColor::black);
-    ofFill();
-    //Draw a rectangle that shows the user drawable area
-    //Top
-    ofRect(0, 0, 662, 60);
-    //Right
-    ofRect(602, 60, 60, 410);
-    //Bottom
-    ofRect(0, 410, 602, 60);
-    //Left
-    ofRect(0, 60, 60, 350);
 
+    drawEdges();
 
-
-    ofSetColor(ofColor::white);
     std::vector< class Polygon >::iterator it = polygons.begin();
 
     for( ; it != polygons.end(); ++it ){
@@ -301,6 +289,23 @@ void testApp::drawGUI()
     i++;
 
     //ofDrawBitmapString( "Keep key 'h' pressed to access help", 20, h_-15 );
+}
+
+void testApp::drawEdges()
+{
+    ofSetColor(ofColor::black);
+    ofFill();
+    //Draw a rectangle that shows the user drawable area
+    //Top
+    ofRect(0, 0, 662, 60);
+    //Right
+    ofRect(602, 60, 60, 410);
+    //Bottom
+    ofRect(0, 410, 602, 60);
+    //Left
+    ofRect(0, 60, 60, 350);
+
+    ofSetColor(ofColor::white);
 }
 
 //--------------------------------------------------------------

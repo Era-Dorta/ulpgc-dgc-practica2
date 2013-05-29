@@ -75,6 +75,7 @@ class testApp : public ofBaseApp
         void addPolygon( Polygon polygon );
         void deleteLastPolygon();
         void release(sem_t* mutex);
+        void drawEdges();
 };
 
 
