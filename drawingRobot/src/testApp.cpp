@@ -54,16 +54,31 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
+    ofSetColor(ofColor::black);
+    ofFill();
+    //Draw a rectangle that shows the user drawable area
+    //Top
+    ofRect(0, 0, 662, 60);
+    //Right
+    ofRect(602, 60, 60, 410);
+    //Bottom
+    ofRect(0, 410, 602, 60);
+    //Left
+    ofRect(0, 60, 60, 350);
+
+
+
+    ofSetColor(ofColor::white);
     std::vector< class Polygon >::iterator it = polygons.begin();
 
     for( ; it != polygons.end(); ++it ){
         if( it == currentPolygon ){
-            ofSetColor( 255, 255, 255 );
+            ofSetColor( ofColor::white);
         }else{
             ofSetColor( 150, 150, 150 );
         }
         it->draw();
-        ofSetColor( 255, 255, 255 );
+        ofSetColor( ofColor::white);
     }
 
     tempPolygon.draw();
