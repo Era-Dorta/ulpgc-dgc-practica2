@@ -11,7 +11,9 @@ class Polygon
         std::vector< Vertex > v;
         std::vector< Vertex > transV;
         std::vector< Vertex > vScalated;
+        std::vector< Vertex > transVScalated;
         std::vector< Vertex > vectors;
+        std::vector< Vertex > transVectors;
 
         Matrix transMatrix;
 
@@ -48,6 +50,7 @@ class Polygon
         void Scale( float sx, float sy );
 
         void Update();
+        void UpdateRotation();
 };
 
 
