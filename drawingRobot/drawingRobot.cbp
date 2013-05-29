@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
@@ -6,7 +6,7 @@
 		<Option makefile_is_custom="1" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
-		<Option virtualFolders="addons/;build config/;" />
+		<Option virtualFolders="addons/;build config/;addons/ofxUI/;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/$(PROJECT_NAME)_debug" prefix_auto="1" extension_auto="1" />
@@ -27,6 +27,144 @@
 				<Option projectLinkerOptionsRelation="2" />
 			</Target>
 		</Build>
+		<Unit filename="../../../addons/ofxUI/src/ofxUI.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUI2DGraph.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUI2DPad.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIBaseDraws.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIBiLabelSlider.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIButton.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUICanvas.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUICircleSlider.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUICustomImageButton.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIDropDownList.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIEventArgs.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIFPS.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIFPSSlider.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIImage.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIImageButton.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIImageSampler.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIImageSlider.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIImageToggle.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUILabel.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUILabelButton.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUILabelToggle.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIMinimalSlider.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIMovingGraph.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIMultiImageButton.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIMultiImageSlider.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIMultiImageToggle.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUINumberDialer.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIOFWrapper.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIRadio.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIRangeSlider.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIRectangle.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIRotarySlider.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIScrollableCanvas.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUISlider.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUISpacer.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUISpectrum.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUISuperCanvas.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUITextArea.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUITextInput.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIToggle.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIToggleMatrix.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIUtils.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIValuePlotter.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIWaveform.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIWidget.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
+		<Unit filename="../../../addons/ofxUI/src/ofxUIWidgetWithLabel.h">
+			<Option virtualFolder="addons/ofxUI/" />
+		</Unit>
 		<Unit filename="config.make">
 			<Option virtualFolder="build config" />
 		</Unit>
@@ -50,57 +188,5 @@
 			<envvars />
 			<debugger />
 		</Extensions>
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxXmlSettings/src/ofxXmlSettings.cpp" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxXmlSettings/src/ofxXmlSettings.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxXmlSettings/libs/tinyxmlparser.cpp" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxXmlSettings/libs/tinyxml.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxXmlSettings/libs/tinyxml.cpp" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxXmlSettings/libs/tinyxmlerror.cpp" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUI2DGraph.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIImageToggle.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUISuperCanvas.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIMultiImageToggle.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUISpacer.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUINumberDialer.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUILabelToggle.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUI.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUICustomImageButton.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIValuePlotter.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUILabelButton.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUICircleSlider.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUITextInput.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIToggle.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIRotarySlider.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIWidgetWithLabel.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUISlider.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIBaseDraws.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIMinimalSlider.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIEventArgs.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIFPS.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIFPSSlider.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIImage.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIMultiImageSlider.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIWidget.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIImageSlider.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUITextArea.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIWaveform.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIButton.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIMovingGraph.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIRectangle.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIImageButton.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIRangeSlider.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIBiLabelSlider.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIOFWrapper.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUISpectrum.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIRadio.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUICanvas.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIMultiImageButton.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIDropDownList.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIScrollableCanvas.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIToggleMatrix.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUILabel.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIUtils.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUI2DPad.h" />
-		<Unit filename="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIImageSampler.h" />
 	</Project>
 </CodeBlocks_project_file>
