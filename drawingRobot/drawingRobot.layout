@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
-	<File name="src/main.cpp" open="0" top="0" tabpos="9">
-		<Cursor position="517" topLine="0" />
+	<File name="src/main.cpp" open="1" top="0" tabpos="3">
+		<Cursor position="671" topLine="0" />
 	</File>
 	<File name="src/polygon.cpp" open="0" top="0" tabpos="3">
 		<Cursor position="577" topLine="0" />
@@ -22,19 +22,25 @@
 	<File name="src/server.hpp" open="0" top="0" tabpos="6">
 		<Cursor position="410" topLine="12" />
 	</File>
-	<File name="src/testApp.cpp" open="1" top="1" tabpos="1">
-		<Cursor position="1304" topLine="9" />
+	<File name="src/testApp.cpp" open="1" top="0" tabpos="2">
+		<Cursor position="4831" topLine="138" />
 	</File>
-	<File name="src/testApp.h" open="0" top="0" tabpos="8">
-		<Cursor position="1751" topLine="39" />
+	<File name="src/testApp.h" open="1" top="1" tabpos="1">
+		<Cursor position="1918" topLine="58" />
 	</File>
 	<File name="src/vertex.cpp" open="0" top="0" tabpos="1">
 		<Cursor position="414" topLine="51" />
 	</File>
-	<File name="src/vertex.hpp" open="0" top="0" tabpos="2">
-		<Cursor position="1311" topLine="24" />
+	<File name="src/vertex.hpp" open="1" top="0" tabpos="4">
+		<Cursor position="388" topLine="0" />
 	</File>
-	<File name="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIRadio.h" open="1" top="0" tabpos="2">
-		<Cursor position="3011" topLine="51" />
+	<File name="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIOFWrapper.h" open="0" top="0" tabpos="6">
+		<Cursor position="10858" topLine="442" />
+	</File>
+	<File name="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIRadio.h" open="1" top="0" tabpos="5">
+		<Cursor position="3383" topLine="63" />
+	</File>
+	<File name="../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUIToggleMatrix.h" open="0" top="0" tabpos="7">
+		<Cursor position="4797" topLine="125" />
 	</File>
 </CodeBlocks_layout_file>

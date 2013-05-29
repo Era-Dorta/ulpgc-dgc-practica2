@@ -3,18 +3,22 @@
 
 #pragma once
 
-#define L_MOUSE 0
-#define R_MOUSE 2
-
 #include "polygon.hpp"
 #include "server.hpp"
 #include "polygonsFile.hpp"
 #include "ofxUI.h"
 #include <string>
 
+// Auxiliar macros for handling mouse button strokes.
+#define L_MOUSE 0
+#define R_MOUSE 2
+
+// This macro tells the GUI not to load or save its current state to a XML
+// file.
 #define OFX_UI_NO_XML
 
 
+// Different app modes.
 enum AppMode {
     MODE_VISUALIZATION = 0,
     MODE_POLYGON_CREATION,
@@ -25,6 +29,9 @@ enum AppMode {
     N_APP_MODES
 };
 
+
+// The GUI displays to the user one of the following strings according to the
+// current app mode.
 const string appModeStr[N_APP_MODES] =
 {
     "Visualization",
@@ -38,41 +45,53 @@ const string appModeStr[N_APP_MODES] =
 class testApp : public ofBaseApp
 {
     private:
+        // Dimensions of the sub-window where polygons are rendered.
         unsigned int appW, appH;
+
+        // GUI width. The GUI takes up a vertical panel on the left of the app,
+        // so its height equals to appH.
         unsigned int guiW;
 
-        int prevX;
-        int prevY;
+        // Mouse position during the last frame.
+        int lastMouseX, lastMouseY;
 
-        std::vector< class Polygon >::iterator currentPolygon;
+        // Container for all polygons drawn by user.
         std::vector< class Polygon > polygons;
+
+        // Iterator pointing to current or active polygon. Transformations
+        // such as translations, rotations, etc will affect this polygon.
+        std::vector< class Polygon >::iterator currentPolygon;
+
+        // Container for polygons waiting to be copied to the NXT server.
         std::vector< class Polygon > toServerPolygons;
 
+        // Current app mode.
         AppMode appMode;
 
+        // Pointer to the server which will send the drawing commands to the
+        // NXT.
         Server* server;
 
+        // Polygon which the user is creating.
         Polygon tempPolygon;
 
-        //Vertex lastMousePress;
+        // Vertex lastMousePress;
         Vertex currentMousePos;
         Vertex currentMouseWorldPos;
 
-        int lastMouseX, lastMouseY;
-
+        // Pointer to GUI.
         ofxUICanvas *gui;
+
+        // Pointer to GUI radio for selecting app mode.
         ofxUIRadio *appModeSelector;
 
 	public:
+        // 1. Initializations
         testApp( const unsigned int& w, const unsigned int& h, const unsigned int& guiW );
-
 		void setup();
 		void setupGUI();
 
-		void update();
-		void draw();
-		void exit();
-
+        // 2. Events
 		void keyPressed  (int key);
 		void keyReleased(int key);
 		void mouseMoved(int x, int y );
@@ -83,21 +102,23 @@ class testApp : public ofBaseApp
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
-		void drawGUI();
+		// Listener for ofxUI GUI library
+		//void guiEvent(ofxUIEventArgs &e);
+
+        // 3. Updating and drawing
+        void update();
+        void draw();
+
+        // 4. Exit
+		void exit();
+
+		// 5. Auxiliar methods
+        bool pointOnRenderWindow( const int& x, const int& y );
 
 	private:
-        /*
-        void sendMessage( const int leftMotor, const int rightMotor, const int pen_up ) const;
-        void waitAck() const;
-        Vertex toPolar(const int x, const int y);
-        float calculateAngle( const Vertex& vector0, const Vertex& vector1) const;
-        void moveForNextPoint(const Vertex& finalPosition, const Vertex& finalVector);
-        */
-
+        // 6. Polygons administration
         void addPolygon( Polygon polygon );
         void deleteLastPolygon();
-
-        void guiEvent(ofxUIEventArgs &e);
 };
 
 
