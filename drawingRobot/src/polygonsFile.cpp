@@ -16,7 +16,7 @@ Vertex PolygonsFile::loadVertexFromLine( char* line )
 }
 
 
-void PolygonsFile::load( string filePath, vector<Polygon>* polygons )
+int PolygonsFile::load( string filePath, vector<Polygon>* polygons )
 {
     const unsigned int LINE_SIZE = 250;
     char line[LINE_SIZE];
@@ -27,8 +27,10 @@ void PolygonsFile::load( string filePath, vector<Polygon>* polygons )
     ifstream file( filePath.c_str() );
 
     if( !file.is_open() ){
-        throw runtime_error( "ERROR opening the file [" + filePath + "]" );
+        return -1;
     }
+
+    polygons->clear();
 
     while( file.getline( line, LINE_SIZE ) ){
         // Read the number of vertexes for current polygon.
@@ -51,4 +53,38 @@ void PolygonsFile::load( string filePath, vector<Polygon>* polygons )
         currentPolygon.clear();
         cout << endl << endl;
     }
+
+    file.close();
+
+    return 0;
+}
+
+
+int PolygonsFile::save( string filePath, vector<Polygon>* polygons )
+{
+    unsigned int i, j;
+    Vertex currentVertex;
+    Polygon currentPolygon;
+
+    ofstream file( filePath.c_str() );
+
+    if( !file.is_open() ){
+        return -1;
+    }
+
+    for( i=0; i<polygons->size(); i++ ){
+        currentPolygon = (*polygons)[i];
+
+        file << currentPolygon.getSize() << endl;
+
+        for( j=0; j<currentPolygon.getSize(); j++ ){
+            currentVertex = currentPolygon.getVertex( j );
+
+            file << currentVertex[X] << " " << currentVertex[Y] << endl;
+        }
+    }
+
+    file.close();
+
+    return 0;
 }

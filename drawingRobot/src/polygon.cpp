@@ -57,6 +57,10 @@ unsigned int Polygon::getSize() const
 }
 
 const Vertex Polygon::getVertex(const int& i) const{
+    return v[i];
+}
+
+const Vertex Polygon::getScalatedVertex(const int& i) const{
     return vScalated[i];
 }
 

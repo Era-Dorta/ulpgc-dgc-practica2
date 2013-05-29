@@ -29,6 +29,8 @@ class Polygon
 
         const Vertex getVertex(const int& i) const;
 
+        const Vertex getScalatedVertex(const int& i) const;
+
         const Vertex getVector(const int& i) const;
 
         void showPolygon() const;
