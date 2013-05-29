@@ -13,12 +13,15 @@ void Polygon::addVertex( const float& x, const float& y )
         aux = vertex - v.back();
         aux.normalize();
         vectors.back().set( aux[X], aux[Y] );
+        transVectors.back().set( aux[X], aux[Y] );
     }
     v.push_back( vertex );
     transV.push_back( vertex );
     vScalated.push_back(vertex*0.25);
+    transVScalated.push_back(vertex*0.25);
     Vertex vector( 0, 1 );
     vectors.push_back(vector);
+    transVectors.push_back(vector);
 }
 
 void Polygon::draw() const
@@ -52,11 +55,11 @@ unsigned int Polygon::getSize() const
 }
 
 const Vertex Polygon::getVertex(const int& i) const{
-    return vScalated[i];
+    return transVScalated[i];
 }
 
 const Vertex Polygon::getVector(const int& i) const{
-    return vectors[i];
+    return transVectors[i];
 }
 
 void Polygon::showPolygon() const{
@@ -103,7 +106,7 @@ void Polygon::Rotate( float angle )
     rotMatrix.setRotation( angle );
     transMatrix = transMatrix*rotMatrix;
 
-    Update();
+    UpdateRotation();
 }
 
 void Polygon::Scale( float sx, float sy )
@@ -122,5 +125,17 @@ void Polygon::Update()
 
     for( i=0; i<v.size(); i++ ){
         transV[i] = v[i]*transMatrix;
+        transVScalated[i] = vScalated[i]*transMatrix;
+    }
+}
+
+void Polygon::UpdateRotation()
+{
+    unsigned int i;
+
+    for( i=0; i<v.size(); i++ ){
+        transV[i] = v[i]*transMatrix;
+        transVScalated[i] = vScalated[i]*transMatrix;
+        transVectors[i] = vectors[i]*transMatrix;
     }
 }
