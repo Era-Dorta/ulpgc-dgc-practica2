@@ -33,8 +33,8 @@ void testApp::setup()
     lastMouseY = RENDER_WINDOW_BORDER;
 
     // Load polygons from file.
-    PolygonsFile polygonsFile;
-    polygonsFile.load( "data/foo.txt", &polygons ); // TODO: Copiar tambien en toServerPolygons.
+    //PolygonsFile polygonsFile;
+    //polygonsFile.load( "data/foo.txt", &polygons ); // TODO: Copiar tambien en toServerPolygons.
 
     // Initialize NXT server. The server thread will be waiting for new
     // polygons to send to the NXT.
@@ -49,6 +49,9 @@ void testApp::setup()
 
     // Default app mode is polygon creation.
     appMode = MODE_POLYGON_CREATION;
+
+
+    ofAddListener(gui->newGUIEvent,this,&testApp::guiEvent);
 }
 
 
@@ -60,6 +63,10 @@ void testApp::setupGUI()
     gui = new ofxUICanvas( 0, 0, guiW, appH );
 
     // Create a radio element for selecting the current app mode.
+
+    // Add a label to the radio options.
+    gui->addLabel("APP MODE", OFX_UI_FONT_MEDIUM);
+
     gui->addSpacer();
     vector<string> vnames;
     for( i=0; i<N_APP_MODES; i++ ){
@@ -67,13 +74,24 @@ void testApp::setupGUI()
         vnames.push_back( appModeStr[i] );
     }
 
-    // Add a label to the radio options.
-    gui->addLabel("APP MODE", OFX_UI_FONT_MEDIUM);
-
     // Add the radio selector to the GUI and activate by default the option
     // "POLYGON CREATION".
     appModeSelector = gui->addRadio("VR", vnames, OFX_UI_ORIENTATION_VERTICAL);
     appModeSelector->activateToggle( appModeStr[MODE_POLYGON_CREATION] );
+    gui->addSpacer();
+
+    // Add a text input for typing a file and two buttons for saving to and
+    // loading from that file.
+    gui->addLabel( "Saving/Loading", OFX_UI_FONT_MEDIUM );
+    gui->addSpacer();
+    fileInput = gui->addTextInput( "FILE_PATH", "data/foo.txt", OFX_UI_FONT_MEDIUM );
+    savingButton = gui->addLabelButton( "Save to file", false );
+    loadingButton = gui->addLabelButton( "Load from file", false );
+
+    fileNotFoundLabel = gui->addLabel( "FILE NOT FOUND" );
+    fileNotFoundLabel->setVisible( false );
+    //gui->addWidgetDown( new ofxUIButton( "Saving button", false, guiW-10, 15 ) );
+    //gui->addWidgetDown( new ofxUILabelButton( guiW-10, false, "Load from file", OFX_UI_FONT_MEDIUM ) );
     gui->addSpacer();
 }
 
@@ -85,6 +103,10 @@ void testApp::setupGUI()
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
     switch( key ){
+        case 'x':
+            // TODO: Cambiar, haria que no se pudieran escribir nombres de fichero con x en el textInput.
+            deleteCurrentPolygon();
+        break;
         /*
         case 'c':
             appMode = MODE_POLYGON_CREATION;
@@ -231,22 +253,38 @@ void testApp::dragEvent(ofDragInfo dragInfo){
 
 }
 
-// TODO: Creo que esto se puede quitar sin mosca, o al menos el cuerpo.
-/*
-void testApp::guiEvent(ofxUIEventArgs &e)
+
+void testApp::guiEvent( ofxUIEventArgs &e )
 {
-    if(e.widget->getName() == "BACKGROUND VALUE")
-    {
-        ofxUISlider *slider = (ofxUISlider *) e.widget;
-        ofBackground(slider->getScaledValue());
+    PolygonsFile polygonsFile;
+
+    if( e.widget->getName() == savingButton->getName() ){
+        if( savingButton->getValue() ){
+            cout << "Saving to file [" << fileInput->getTextString() << "]" << endl;
+
+            if( !polygonsFile.save( fileInput->getTextString(), &polygons ) ){
+                fileNotFoundLabel->setVisible( false );
+            }else{
+                fileNotFoundLabel->setVisible( true );
+            }
+        }
+    }else if( e.widget->getName() == loadingButton->getName() ){
+        if( loadingButton->getValue() ){
+            cout << "Loading from file [" << fileInput->getTextString() << "]" << endl;
+            if( !polygonsFile.load( fileInput->getTextString(), &polygons ) ){
+                currentPolygon = polygons.begin();
+                fileNotFoundLabel->setVisible( false );
+            }else{
+                fileNotFoundLabel->setVisible( true );
+            }
+        }
     }
 }
-*/
+
 
 /***
     3. Updating and drawing
 ***/
-
 
 //--------------------------------------------------------------
 void testApp::update(){
@@ -318,8 +356,6 @@ void testApp::draw(){
 
 void testApp::exit()
 {
-    PolygonsFile polygonsFile;
-    polygonsFile.save( "data/foo.txt", &polygons );
     server->stopThread();
 
     //gui->saveSettings("GUI/guiSettings.xml");
@@ -352,4 +388,14 @@ void testApp::addPolygon( Polygon polygon ){
 void testApp::deleteLastPolygon()
 {
     polygons.pop_back();
+}
+
+void testApp::deleteCurrentPolygon()
+{
+    if( polygons.size() ){
+        polygons.erase( currentPolygon );
+        if( currentPolygon == polygons.end() ){
+            polygons.begin();
+        }
+    }
 }

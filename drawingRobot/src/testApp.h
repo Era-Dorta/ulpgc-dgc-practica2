@@ -7,6 +7,8 @@
 #include "server.hpp"
 #include "polygonsFile.hpp"
 #include "ofxUI.h"
+// User Interface Library/Addon for openFrameworks created by rezaali :
+// https://github.com/rezaali/ofxUI
 #include <string>
 
 // Auxiliar macros for handling mouse button strokes.
@@ -80,10 +82,20 @@ class testApp : public ofBaseApp
         Vertex currentMouseWorldPos;
 
         // Pointer to GUI.
-        ofxUICanvas *gui;
+        ofxUICanvas* gui;
 
         // Pointer to GUI radio for selecting app mode.
-        ofxUIRadio *appModeSelector;
+        ofxUIRadio* appModeSelector;
+
+        // Text input for submiting saving / loading file.
+        ofxUITextInput* fileInput;
+
+        // Pointers to buttons for saving / loading.
+        ofxUILabelButton* savingButton;
+        ofxUILabelButton* loadingButton;
+
+        // Pointer to warning label (used when a file is not found).
+        ofxUILabel* fileNotFoundLabel;
 
 	public:
         // 1. Initializations
@@ -103,7 +115,7 @@ class testApp : public ofBaseApp
 		void gotMessage(ofMessage msg);
 
 		// Listener for ofxUI GUI library
-		//void guiEvent(ofxUIEventArgs &e);
+		void guiEvent(ofxUIEventArgs &e);
 
         // 3. Updating and drawing
         void update();
@@ -119,6 +131,7 @@ class testApp : public ofBaseApp
         // 6. Polygons administration
         void addPolygon( Polygon polygon );
         void deleteLastPolygon();
+        void deleteCurrentPolygon();
 };
 
 
