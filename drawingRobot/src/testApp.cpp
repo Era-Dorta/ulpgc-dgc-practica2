@@ -15,6 +15,15 @@ void testApp::setup()
 {
     lastMouseX = 60;
     lastMouseY = 60;
+
+    //Creates the semaphore with permisions rw,r,r, and 0 tokens
+    mutex = sem_open("mutexForServer", O_CREAT, 0644, 0);
+
+    if(mutex == SEM_FAILED) {
+      perror("testApp: error creating semaphore");
+      return;
+    }
+
     server = Server::getInstance();
 
     PolygonsFile polygonsFile;
@@ -35,15 +44,15 @@ void testApp::setup()
 
 //--------------------------------------------------------------
 void testApp::update(){
-    //cout << "Soy main thread\n";
-
     // If there are polygons to copy to the server, copy them.
     if(toServerPolygons.size() > 0){
         cout << "To server poligons > 0\n";
         if(server->lock()){
             cout << "Copying polygons to server\n";
             for( unsigned int i = 0; i < toServerPolygons.size(); i++ ){
-                server->polygons.push_back(/*&*/(toServerPolygons[i]));
+                server->polygons.push_back(toServerPolygons[i]);
+                //Increment semaphore one token for each polygon copied
+                release(mutex);
             }
             server->unlock();
             toServerPolygons.clear();
@@ -53,17 +62,20 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
+
+    drawEdges();
+
     std::vector< class Polygon >::iterator it = polygons.begin();
 
     for( ; it != polygons.end(); ++it ){
         cout << "polygon.size: " << it->getSize() << endl;
         if( it == currentPolygon ){
-            ofSetColor( 255, 255, 255 );
+            ofSetColor( ofColor::white);
         }else{
             ofSetColor( 150, 150, 150 );
         }
         it->draw();
-        ofSetColor( 255, 255, 255 );
+        ofSetColor( ofColor::white);
     }
 
     tempPolygon.draw();
@@ -288,12 +300,42 @@ void testApp::drawGUI()
     //ofDrawBitmapString( "Keep key 'h' pressed to access help", 20, h_-15 );
 }
 
+void testApp::drawEdges()
+{
+    ofSetColor(ofColor::black);
+    ofFill();
+    //Draw a rectangle that shows the user drawable area
+    //Top
+    ofRect(0, 0, 662, 60);
+    //Right
+    ofRect(602, 60, 60, 410);
+    //Bottom
+    ofRect(0, 410, 602, 60);
+    //Left
+    ofRect(0, 60, 60, 350);
+
+    ofSetColor(ofColor::white);
+}
+
 //--------------------------------------------------------------
 
 //--------------------------------------------------------------
 void testApp::exit()
 {
+    cout << "cerrando 0\n";
+    server->exit();
     server->stopThread();
+    sem_close(mutex);
+    sem_unlink("mutexForServer");
+    cout << "cerrando 1\n";
 }
 
+//--------------------------------------------------------------
+void testApp::release( sem_t* mutex_)
+{
+    if(sem_post(mutex) < 0) {
+      perror("main thread: error on post semaphore");
+      _Exit(EXIT_FAILURE);
+    }
+}
 

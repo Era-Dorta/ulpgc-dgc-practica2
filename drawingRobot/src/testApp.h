@@ -9,6 +9,10 @@
 #include "polygon.hpp"
 #include "server.hpp"
 #include "polygonsFile.hpp"
+#include <semaphore.h>
+#include <fcntl.h> //O_CREAT and SEM_FAILED
+#include <cstdlib> //exit function
+using namespace std;
 
 enum AppMode {
     MODE_VISUALIZATION = 0,
@@ -40,6 +44,8 @@ class testApp : public ofBaseApp
 
         int lastMouseX, lastMouseY;
 
+        sem_t* mutex;
+
 	public:
 		void setup();
 		void update();
@@ -69,6 +75,8 @@ class testApp : public ofBaseApp
 
         void addPolygon( Polygon polygon );
         void deleteLastPolygon();
+        void release(sem_t* mutex);
+        void drawEdges();
 };
 
 

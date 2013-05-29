@@ -15,8 +15,31 @@ Server::Server()
     penPosition = brickPosition + penOffset;
     //When mesured, pen position is shifted 4cm, 9cm
     penOffset.set(3.5,12);
+
+    mutex = sem_open("mutexForServer", O_CREAT, 0644, 0);
+    if(mutex == SEM_FAILED) {
+      perror("server: error creating semaphore");
+      return;
+    }
 }
 
+//--------------------------------------------------------------
+void Server::wait( sem_t* mutex_)
+{
+    if(sem_wait(mutex_) < 0){
+        perror("server: error on wait semaphore");
+        _Exit(EXIT_FAILURE);
+    }
+}
+
+//--------------------------------------------------------------
+void Server::release( sem_t* mutex_)
+{
+    if(sem_post(mutex) < 0) {
+      perror("server: error on post semaphore");
+      _Exit(EXIT_FAILURE);
+    }
+}
 
 Server* Server::getInstance()
 {
@@ -195,29 +218,24 @@ void Server::drawBrick() const
 void Server::threadedFunction()
 {
     while( isThreadRunning() != 0 ){
-        cout << "Server: Soy thread en paralelo\n";
-
-
         if( lock() ){
-            cout << "Server: tengo el lock!" << endl;
             if(polygons.size() > 0){
-                cout << "Server: Dibujando poligono\n";
-<<<<<<< HEAD
                 unlock();
+                wait(mutex);
                 drawPolygon( polygons.front() );
-=======
-                //currentPolygon = polygons.front();
-                unlock();
-
-                drawPolygon( &(polygons.front()) );
-                toErase = true;
-                //currentPolygon = NULL;
->>>>>>> moises
             }else{
-                cout << "Server: Espero" << endl;
                 unlock();
-                ofSleepMillis(1 * 5000);
+                wait(mutex);
+                //Increment semaphore one token so in next check this thread
+                //will not sleep
+                release(mutex);
             }
         }
+
     }
+}
+
+void Server::exit()
+{
+    sem_close(mutex);
 }

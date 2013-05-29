@@ -3,6 +3,10 @@
 #define SERVER_H
 
 #include "polygon.hpp"
+#include <semaphore.h>
+#include <fcntl.h> //O_CREAT and SEM_FAILED
+#include <cstdlib> //exit function
+using namespace std;
 
 #define USE_BRICK false
 
@@ -34,10 +38,15 @@ class Server : public ofThread
 
         static Server* instance;
 
+        sem_t *mutex;
+
         Server();
 
         Server(Server const&);              // Don't Implement
         void operator=(Server const&); // Don't implement
+
+        void wait( sem_t * mutex_ );
+        void release( sem_t* mutex_ );
 
     public:
         std::vector< Polygon > polygons;
@@ -59,6 +68,8 @@ class Server : public ofThread
         void drawBrick() const;
 
         void threadedFunction();
+
+        void exit();
 };
 
 
