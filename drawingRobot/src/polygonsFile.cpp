@@ -78,7 +78,7 @@ int PolygonsFile::save( string filePath, vector<Polygon>* polygons )
         file << currentPolygon.getSize() << endl;
 
         for( j=0; j<currentPolygon.getSize(); j++ ){
-            currentVertex = currentPolygon.getVertex( j );
+            currentVertex = currentPolygon.getTransVertex( j );
 
             file << currentVertex[X] << " " << currentVertex[Y] << endl;
         }

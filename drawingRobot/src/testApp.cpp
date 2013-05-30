@@ -398,6 +398,9 @@ void testApp::exit()
     sem_close(mutex);
     sem_unlink("mutexForServer");
     cout << "cerrando 1\n";
+
+    //gui->saveSettings("GUI/guiSettings.xml");
+    delete gui;
 }
 
 //--------------------------------------------------------------
@@ -407,9 +410,6 @@ void testApp::release( sem_t* mutex_)
       perror("main thread: error on post semaphore");
       _Exit(EXIT_FAILURE);
     }
-
-    //gui->saveSettings("GUI/guiSettings.xml");
-    delete gui;
 }
 
 

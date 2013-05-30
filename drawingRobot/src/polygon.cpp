@@ -63,6 +63,10 @@ const Vertex Polygon::getVertex(const int& i) const{
     return v[i];
 }
 
+const Vertex Polygon::getTransVertex(const int& i) const{
+    return transV[i];
+}
+
 const Vertex Polygon::getScalatedVertex(const int& i) const{
     return transVScalated[i];
 }
