@@ -232,7 +232,7 @@ void testApp::mousePressed(int x, int y, int button)
     Vertex position, vector, currentVertex, prevVertex;
     switch(button){
     case L_MOUSE:
-        tempPolygon.addVertex( x, y );
+        tempPolygon.addVertexFromPixel( x, y );
     break;
     case R_MOUSE:
         addPolygon( tempPolygon );
@@ -316,6 +316,7 @@ void testApp::drawEdges()
 
     ofSetColor( ofColor::white );
 }
+
 
 /***
     3. Updating and drawing
