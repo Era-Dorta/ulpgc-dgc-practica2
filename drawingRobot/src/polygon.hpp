@@ -6,7 +6,7 @@
 
 class Polygon
 {
-    private:
+    protected:
         static int ox, oy;
         std::vector< Vertex > v;
         std::vector< Vertex > transV;
@@ -51,8 +51,8 @@ class Polygon
         void Rotate( float angle );
         void Scale( float sx, float sy );
 
-        void Update();
-        void UpdateRotation();
+        virtual void Update();
+        virtual void UpdateRotation();
 };
 
 
