@@ -149,6 +149,7 @@ class testApp : public ofBaseApp
         void addPolygon( Polygon polygon );
         void deleteLastPolygon();
         void deleteCurrentPolygon();
+        void sendToServer();
 
         void release(sem_t* mutex);
         void drawEdges();

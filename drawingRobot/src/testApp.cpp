@@ -308,6 +308,7 @@ void testApp::guiEvent( ofxUIEventArgs &e )
         if( sendToServerButton->getValue() ){
             // Button is pressed
             cout << "Sending drawing to server" << endl;
+            sendToServer();
         }
     }
 }
@@ -344,22 +345,6 @@ void testApp::drawEdges()
 
 void testApp::update(){
     int w, h;
-    //cout << "Soy main thread\n";
-
-    // If there are polygons to copy to the server, copy them.
-    if(toServerPolygons.size() > 0){
-        cout << "To server poligons > 0\n";
-        if(server->lock()){
-            cout << "Copying polygons to server\n";
-            for( unsigned int i = 0; i < toServerPolygons.size(); i++ ){
-                server->polygons.push_back(toServerPolygons[i]);
-                //Increment semaphore one token for each polygon copied
-                release(mutex);
-            }
-            server->unlock();
-            toServerPolygons.clear();
-        }
-    }
 
     // Prevent the user from resizing the window.
     w = ofGetWidth();
@@ -480,6 +465,24 @@ void testApp::deleteCurrentPolygon()
         polygons.erase( currentPolygon );
         if( currentPolygon == polygons.end() ){
             polygons.begin();
+        }
+    }
+}
+
+void testApp::sendToServer()
+{
+    // If there are polygons to copy to the server, copy them.
+    if(toServerPolygons.size() > 0){
+        cout << "To server poligons > 0\n";
+        if(server->lock()){
+            cout << "Copying polygons to server\n";
+            for( unsigned int i = 0; i < toServerPolygons.size(); i++ ){
+                server->polygons.push_back(toServerPolygons[i]);
+                //Increment semaphore one token for each polygon copied
+                release(mutex);
+            }
+            server->unlock();
+            toServerPolygons.clear();
         }
     }
 }
