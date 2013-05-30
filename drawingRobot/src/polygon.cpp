@@ -5,6 +5,12 @@
 int Polygon::ox = 0;
 int Polygon::oy = 0;
 
+// Initializations for Thresholds for polygons drawable by the robot.
+int Polygon::minX = 0;
+int Polygon::maxX = 0;
+int Polygon::minY = 0;
+int Polygon::maxY = 0;
+
 
 /***
     1. Initializations
@@ -99,6 +105,11 @@ void Polygon::addVertex( const Vertex& vertex )
     Vertex vector( 0, 1 );
     vectors.push_back( vector );
     transVectors.push_back( vector );
+
+    // If any vertex falls out of space where robot cand draw it, indicate it.
+    if( !vertexInRobotRange( vertex ) ){
+        robotDrawingErrors = VERTEX_OUT_OF_BORDERS;
+    }
 }
 
 
@@ -185,11 +196,18 @@ void Polygon::Update()
 {
     unsigned int i;
 
+    robotDrawingErrors = NONE;
+
     // Update transformed vertexes by multiply original ones by transformation
     // matrix.
     for( i=0; i<v.size(); i++ ){
         transV[i] = v[i]*transMatrix;
         transVScalated[i] = vScalated[i]*transMatrix;
+
+        // If any vertex falls out of space where robot cand draw it, indicate it.
+        if( !vertexInRobotRange( transV[i] ) ){
+            robotDrawingErrors = VERTEX_OUT_OF_BORDERS;
+        }
     }
 }
 
@@ -198,12 +216,19 @@ void Polygon::UpdateRotation()
 {
     unsigned int i;
 
+    robotDrawingErrors = NONE;
+
     // Update transformed vertexes and vectors by multiply original ones by
     // transformation matrix.
     for( i=0; i<v.size(); i++ ){
         transV[i] = v[i]*transMatrix;
         transVScalated[i] = vScalated[i]*transMatrix;
         transVectors[i] = vectors[i]*transMatrix;
+
+        // If any vertex falls out of space where robot cand draw it, indicate it.
+        if( !vertexInRobotRange( transV[i] ) ){
+            robotDrawingErrors = VERTEX_OUT_OF_BORDERS;
+        }
     }
 }
 
@@ -228,7 +253,36 @@ void Polygon::drawLine( const Vertex& v0, const Vertex& v1 )
 
 
 /***
-    8. Auxiliar methods
+    8. Robot drawing conditions
+***/
+
+void Polygon::setCoordinatesThresholds( const int& minX, const int& minY,
+                                         const int& maxX, const int& maxY )
+{
+    Polygon::minX = minX;
+    Polygon::minY = minY;
+    Polygon::maxX = maxX;
+    Polygon::maxY = maxY;
+}
+
+
+bool Polygon::vertexInRobotRange( Vertex vertex ) const
+{
+    vertex[X] += ox;
+    vertex[Y] += oy;
+    return ( vertex[X] >= minX ) && ( vertex[X] <= maxX ) &&
+            ( vertex[Y] >= minY ) && ( vertex[Y] <= maxY );
+}
+
+
+bool Polygon::drawableByRobot() const
+{
+    return ( robotDrawingErrors == NONE );
+}
+
+
+/***
+    9. Auxiliar methods
 ***/
 
 void Polygon::showPolygon() const{

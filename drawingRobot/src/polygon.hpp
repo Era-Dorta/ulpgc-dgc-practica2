@@ -1,6 +1,8 @@
 /***
-    Polygon: class used for defining and transforming 2D polygons, drawable by
-    NXT robot.
+    Polygon
+    ===
+    Class used for defining and transforming 2D polygons, drawable by NXT
+    robot.
 ***/
 
 #ifndef POLYGON_HPP
@@ -14,7 +16,7 @@
 enum RobotDrawingErrors
 {
     NONE = 0,
-    OUT_OF_BORDERS,
+    VERTEX_OUT_OF_BORDERS,
     IMPOSSIBLE_ANGLE
 };
 
@@ -24,11 +26,15 @@ class Polygon
         // Coordinates system origin (for all polygons).
         static int ox, oy;
 
+        // Thresholds for polygons drawable by the robot.
+        static int minX, maxX;
+        static int minY, maxY;
+
         // Original polygon vertexes.
         std::vector< Vertex > v;
 
-        // Transformed polygon vertexes (These are obtained from original ones
-        // by multiplying them by transformation matrix).
+        // Transformed polygon vertexes (These are obtained by multiplying
+        // original ones by transformation matrix).
         std::vector< Vertex > transV;
 
         // Original and transformed polygon vertexes adapted to real world
@@ -106,10 +112,19 @@ class Polygon
 
 
         /***
-        8. Auxiliar methods
+        8. Robot drawing conditions
+        ***/
+        static void setCoordinatesThresholds( const int& minX, const int& minY,
+                                                const int& maxX, const int& maxY );
+        bool vertexInRobotRange( Vertex vertex ) const ;
+        bool drawableByRobot() const ;
+
+        /***
+        9. Auxiliar methods
         ***/
         void showPolygon() const;
         static void PixelToWorld( float& x, float &y );
+
 };
 
 #endif // POLYGON_HPP
