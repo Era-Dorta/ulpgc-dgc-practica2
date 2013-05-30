@@ -10,9 +10,9 @@ int Polygon::oy = 0;
     1. Initializations
 ***/
 
-void Polygon::Polygon()
+Polygon::Polygon()
 {
-    robotDrawingProblems = NONE;
+    robotDrawingErrors = NONE;
 }
 
 

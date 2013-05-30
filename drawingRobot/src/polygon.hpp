@@ -16,7 +16,7 @@ enum RobotDrawingErrors
     NONE = 0,
     OUT_OF_BORDERS,
     IMPOSSIBLE_ANGLE
-}
+};
 
 class Polygon
 {
@@ -48,7 +48,7 @@ class Polygon
 
         // This atribute indicates whether the polygon can be drawn by the
         // robot in real world or exists any problem.
-        RobotDrawingProblems robotDrawingProblems;
+        RobotDrawingErrors robotDrawingErrors;
 
     public:
         /***
