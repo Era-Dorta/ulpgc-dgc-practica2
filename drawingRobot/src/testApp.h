@@ -100,6 +100,8 @@ class testApp : public ofBaseApp
         // Pointer to warning label (used when a file is not found).
         ofxUILabel* fileNotFoundLabel;
 
+        ofxUILabelButton* deletingButton;
+
         sem_t* mutex;
 
 	public:

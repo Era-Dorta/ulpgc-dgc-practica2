@@ -84,9 +84,15 @@ void testApp::setupGUI()
     appModeSelector->activateToggle( appModeStr[MODE_POLYGON_CREATION] );
     gui->addSpacer();
 
+    // Add a subpanel with a button for deleting the current polygon.
+    gui->addLabel("POLYGON ADMINISTRATION", OFX_UI_FONT_MEDIUM);
+    gui->addSpacer( OFX_UI_GLOBAL_SPACING_HEIGHT + 250 );
+    deletingButton = gui->addLabelButton( "Delete current polygon", false );
+    gui->addSpacer();
+
     // Add a text input for typing a file and two buttons for saving to and
     // loading from that file.
-    gui->addLabel( "Saving/Loading", OFX_UI_FONT_MEDIUM );
+    gui->addLabel( "FILE SAVING/LOADING", OFX_UI_FONT_MEDIUM );
     gui->addSpacer();
     fileInput = gui->addTextInput( "FILE_PATH", "data/foo.txt", OFX_UI_FONT_MEDIUM );
     savingButton = gui->addLabelButton( "Save to file", false );
@@ -97,6 +103,8 @@ void testApp::setupGUI()
     //gui->addWidgetDown( new ofxUIButton( "Saving button", false, guiW-10, 15 ) );
     //gui->addWidgetDown( new ofxUILabelButton( guiW-10, false, "Load from file", OFX_UI_FONT_MEDIUM ) );
     gui->addSpacer();
+
+
 
     ofAddListener(gui->newGUIEvent,this,&testApp::guiEvent);
 }
@@ -109,10 +117,6 @@ void testApp::setupGUI()
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
     switch( key ){
-        case 'x':
-            // TODO: Cambiar, haria que no se pudieran escribir nombres de fichero con x en el textInput.
-            deleteCurrentPolygon();
-        break;
         /*
         case 'c':
             appMode = MODE_POLYGON_CREATION;
@@ -266,6 +270,7 @@ void testApp::guiEvent( ofxUIEventArgs &e )
 
     if( e.widget->getName() == savingButton->getName() ){
         if( savingButton->getValue() ){
+            // Button is pressed
             cout << "Saving to file [" << fileInput->getTextString() << "]" << endl;
 
             if( !polygonsFile.save( fileInput->getTextString(), &polygons ) ){
@@ -276,6 +281,7 @@ void testApp::guiEvent( ofxUIEventArgs &e )
         }
     }else if( e.widget->getName() == loadingButton->getName() ){
         if( loadingButton->getValue() ){
+            // Button is pressed
             cout << "Loading from file [" << fileInput->getTextString() << "]" << endl;
             if( !polygonsFile.load( fileInput->getTextString(), &polygons ) ){
                 currentPolygon = polygons.begin();
@@ -283,6 +289,11 @@ void testApp::guiEvent( ofxUIEventArgs &e )
             }else{
                 fileNotFoundLabel->setVisible( true );
             }
+        }
+    }else if( e.widget->getName() == deletingButton->getName() ){
+        if( deletingButton->getValue() ){
+            // Button is pressed
+            deleteCurrentPolygon();
         }
     }
 }
