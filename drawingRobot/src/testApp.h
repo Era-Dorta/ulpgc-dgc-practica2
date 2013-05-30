@@ -10,6 +10,10 @@
 #include <fcntl.h> //O_CREAT and SEM_FAILED
 #include <cstdlib> //exit function
 using namespace std;
+// This macro tells the GUI not to load or save its current state to a XML
+// file.
+#define OFX_UI_NO_XML
+
 #include "ofxUI.h"
 // User Interface Library/Addon for openFrameworks created by rezaali :
 // https://github.com/rezaali/ofxUI
@@ -18,10 +22,6 @@ using namespace std;
 // Auxiliar macros for handling mouse button strokes.
 #define L_MOUSE 0
 #define R_MOUSE 2
-
-// This macro tells the GUI not to load or save its current state to a XML
-// file.
-#define OFX_UI_NO_XML
 
 // Different app modes.
 enum AppMode {
