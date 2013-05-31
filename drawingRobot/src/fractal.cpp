@@ -1,5 +1,5 @@
 #include "fractal.hpp"
-
+#define INV4 0.25
 //--------------------------------------------------------------
 void Fractal::addVertex( const Vertex& vertex, std::vector<class Vertex>::iterator i )
 {
@@ -48,14 +48,20 @@ void Fractal::divide()
         auxIndex = 0;
         for(j = v.begin(); j < v.end(); j++){
             //Add three new vertices for each old vertex
-            auxIndex++;
-            j = v.begin() + auxIndex
-            addVertex(newVertex, j);
-
+            newVertex = (v[auxIndex] + v[auxIndex+1])*INV4 + v[auxIndex];
             auxIndex++;
             j = v.begin() + auxIndex;
             addVertex(newVertex, j);
 
+            //TODO Este es el valor base, habria que sumarle en x,y el valor de
+            //la normal a la recta y que sea proporcionalmente inverso
+            //al numero de divisiones
+            newVertex = (v[auxIndex - 1] + v[auxIndex+1])*INV4*2 + v[auxIndex];
+            auxIndex++;
+            j = v.begin() + auxIndex;
+            addVertex(newVertex, j);
+
+            newVertex = (v[auxIndex - 2] + v[auxIndex+1])*INV4*3 + v[auxIndex];
             auxIndex++;
             j = v.begin() + auxIndex;
             addVertex(newVertex, j);
