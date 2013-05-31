@@ -202,7 +202,7 @@ void Polygon::Update()
     // matrix.
     for( i=0; i<v.size(); i++ ){
         transV[i] = v[i]*transMatrix;
-        transVScalated[i] = vScalated[i]*transMatrix;
+        transVScalated[i] = transV[i]*0.25;
 
         // If any vertex falls out of space where robot cand draw it, indicate it.
         if( !vertexInRobotRange( transV[i] ) ){
@@ -222,7 +222,7 @@ void Polygon::UpdateRotation()
     // transformation matrix.
     for( i=0; i<v.size(); i++ ){
         transV[i] = v[i]*transMatrix;
-        transVScalated[i] = vScalated[i]*transMatrix;
+        transVScalated[i] = transV[i]*0.25;
         transVectors[i] = vectors[i]*transMatrix;
 
         // If any vertex falls out of space where robot cand draw it, indicate it.
@@ -287,7 +287,8 @@ bool Polygon::drawableByRobot() const
 
 void Polygon::showPolygon() const{
     for( unsigned int i=0; i<v.size(); i++ ){
-        cout << "v[" << i << "] " << v[i] << " vector " << vectors[i] << endl;
+        cout << "v[" << i << "] " << v[i] << "transV[" << i << "] " << transV[i]  << "vScalated[" << i << "] " <<
+            vScalated[i] << "transVscalated[" << i << "] " << transVScalated[i] << " vector " << vectors[i] << endl;
     }
 }
 

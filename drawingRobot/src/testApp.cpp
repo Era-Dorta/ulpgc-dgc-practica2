@@ -451,7 +451,7 @@ bool testApp::pointOnRenderWindow( const int& x, const int& y )
 
 void testApp::addPolygon( Polygon polygon ){
     currentPolygon = polygons.insert( polygons.end(), polygon );
-    toServerPolygons.push_back(tempPolygon);
+    toServerPolygons.push_back(&(polygons.back()));
 }
 
 void testApp::deleteLastPolygon()
@@ -477,7 +477,7 @@ void testApp::sendToServer()
         if(server->lock()){
             cout << "Copying polygons to server\n";
             for( unsigned int i = 0; i < toServerPolygons.size(); i++ ){
-                server->polygons.push_back(toServerPolygons[i]);
+                server->polygons.push_back(*(toServerPolygons[i]));
                 //Increment semaphore one token for each polygon copied
                 release(mutex);
             }
