@@ -42,16 +42,26 @@ void Fractal::divide()
     std::vector<class Vertex>::iterator j;
 
     Vertex newVertex;
+    int auxIndex;
     //Divide line as many times as divisions says
     for(int i = 0; i < divisions; i++){
+        auxIndex = 0;
         for(j = v.begin(); j < v.end(); j++){
             //Add three new vertices for each old vertex
+            auxIndex++;
+            j = v.begin() + auxIndex
             addVertex(newVertex, j);
-            j++;
+
+            auxIndex++;
+            j = v.begin() + auxIndex;
             addVertex(newVertex, j);
-            j++;
+
+            auxIndex++;
+            j = v.begin() + auxIndex;
             addVertex(newVertex, j);
-            j++;
+
+            auxIndex++;
+            j = v.begin() + auxIndex;
         }
     }
 }
