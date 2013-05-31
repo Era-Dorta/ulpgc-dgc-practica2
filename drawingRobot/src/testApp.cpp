@@ -294,6 +294,10 @@ void testApp::guiEvent( ofxUIEventArgs &e )
             cout << "Loading from file [" << fileInput->getTextString() << "]" << endl;
             if( !polygonsFile.load( fileInput->getTextString(), &polygons ) ){
                 currentPolygon = polygons.begin();
+                //Copy loaded poligons to send to server
+                for(unsigned int i = 0; i < polygons.size(); i++){
+                    toServerPolygons.push_back(&(polygons[i]));
+                }
                 fileNotFoundLabel->setVisible( false );
             }else{
                 fileNotFoundLabel->setVisible( true );
