@@ -52,6 +52,9 @@ class Polygon
         // Transformation matrix.
         Matrix transMatrix;
 
+        //Rotations matrix for vectors
+        Matrix rotationsMatrix;
+
         // This atribute indicates whether the polygon can be drawn by the
         // robot in real world or exists any problem.
         RobotDrawingErrors robotDrawingErrors;
@@ -101,7 +104,6 @@ class Polygon
         6. Updating
         ***/
         void Update();
-        void UpdateRotation();
 
 
         /***

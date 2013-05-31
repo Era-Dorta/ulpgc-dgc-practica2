@@ -38,6 +38,7 @@ void Polygon::clear()
 
     // Set transformation matrix to identity.
     transMatrix.setIdentity();
+    rotationsMatrix.setIdentity();
 
     // By default, there's not errors for robot "drawing" an empty polygon.
     robotDrawingErrors = NONE;
@@ -170,9 +171,15 @@ void Polygon::Rotate( float angle )
     Matrix rotMatrix;
     rotMatrix.setRotation( angle );
     transMatrix = transMatrix*rotMatrix;
+    rotationsMatrix = rotationsMatrix*rotMatrix;
 
-    // Update transformed vertexes and vectors.
-    UpdateRotation();
+    // Update transformed vertexes
+    Update();
+
+    //Update vectors
+    for( unsigned int i=0; i<transVectors.size(); i++ ){
+        transVectors[i] = vectors[i]*rotationsMatrix;
+    }
 }
 
 void Polygon::Scale( float sx, float sy )
@@ -210,28 +217,6 @@ void Polygon::Update()
         }
     }
 }
-
-
-void Polygon::UpdateRotation()
-{
-    unsigned int i;
-
-    robotDrawingErrors = NONE;
-
-    // Update transformed vertexes and vectors by multiply original ones by
-    // transformation matrix.
-    for( i=0; i<v.size(); i++ ){
-        transV[i] = v[i]*transMatrix;
-        transVScalated[i] = transV[i]*0.25;
-        transVectors[i] = vectors[i]*transMatrix;
-
-        // If any vertex falls out of space where robot cand draw it, indicate it.
-        if( !vertexInRobotRange( transV[i] ) ){
-            robotDrawingErrors = VERTEX_OUT_OF_BORDERS;
-        }
-    }
-}
-
 
 /***
     7. Drawing
