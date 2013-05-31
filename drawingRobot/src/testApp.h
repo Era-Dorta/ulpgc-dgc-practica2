@@ -23,6 +23,11 @@ using namespace std;
 #define L_MOUSE 0
 #define R_MOUSE 2
 
+// Do not allow to paint more than 15 cm closer to the edges, since the brick
+// could fall off the board.
+// Since canvas is world cm*4, then 15*4 = 60 pixels in canvas
+const unsigned int RENDER_WINDOW_BORDER = 60;
+
 // Different app modes.
 enum AppMode {
     MODE_VISUALIZATION = 0,
@@ -68,7 +73,7 @@ class testApp : public ofBaseApp
         std::vector< class Polygon >::iterator currentPolygon;
 
         // Container for polygons waiting to be copied to the NXT server.
-        std::vector< class Polygon > toServerPolygons;
+        std::vector< class Polygon* > toServerPolygons;
 
         // Current app mode.
         AppMode appMode;
@@ -90,15 +95,21 @@ class testApp : public ofBaseApp
         // Pointer to GUI radio for selecting app mode.
         ofxUIRadio* appModeSelector;
 
-        // Text input for submiting saving / loading file.
+        // Pointer to GUI text input for submiting saving / loading file.
         ofxUITextInput* fileInput;
 
-        // Pointers to buttons for saving / loading.
+        // Pointer to GUI buttons for saving / loading.
         ofxUILabelButton* savingButton;
         ofxUILabelButton* loadingButton;
 
-        // Pointer to warning label (used when a file is not found).
+        // Pointer to GUI warning label (used when a file is not found).
         ofxUILabel* fileNotFoundLabel;
+
+        // Pointer to GUI button for sending drawing to server / NXT.
+        ofxUILabelButton* sendToServerButton;
+
+        // Pointer to GUI button for deleting current polygon.
+        ofxUILabelButton* deletingButton;
 
         sem_t* mutex;
 
@@ -138,6 +149,7 @@ class testApp : public ofBaseApp
         void addPolygon( Polygon polygon );
         void deleteLastPolygon();
         void deleteCurrentPolygon();
+        void sendToServer();
 
         void release(sem_t* mutex);
         void drawEdges();

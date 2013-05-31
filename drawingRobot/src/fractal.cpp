@@ -67,12 +67,3 @@ void Fractal::Update()
     }
 }
 
-//--------------------------------------------------------------
-void Fractal::UpdateRotation()
-{
-    Polygon::UpdateRotation();
-
-    for( unsigned int i=0; i<coreVertices.size(); i++ ){
-        transCoreVertices[i] = coreVertices[i]*transMatrix;
-    }
-}

@@ -18,8 +18,6 @@ class Fractal : public Polygon
         void divide();
 
         virtual void Update();
-        virtual void UpdateRotation();
-
 };
 
 #endif // FRACTAL_H

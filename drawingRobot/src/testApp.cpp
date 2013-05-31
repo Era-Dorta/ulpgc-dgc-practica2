@@ -7,12 +7,6 @@ const unsigned int KEY_LEFT_ARROW = 356;
 const unsigned int KEY_RIGHT_ARROW = 358;
 
 
-// Do not allow to paint more than 15 cm closer to the edges, since the brick
-// could fall off the board.
-// Since canvas is world cm*4, then 15*4 = 60 pixels in canvas
-const unsigned int RENDER_WINDOW_BORDER = 60;
-
-
 /***
     1. Initializations
 ***/
@@ -66,15 +60,16 @@ void testApp::setupGUI()
     // Set the GUI canvas. It will take up a vertical space to the left.
     gui = new ofxUICanvas( 0, 0, guiW, appH );
 
-    // Create a radio element for selecting the current app mode.
-
+    /***
+    Add to the GUI a radio element for selecting the current app mode.
+    ***/
     // Add a label to the radio options.
     gui->addLabel("APP MODE", OFX_UI_FONT_MEDIUM);
 
     gui->addSpacer();
     vector<string> vnames;
+    // Feed radio options from appModeStr array of strings.
     for( i=0; i<N_APP_MODES; i++ ){
-        // Feed radio options from appModeStr array of strings.
         vnames.push_back( appModeStr[i] );
     }
 
@@ -84,18 +79,40 @@ void testApp::setupGUI()
     appModeSelector->activateToggle( appModeStr[MODE_POLYGON_CREATION] );
     gui->addSpacer();
 
-    // Add a text input for typing a file and two buttons for saving to and
-    // loading from that file.
-    gui->addLabel( "Saving/Loading", OFX_UI_FONT_MEDIUM );
+
+    /***
+    Add to the GUI a subpanel with a button for deleting the current polygon.
+    ***/
+    gui->addLabel("POLYGON ADMINISTRATION", OFX_UI_FONT_MEDIUM);
+    gui->addSpacer( OFX_UI_GLOBAL_SPACING_HEIGHT + 250 );
+    deletingButton = gui->addLabelButton( "Delete current polygon", false );
+    gui->addSpacer();
+
+    /***
+    Add a text input for typing a file and two buttons for saving to and
+    loading from that file.
+    ***/
+    gui->addLabel( "FILE SAVING/LOADING", OFX_UI_FONT_MEDIUM );
     gui->addSpacer();
     fileInput = gui->addTextInput( "FILE_PATH", "data/foo.txt", OFX_UI_FONT_MEDIUM );
     savingButton = gui->addLabelButton( "Save to file", false );
     loadingButton = gui->addLabelButton( "Load from file", false );
 
+    // Add a invisible "File not found" error message. When user try to load from
+    // a non-existing file, this label will turn visible.
     fileNotFoundLabel = gui->addLabel( "FILE NOT FOUND" );
     fileNotFoundLabel->setVisible( false );
-    //gui->addWidgetDown( new ofxUIButton( "Saving button", false, guiW-10, 15 ) );
-    //gui->addWidgetDown( new ofxUILabelButton( guiW-10, false, "Load from file", OFX_UI_FONT_MEDIUM ) );
+    gui->addSpacer();
+
+    /***
+    Add to the GUI a panel with a button for sending the drawing to the NXT.
+    Also include a label informing the user that red polygons can't be drawn
+    by the robot.
+    ***/
+    gui->addLabel( "SERVER COMMUNICATION", OFX_UI_FONT_MEDIUM );
+    gui->addSpacer();
+    sendToServerButton = gui->addLabelButton( "Send drawing to NXT", false );
+    gui->addLabel( "Note: red polys can't be drawn by robot", OFX_UI_FONT_SMALL );
     gui->addSpacer();
 
     ofAddListener(gui->newGUIEvent,this,&testApp::guiEvent);
@@ -109,10 +126,6 @@ void testApp::setupGUI()
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
     switch( key ){
-        case 'x':
-            // TODO: Cambiar, haria que no se pudieran escribir nombres de fichero con x en el textInput.
-            deleteCurrentPolygon();
-        break;
         /*
         case 'c':
             appMode = MODE_POLYGON_CREATION;
@@ -228,7 +241,7 @@ void testApp::mousePressed(int x, int y, int button)
     Vertex position, vector, currentVertex, prevVertex;
     switch(button){
     case L_MOUSE:
-        tempPolygon.addVertex( x, y );
+        tempPolygon.addVertexFromPixel( x, y );
     break;
     case R_MOUSE:
         addPolygon( tempPolygon );
@@ -266,6 +279,7 @@ void testApp::guiEvent( ofxUIEventArgs &e )
 
     if( e.widget->getName() == savingButton->getName() ){
         if( savingButton->getValue() ){
+            // Button is pressed
             cout << "Saving to file [" << fileInput->getTextString() << "]" << endl;
 
             if( !polygonsFile.save( fileInput->getTextString(), &polygons ) ){
@@ -276,13 +290,29 @@ void testApp::guiEvent( ofxUIEventArgs &e )
         }
     }else if( e.widget->getName() == loadingButton->getName() ){
         if( loadingButton->getValue() ){
+            // Button is pressed
             cout << "Loading from file [" << fileInput->getTextString() << "]" << endl;
             if( !polygonsFile.load( fileInput->getTextString(), &polygons ) ){
                 currentPolygon = polygons.begin();
+                //Copy loaded poligons to send to server
+                for(unsigned int i = 0; i < polygons.size(); i++){
+                    toServerPolygons.push_back(&(polygons[i]));
+                }
                 fileNotFoundLabel->setVisible( false );
             }else{
                 fileNotFoundLabel->setVisible( true );
             }
+        }
+    }else if( e.widget->getName() == deletingButton->getName() ){
+        if( deletingButton->getValue() ){
+            // Button is pressed
+            deleteCurrentPolygon();
+        }
+    }else if( e.widget->getName() == sendToServerButton->getName() ){
+        if( sendToServerButton->getValue() ){
+            // Button is pressed
+            cout << "Sending drawing to server" << endl;
+            sendToServer();
         }
     }
 }
@@ -306,6 +336,7 @@ void testApp::drawEdges()
     ofSetColor( ofColor::white );
 }
 
+
 /***
     3. Updating and drawing
 ***/
@@ -318,22 +349,6 @@ void testApp::drawEdges()
 
 void testApp::update(){
     int w, h;
-    //cout << "Soy main thread\n";
-
-    // If there are polygons to copy to the server, copy them.
-    if(toServerPolygons.size() > 0){
-        cout << "To server poligons > 0\n";
-        if(server->lock()){
-            cout << "Copying polygons to server\n";
-            for( unsigned int i = 0; i < toServerPolygons.size(); i++ ){
-                server->polygons.push_back(toServerPolygons[i]);
-                //Increment semaphore one token for each polygon copied
-                release(mutex);
-            }
-            server->unlock();
-            toServerPolygons.clear();
-        }
-    }
 
     // Prevent the user from resizing the window.
     w = ofGetWidth();
@@ -362,12 +377,20 @@ void testApp::draw()
 
     for( ; it != polygons.end(); ++it ){
         if( it == currentPolygon ){
-            ofSetColor( ofColor::white);
+            if( it->drawableByRobot() ){
+                ofSetColor( ofColor::white );
+            }else{
+                ofSetColor( ofColor::red );
+            }
         }else{
-            ofSetColor( 150, 150, 150 );
+            if( it->drawableByRobot() ){
+                ofSetColor( 150, 150, 150 );
+            }else{
+                ofSetColor( 150, 0, 0 );
+            }
         }
         it->draw();
-        ofSetColor( ofColor::white);
+        ofSetColor( ofColor::white );
     }
 
     tempPolygon.draw();
@@ -432,7 +455,7 @@ bool testApp::pointOnRenderWindow( const int& x, const int& y )
 
 void testApp::addPolygon( Polygon polygon ){
     currentPolygon = polygons.insert( polygons.end(), polygon );
-    toServerPolygons.push_back(tempPolygon);
+    toServerPolygons.push_back(&(polygons.back()));
 }
 
 void testApp::deleteLastPolygon()
@@ -446,6 +469,24 @@ void testApp::deleteCurrentPolygon()
         polygons.erase( currentPolygon );
         if( currentPolygon == polygons.end() ){
             polygons.begin();
+        }
+    }
+}
+
+void testApp::sendToServer()
+{
+    // If there are polygons to copy to the server, copy them.
+    if(toServerPolygons.size() > 0){
+        cout << "To server poligons > 0\n";
+        if(server->lock()){
+            cout << "Copying polygons to server\n";
+            for( unsigned int i = 0; i < toServerPolygons.size(); i++ ){
+                server->polygons.push_back(*(toServerPolygons[i]));
+                //Increment semaphore one token for each polygon copied
+                release(mutex);
+            }
+            server->unlock();
+            toServerPolygons.clear();
         }
     }
 }
