@@ -34,10 +34,7 @@ int PolygonsFile::load( string filePath, vector<Polygon>* polygons )
 
     while( file.getline( line, LINE_SIZE ) ){
         // Read the number of vertexes for current polygon.
-        //file.getline( line, LINE_SIZE );
-        //if( !file.eof() )
         nVertexes = atoi( line );
-        cout << "Nº vertexes: " << nVertexes << endl;
 
         // Read all vertexes for current polygon.
         for( i=0; i<nVertexes; i++ ){
@@ -46,12 +43,9 @@ int PolygonsFile::load( string filePath, vector<Polygon>* polygons )
             currentVertex = loadVertexFromLine( line );
 
             currentPolygon.addVertex( currentVertex );
-
-            cout << "\tVertex: " << currentVertex << endl;
         }
         polygons->push_back( currentPolygon );
         currentPolygon.clear();
-        cout << endl << endl;
     }
 
     file.close();

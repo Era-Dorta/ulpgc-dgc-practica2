@@ -81,11 +81,14 @@ void testApp::setupGUI()
 
 
     /***
-    Add to the GUI a subpanel with a button for deleting the current polygon.
+    Add to the GUI a subpanel with buttons for deleting and selecting the
+    current polygon.
     ***/
     gui->addLabel("POLYGON ADMINISTRATION", OFX_UI_FONT_MEDIUM);
     gui->addSpacer( OFX_UI_GLOBAL_SPACING_HEIGHT + 250 );
     deletingButton = gui->addLabelButton( "Delete current polygon", false );
+    previousPolygonButton = gui->addLabelButton( "Select previous polygon", false );
+    nextPolygonButton = gui->addLabelButton( "Select next polygon", false );
     gui->addSpacer();
 
     /***
@@ -142,17 +145,11 @@ void testApp::keyPressed(int key){
         */
         case KEY_LEFT_ARROW:
             // Select previous polygon in the list.
-            if( currentPolygon == polygons.begin() ){
-                currentPolygon = polygons.end();
-            }
-            currentPolygon--;
+            selectPreviousPolygon();
         break;
         case KEY_RIGHT_ARROW:
             // Select next polygon in the list.
-            currentPolygon++;
-            if( currentPolygon == polygons.end() ){
-                currentPolygon = polygons.begin();
-            }
+            selectNextPolygon();
         break;
         default:
             cout << "key: " << key << endl;
@@ -319,6 +316,16 @@ void testApp::guiEvent( ofxUIEventArgs &e )
             cout << "Sending drawing to server" << endl;
             sendToServer();
         }
+    }else if( e.widget->getName() == previousPolygonButton->getName() ){
+        if( previousPolygonButton->getValue() ){
+            // Button is pressed
+            selectPreviousPolygon();
+        }
+    }else if( e.widget->getName() == nextPolygonButton->getName() ){
+        if( nextPolygonButton->getValue() ){
+            // Button is pressed
+            selectNextPolygon();
+        }
     }
 }
 
@@ -469,6 +476,25 @@ void testApp::deleteCurrentPolygon()
         }
     }
 }
+
+
+void testApp::selectPreviousPolygon()
+{
+    if( currentPolygon == polygons.begin() ){
+        currentPolygon = polygons.end();
+    }
+    currentPolygon--;
+}
+
+
+void testApp::selectNextPolygon()
+{
+    currentPolygon++;
+    if( currentPolygon == polygons.end() ){
+        currentPolygon = polygons.begin();
+    }
+}
+
 
 void testApp::sendToServer()
 {
