@@ -30,8 +30,7 @@ const unsigned int RENDER_WINDOW_BORDER = 60;
 
 // Different app modes.
 enum AppMode {
-    MODE_VISUALIZATION = 0,
-    MODE_POLYGON_CREATION,
+    MODE_POLYGON_CREATION = 0,
     MODE_TRANSLATION,
     MODE_ROTATION,
     MODE_SCALE,
@@ -44,7 +43,6 @@ enum AppMode {
 // current app mode.
 const string appModeStr[N_APP_MODES] =
 {
-    "Visualization",
     "Create Polygon",
     "Translate",
     "Rotate",

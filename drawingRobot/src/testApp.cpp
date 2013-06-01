@@ -56,6 +56,7 @@ void testApp::setup()
 void testApp::setupGUI()
 {
     unsigned int i;
+    const float widthGuiElement = (float)((guiW >> 1)-10);
 
     // Set the GUI canvas. It will take up a vertical space to the left.
     gui = new ofxUICanvas( 0, 0, guiW, appH );
@@ -79,7 +80,6 @@ void testApp::setupGUI()
     appModeSelector->activateToggle( appModeStr[MODE_POLYGON_CREATION] );
     gui->addSpacer();
 
-
     /***
     Add to the GUI a subpanel with buttons for deleting and selecting the
     current polygon.
@@ -87,8 +87,12 @@ void testApp::setupGUI()
     gui->addLabel("POLYGON ADMINISTRATION", OFX_UI_FONT_MEDIUM);
     gui->addSpacer( OFX_UI_GLOBAL_SPACING_HEIGHT + 250 );
     deletingButton = gui->addLabelButton( "Delete current polygon", false );
-    previousPolygonButton = gui->addLabelButton( "Select previous polygon", false );
-    nextPolygonButton = gui->addLabelButton( "Select next polygon", false );
+    previousPolygonButton = gui->addLabelButton( "Previous poly", false, widthGuiElement );
+    // Place the following button next to the last one.
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    nextPolygonButton = gui->addLabelButton( "Next poly", false, widthGuiElement );
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+
     gui->addSpacer();
 
     /***
@@ -98,8 +102,11 @@ void testApp::setupGUI()
     gui->addLabel( "FILE SAVING/LOADING", OFX_UI_FONT_MEDIUM );
     gui->addSpacer();
     fileInput = gui->addTextInput( "FILE_PATH", "data/foo.txt", OFX_UI_FONT_MEDIUM );
-    savingButton = gui->addLabelButton( "Save to file", false );
-    loadingButton = gui->addLabelButton( "Load from file", false );
+
+    savingButton = gui->addLabelButton( "Save", false, widthGuiElement );
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    loadingButton = gui->addLabelButton( "Load", false, widthGuiElement );
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
 
     // Add a invisible "File not found" error message. When user try to load from
     // a non-existing file, this label will turn visible.
