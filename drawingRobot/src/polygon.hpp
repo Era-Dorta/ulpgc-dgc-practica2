@@ -95,9 +95,9 @@ class Polygon
         /***
         5. Transformations
         ***/
-        void Translate( int tx, int ty );
-        void Rotate( float angle );
-        void Scale( float sx, float sy );
+        void translate( int tx, int ty );
+        void rotate( float angle );
+        void scale( float sx, float sy );
 
 
         /***

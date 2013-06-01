@@ -200,17 +200,17 @@ void testApp::mouseDragged(int x, int y, int button)
     // Set one transformation or another according to pressed key.
     switch( appMode ){
 		case MODE_TRANSLATION:
-		    currentPolygon->Translate( x-lastMouseX, -y+lastMouseY );
+		    currentPolygon->translate( x-lastMouseX, -y+lastMouseY );
 		break;
         case MODE_ROTATION:
             aux = x-lastMouseX;
-            currentPolygon->Rotate( aux );
+            currentPolygon->rotate( aux );
         break;
         case MODE_SCALE:
             aux = x-lastMouseX;
 
             aux = aux ? 1+aux*0.01 : 1;
-            currentPolygon->Scale( aux, aux );
+            currentPolygon->scale( aux, aux );
         break;
         default:
         break;

@@ -152,7 +152,7 @@ const Vertex Polygon::getVector( const int& i ) const
     5. Transformations
 ***/
 
-void Polygon::Translate( int tx, int ty )
+void Polygon::translate( int tx, int ty )
 {
     // Create a translation matrix and compound it with the polygon's
     // transformation matrix.
@@ -164,7 +164,7 @@ void Polygon::Translate( int tx, int ty )
     Update();
 }
 
-void Polygon::Rotate( float angle )
+void Polygon::rotate( float angle )
 {
     // Create a rotation matrix and compound it with the polygon's
     // transformation matrix.
@@ -182,7 +182,7 @@ void Polygon::Rotate( float angle )
     }
 }
 
-void Polygon::Scale( float sx, float sy )
+void Polygon::scale( float sx, float sy )
 {
     // Create a scale matrix and compound it with the polygon's
     // transformation matrix.
