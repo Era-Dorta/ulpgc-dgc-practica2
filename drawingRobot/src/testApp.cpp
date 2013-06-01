@@ -254,21 +254,26 @@ void testApp::mousePressed(int x, int y, int button)
 }
 
 //--------------------------------------------------------------
-void testApp::mouseReleased(int x, int y, int button){
+void testApp::mouseReleased(int x, int y, int button)
+{
 }
 
 //--------------------------------------------------------------
-void testApp::windowResized(int w, int h){
+void testApp::windowResized(int w, int h)
+{
+    // Don't allow the user to resize the window.
+    ofSetWindowShape( guiW+appW, appH );
+}
+
+//--------------------------------------------------------------
+void testApp::gotMessage(ofMessage msg)
+{
 
 }
 
 //--------------------------------------------------------------
-void testApp::gotMessage(ofMessage msg){
-
-}
-
-//--------------------------------------------------------------
-void testApp::dragEvent(ofDragInfo dragInfo){
+void testApp::dragEvent(ofDragInfo dragInfo)
+{
 
 }
 
@@ -349,14 +354,6 @@ void testApp::drawEdges()
 
 void testApp::update(){
     int w, h;
-
-    // Prevent the user from resizing the window.
-    w = ofGetWidth();
-    h = ofGetHeight();
-
-    if( (w != guiW+appW) || (h != appH) ){
-        ofSetWindowShape( guiW+appW, appH );
-    }
 
     ofxUIToggle* appModeSelection = appModeSelector->getActive();
     for( unsigned int i=0; i<N_APP_MODES; i++ ){
