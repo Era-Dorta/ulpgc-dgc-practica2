@@ -92,7 +92,7 @@ void Fractal::divide()
             normal.normalize();
             //Normal length is inversely proportional to the number of
             //divisions
-            normal = normal*(10.0/(i + 1));
+            normal = normal*(20.0/(i + 1));
             //Calculate a vertex between the two original vertices
             newVertex = (v[j+1] - v[j - 1])*INV4*2 + v[j - 1];
             //Add the normal length to this vertex
