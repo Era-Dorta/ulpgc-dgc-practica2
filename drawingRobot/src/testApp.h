@@ -30,8 +30,7 @@ const unsigned int RENDER_WINDOW_BORDER = 60;
 
 // Different app modes.
 enum AppMode {
-    MODE_VISUALIZATION = 0,
-    MODE_POLYGON_CREATION,
+    MODE_POLYGON_CREATION = 0,
     MODE_TRANSLATION,
     MODE_ROTATION,
     MODE_SCALE,
@@ -44,7 +43,6 @@ enum AppMode {
 // current app mode.
 const string appModeStr[N_APP_MODES] =
 {
-    "Visualization",
     "Create Polygon",
     "Translate",
     "Rotate",
@@ -111,6 +109,10 @@ class testApp : public ofBaseApp
         // Pointer to GUI button for deleting current polygon.
         ofxUILabelButton* deletingButton;
 
+        // Pointer to GUI buttons for selecting previous and next polygon.
+        ofxUILabelButton* previousPolygonButton;
+        ofxUILabelButton* nextPolygonButton;
+
         sem_t* mutex;
 
 	public:
@@ -149,6 +151,9 @@ class testApp : public ofBaseApp
         void addPolygon( Polygon polygon );
         void deleteLastPolygon();
         void deleteCurrentPolygon();
+        void selectPreviousPolygon();
+        void selectNextPolygon();
+
         void sendToServer();
 
         void release(sem_t* mutex);

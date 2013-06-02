@@ -56,6 +56,7 @@ void testApp::setup()
 void testApp::setupGUI()
 {
     unsigned int i;
+    const float widthGuiElement = (float)((guiW >> 1)-10);
 
     // Set the GUI canvas. It will take up a vertical space to the left.
     gui = new ofxUICanvas( 0, 0, guiW, appH );
@@ -79,13 +80,19 @@ void testApp::setupGUI()
     appModeSelector->activateToggle( appModeStr[MODE_POLYGON_CREATION] );
     gui->addSpacer();
 
-
     /***
-    Add to the GUI a subpanel with a button for deleting the current polygon.
+    Add to the GUI a subpanel with buttons for deleting and selecting the
+    current polygon.
     ***/
     gui->addLabel("POLYGON ADMINISTRATION", OFX_UI_FONT_MEDIUM);
     gui->addSpacer( OFX_UI_GLOBAL_SPACING_HEIGHT + 250 );
     deletingButton = gui->addLabelButton( "Delete current polygon", false );
+    previousPolygonButton = gui->addLabelButton( "Previous poly", false, widthGuiElement );
+    // Place the following button next to the last one.
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    nextPolygonButton = gui->addLabelButton( "Next poly", false, widthGuiElement );
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
+
     gui->addSpacer();
 
     /***
@@ -95,8 +102,11 @@ void testApp::setupGUI()
     gui->addLabel( "FILE SAVING/LOADING", OFX_UI_FONT_MEDIUM );
     gui->addSpacer();
     fileInput = gui->addTextInput( "FILE_PATH", "data/foo.txt", OFX_UI_FONT_MEDIUM );
-    savingButton = gui->addLabelButton( "Save to file", false );
-    loadingButton = gui->addLabelButton( "Load from file", false );
+
+    savingButton = gui->addLabelButton( "Save", false, widthGuiElement );
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
+    loadingButton = gui->addLabelButton( "Load", false, widthGuiElement );
+    gui->setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
 
     // Add a invisible "File not found" error message. When user try to load from
     // a non-existing file, this label will turn visible.
@@ -142,17 +152,11 @@ void testApp::keyPressed(int key){
         */
         case KEY_LEFT_ARROW:
             // Select previous polygon in the list.
-            if( currentPolygon == polygons.begin() ){
-                currentPolygon = polygons.end();
-            }
-            currentPolygon--;
+            selectPreviousPolygon();
         break;
         case KEY_RIGHT_ARROW:
             // Select next polygon in the list.
-            currentPolygon++;
-            if( currentPolygon == polygons.end() ){
-                currentPolygon = polygons.begin();
-            }
+            selectNextPolygon();
         break;
         default:
             cout << "key: " << key << endl;
@@ -196,17 +200,17 @@ void testApp::mouseDragged(int x, int y, int button)
     // Set one transformation or another according to pressed key.
     switch( appMode ){
 		case MODE_TRANSLATION:
-		    currentPolygon->Translate( x-lastMouseX, -y+lastMouseY );
+		    currentPolygon->translate( x-lastMouseX, -y+lastMouseY );
 		break;
         case MODE_ROTATION:
             aux = x-lastMouseX;
-            currentPolygon->Rotate( aux );
+            currentPolygon->rotate( aux );
         break;
         case MODE_SCALE:
             aux = x-lastMouseX;
 
             aux = aux ? 1+aux*0.01 : 1;
-            currentPolygon->Scale( aux, aux );
+            currentPolygon->scale( aux, aux );
         break;
         default:
         break;
@@ -254,21 +258,26 @@ void testApp::mousePressed(int x, int y, int button)
 }
 
 //--------------------------------------------------------------
-void testApp::mouseReleased(int x, int y, int button){
+void testApp::mouseReleased(int x, int y, int button)
+{
 }
 
 //--------------------------------------------------------------
-void testApp::windowResized(int w, int h){
+void testApp::windowResized(int w, int h)
+{
+    // Don't allow the user to resize the window.
+    ofSetWindowShape( guiW+appW, appH );
+}
+
+//--------------------------------------------------------------
+void testApp::gotMessage(ofMessage msg)
+{
 
 }
 
 //--------------------------------------------------------------
-void testApp::gotMessage(ofMessage msg){
-
-}
-
-//--------------------------------------------------------------
-void testApp::dragEvent(ofDragInfo dragInfo){
+void testApp::dragEvent(ofDragInfo dragInfo)
+{
 
 }
 
@@ -314,6 +323,16 @@ void testApp::guiEvent( ofxUIEventArgs &e )
             cout << "Sending drawing to server" << endl;
             sendToServer();
         }
+    }else if( e.widget->getName() == previousPolygonButton->getName() ){
+        if( previousPolygonButton->getValue() ){
+            // Button is pressed
+            selectPreviousPolygon();
+        }
+    }else if( e.widget->getName() == nextPolygonButton->getName() ){
+        if( nextPolygonButton->getValue() ){
+            // Button is pressed
+            selectNextPolygon();
+        }
     }
 }
 
@@ -349,14 +368,6 @@ void testApp::drawEdges()
 
 void testApp::update(){
     int w, h;
-
-    // Prevent the user from resizing the window.
-    w = ofGetWidth();
-    h = ofGetHeight();
-
-    if( (w != guiW+appW) || (h != appH) ){
-        ofSetWindowShape( guiW+appW, appH );
-    }
 
     ofxUIToggle* appModeSelection = appModeSelector->getActive();
     for( unsigned int i=0; i<N_APP_MODES; i++ ){
@@ -472,6 +483,25 @@ void testApp::deleteCurrentPolygon()
         }
     }
 }
+
+
+void testApp::selectPreviousPolygon()
+{
+    if( currentPolygon == polygons.begin() ){
+        currentPolygon = polygons.end();
+    }
+    currentPolygon--;
+}
+
+
+void testApp::selectNextPolygon()
+{
+    currentPolygon++;
+    if( currentPolygon == polygons.end() ){
+        currentPolygon = polygons.begin();
+    }
+}
+
 
 void testApp::sendToServer()
 {
