@@ -30,19 +30,23 @@ Fractal::Fractal(int divisions_)
 {
     Vertex aux;
     divisions = divisions_;
-    for(int i = 0; i < 2; i++){
+    for(int i = 0; i < 3; i++){
         Polygon::addVertex(aux);
     }
 }
 
 //--------------------------------------------------------------
 void Fractal::setVertices( const Vertex& vertex0, const Vertex& vertex1){
+    clear();
     Vertex aux;
     aux[X] = (vertex0[X] + vertex1[X])*0.5;
     aux[Y] = vertex0[Y] + vertex0[X] - vertex1[X];
     Polygon::addVertex(vertex0);
     Polygon::addVertex(aux);
     Polygon::addVertex(vertex1);
+    Polygon::addVertex(vertex0);
+
+    showPolygon();
 
 }
 
