@@ -1,4 +1,6 @@
 #include "fractal.hpp"
+
+#define swap(type, i, j) {type t = i; i = j; j = t;}
 #define INV4 0.25
 //--------------------------------------------------------------
 void Fractal::addVertex( const Vertex& vertex, std::vector<class Vertex>::iterator i )
@@ -41,7 +43,7 @@ void Fractal::divide()
 
     std::vector<class Vertex>::iterator j;
 
-    Vertex newVertex;
+    Vertex newVertex, normal;
     int auxIndex;
     //Divide line as many times as divisions says
     for(int i = 0; i < divisions; i++){
@@ -53,10 +55,18 @@ void Fractal::divide()
             j = v.begin() + auxIndex;
             addVertex(newVertex, j);
 
-            //TODO Este es el valor base, habria que sumarle en x,y el valor de
-            //la normal a la recta y que sea proporcionalmente inverso
-            //al numero de divisiones
+            //Calculate normal between original vertices
+            normal = v[auxIndex - 1] - v[auxIndex+1];
+            swap(float, normal[X], normal[Y]);
+            normal[X] = -normal[X];
+            normal.normalize();
+            //Normal length is inversely proportional to the number of
+            //divisions
+            normal = normal*(10.0/(i + 1));
+            //Calculate a vertex between the two original vertices
             newVertex = (v[auxIndex - 1] + v[auxIndex+1])*INV4*2 + v[auxIndex];
+            //Add the normal length to this vertex
+            newVertex = newVertex + normal;
             auxIndex++;
             j = v.begin() + auxIndex;
             addVertex(newVertex, j);
