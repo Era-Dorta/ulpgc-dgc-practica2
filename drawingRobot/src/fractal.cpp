@@ -76,7 +76,7 @@ void Fractal::divide()
     Vertex newVertex, normal;
     //Divide line as many times as divisions says
     for(int i = 0; i < divisions; i++){
-        for(unsigned int j = 0; j < v.size(); j++){
+        for(unsigned int j = 0; j < v.size() - 1; j++){
             //Add three new vertices for each old vertex
             newVertex = (v[j] + v[j+1])*INV4 + v[j];
             j++;
@@ -100,8 +100,6 @@ void Fractal::divide()
             newVertex = (v[j - 2] + v[j+1])*INV4*3 + v[j];
             j++;
             addVertex(newVertex, j);
-
-            j++;
         }
     }
 }
