@@ -15,6 +15,7 @@ class Fractal : public Polygon
 
     public:
         Fractal( int divisions_ = 0 );
+        void setVertices( const Vertex& vertex0, const Vertex& vertex1);
         void divide();
 
         virtual void Update();

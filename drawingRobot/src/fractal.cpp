@@ -29,6 +29,20 @@ void Fractal::addVertex( const Vertex& vertex, std::vector<class Vertex>::iterat
 Fractal::Fractal(int divisions_)
 {
     divisions = divisions_;
+    for(int i = 0; i < 2, i++){
+        Polygon::addVertex(new Vertex());
+    }
+}
+
+//--------------------------------------------------------------
+void Fractal::setVertices( const Vertex& vertex0, const Vertex& vertex1){
+    Vertex aux;
+    aux[X] = (vertex0[X] + vertex1[X])*0.5
+    aux[Y] = vertex0[Y] + vertex0[X] - vertex1[X];
+    Polygon::addVertex(vertex0);
+    Polygon::addVertex(aux);
+    Polygon::addVertex(vertex1);
+
 }
 
 //--------------------------------------------------------------
