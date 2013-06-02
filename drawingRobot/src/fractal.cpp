@@ -28,6 +28,9 @@ void Fractal::addVertex( const Vertex& vertex, const unsigned int& index )
 //--------------------------------------------------------------
 void Fractal::copyToCore()
 {
+    coreVertices.clear();
+    transCoreVertices.clear();
+
     for( unsigned int i=0; i<v.size(); i++ ){
         coreVertices.push_back(v[i]);
         transCoreVertices.push_back(v[i]);
