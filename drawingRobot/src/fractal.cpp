@@ -81,7 +81,7 @@ void Fractal::divide()
     for(int i = 0; i < divisions; i++){
         for(unsigned int j = 0; j < v.size() - 1; j++){
             //Add three new vertices for each old vertex
-            newVertex = (v[j] + v[j+1])*INV4 + v[j];
+            newVertex = (v[j+1] - v[j])*INV4 + v[j];
             j++;
             addVertex(newVertex, j);
 
@@ -94,13 +94,13 @@ void Fractal::divide()
             //divisions
             normal = normal*(10.0/(i + 1));
             //Calculate a vertex between the two original vertices
-            newVertex = (v[j - 1] + v[j+1])*INV4*2 + v[j];
+            newVertex = (v[j+1] - v[j - 1])*INV4*2 + v[j - 1];
             //Add the normal length to this vertex
             newVertex = newVertex + normal;
             j++;
             addVertex(newVertex, j);
 
-            newVertex = (v[j - 2] + v[j+1])*INV4*3 + v[j];
+            newVertex = (v[j+1] - v[j - 2])*INV4*3 + v[j - 2];
             j++;
             addVertex(newVertex, j);
         }
