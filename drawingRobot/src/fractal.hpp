@@ -11,7 +11,8 @@ class Fractal : public Polygon
         std::vector< Vertex > coreVertices;
         std::vector< Vertex > transCoreVertices;
 
-        void addVertex( const Vertex& vertex, std::vector<class Vertex>::iterator i);
+        void addVertex( const Vertex& vertex, const unsigned int& index);
+        void copyToCore();
 
     public:
         Fractal( int divisions_ = 0 );
