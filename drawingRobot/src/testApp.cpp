@@ -200,17 +200,17 @@ void testApp::mouseDragged(int x, int y, int button)
     // Set one transformation or another according to pressed key.
     switch( appMode ){
 		case MODE_TRANSLATION:
-		    currentPolygon->translate( x-lastMouseX, -y+lastMouseY );
+		    (*currentPolygon)->translate( x-lastMouseX, -y+lastMouseY );
 		break;
         case MODE_ROTATION:
             aux = x-lastMouseX;
-            currentPolygon->rotate( aux );
+            (*currentPolygon)->rotate( aux );
         break;
         case MODE_SCALE:
             aux = x-lastMouseX;
 
             aux = aux ? 1+aux*0.01 : 1;
-            currentPolygon->scale( aux, aux );
+            (*currentPolygon)->scale( aux, aux );
         break;
         default:
         break;
@@ -305,7 +305,7 @@ void testApp::guiEvent( ofxUIEventArgs &e )
                 currentPolygon = polygons.begin();
                 //Copy loaded poligons to send to server
                 for(unsigned int i = 0; i < polygons.size(); i++){
-                    toServerPolygons.push_back(&(polygons[i]));
+                    toServerPolygons.push_back( *(polygons[i]) );
                 }
                 fileNotFoundLabel->setVisible( false );
             }else{
@@ -350,7 +350,7 @@ void testApp::drawEdges()
     //ofRect(0, 410, 602, 60);
     ofRect( guiW, appH-RENDER_WINDOW_BORDER, guiW+appW-RENDER_WINDOW_BORDER, RENDER_WINDOW_BORDER );
     //Left
-    ofRect( guiW, RENDER_WINDOW_BORDER, RENDER_WINDOW_BORDER, appH-RENDER_WINDOW_BORDER<<1 );
+    ofRect( guiW, RENDER_WINDOW_BORDER, RENDER_WINDOW_BORDER, appH-(RENDER_WINDOW_BORDER<<1) );
 
     ofSetColor( ofColor::white );
 }
@@ -384,23 +384,23 @@ void testApp::draw()
     drawEdges();
 
 
-    std::vector< class Polygon >::iterator it = polygons.begin();
+    std::vector< ofPtr<Polygon> >::iterator it = polygons.begin();
 
     for( ; it != polygons.end(); ++it ){
         if( it == currentPolygon ){
-            if( it->drawableByRobot() ){
+            if( (*it)->drawableByRobot() ){
                 ofSetColor( ofColor::white );
             }else{
                 ofSetColor( ofColor::red );
             }
         }else{
-            if( it->drawableByRobot() ){
+            if( (*it)->drawableByRobot() ){
                 ofSetColor( 150, 150, 150 );
             }else{
                 ofSetColor( 150, 0, 0 );
             }
         }
-        it->draw();
+        (*it)->draw();
         ofSetColor( ofColor::white );
     }
 
@@ -465,8 +465,9 @@ bool testApp::pointOnRenderWindow( const int& x, const int& y )
 ***/
 
 void testApp::addPolygon( Polygon polygon ){
-    currentPolygon = polygons.insert( polygons.end(), polygon );
-    toServerPolygons.push_back(&(polygons.back()));
+    ofPtr<Polygon> polygonPtr( new Polygon(polygon) );
+    currentPolygon = polygons.insert( polygons.end(), polygonPtr );
+    toServerPolygons.push_back(*(polygons.back()));
 }
 
 void testApp::deleteLastPolygon()
@@ -511,7 +512,7 @@ void testApp::sendToServer()
         if(server->lock()){
             cout << "Copying polygons to server\n";
             for( unsigned int i = 0; i < toServerPolygons.size(); i++ ){
-                server->polygons.push_back(*(toServerPolygons[i]));
+                server->polygons.push_back(toServerPolygons[i]);
                 //Increment semaphore one token for each polygon copied
                 release(mutex);
             }

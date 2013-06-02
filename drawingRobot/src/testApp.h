@@ -15,6 +15,8 @@ using namespace std;
 #define OFX_UI_NO_XML
 
 #include "ofxUI.h"
+#include "ofTypes.h"
+
 // User Interface Library/Addon for openFrameworks created by rezaali :
 // https://github.com/rezaali/ofxUI
 #include <string>
@@ -64,14 +66,14 @@ class testApp : public ofBaseApp
         int lastMouseX, lastMouseY;
 
         // Container for all polygons drawn by user.
-        std::vector< class Polygon > polygons;
+        std::vector< ofPtr<Polygon> > polygons;
 
         // Iterator pointing to current or active polygon. Transformations
         // such as translations, rotations, etc will affect this polygon.
-        std::vector< class Polygon >::iterator currentPolygon;
+        std::vector< ofPtr<Polygon> >::iterator currentPolygon;
 
         // Container for polygons waiting to be copied to the NXT server.
-        std::vector< class Polygon* > toServerPolygons;
+        std::vector< Polygon > toServerPolygons;
 
         // Current app mode.
         AppMode appMode;

@@ -11,8 +11,8 @@ class PolygonsFile
     private:
         Vertex loadVertexFromLine( char* line );
     public:
-        int load( string filePath, vector<Polygon>* polygons );
-        int save( string filePath, vector<Polygon>* polygons );
+        int load( string filePath, vector< ofPtr<Polygon> >* polygons );
+        int save( string filePath, vector< ofPtr<Polygon> >* polygons );
 };
 
 #endif // POLYGONS_FILE_H

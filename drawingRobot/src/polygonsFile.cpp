@@ -16,7 +16,7 @@ Vertex PolygonsFile::loadVertexFromLine( char* line )
 }
 
 
-int PolygonsFile::load( string filePath, vector<Polygon>* polygons )
+int PolygonsFile::load( string filePath, vector< ofPtr<Polygon> >* polygons )
 {
     const unsigned int LINE_SIZE = 250;
     char line[LINE_SIZE];
@@ -44,7 +44,7 @@ int PolygonsFile::load( string filePath, vector<Polygon>* polygons )
 
             currentPolygon.addVertex( currentVertex );
         }
-        polygons->push_back( currentPolygon );
+        polygons->push_back( (ofPtr<Polygon>)( new Polygon( currentPolygon ) ) );
         currentPolygon.clear();
     }
 
@@ -54,7 +54,7 @@ int PolygonsFile::load( string filePath, vector<Polygon>* polygons )
 }
 
 
-int PolygonsFile::save( string filePath, vector<Polygon>* polygons )
+int PolygonsFile::save( string filePath, vector< ofPtr<Polygon> >* polygons )
 {
     unsigned int i, j;
     Vertex currentVertex;
@@ -67,7 +67,7 @@ int PolygonsFile::save( string filePath, vector<Polygon>* polygons )
     }
 
     for( i=0; i<polygons->size(); i++ ){
-        currentPolygon = (*polygons)[i];
+        currentPolygon = *((*polygons)[i]);
 
         file << currentPolygon.getSize() << endl;
 
