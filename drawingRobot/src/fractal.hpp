@@ -20,6 +20,9 @@ class Fractal : public Polygon
         void divide();
 
         virtual void Update();
+
+        int getDivisions() const { return divisions; };
+        void setDivisions( const int& divisions_ ){ divisions = divisions_; };
 };
 
 #endif // FRACTAL_H
