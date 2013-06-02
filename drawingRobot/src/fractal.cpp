@@ -5,24 +5,24 @@
 //--------------------------------------------------------------
 void Fractal::addVertex( const Vertex& vertex, const unsigned int& index )
 {
-    //TODO
-    //Se calcula el vector de i a vertex
-    //y tb de vertex a i+1
-    //Y se insertar vertex en medio de los dos
-    if(vectors.size() > 0){
-        Vertex aux;
-        aux = vertex - v.back();
-        aux.normalize();
-        vectors.back().set( aux[X], aux[Y] );
-        transVectors.back().set( aux[X], aux[Y] );
-    }
+    //Vector from previous vertex to the new one
+    Vertex aux;
+    aux = vertex - v[index - 1];
+    aux.normalize();
+    vectors[index - 1].set( aux[X], aux[Y] );
+    transVectors[index - 1].set( aux[X], aux[Y] );
+
+    //Vector from the new vertex to the next one
+    aux = v[index] - vertex;
+    aux.normalize();
+    vectors.insert(vectors.begin() + index, aux);
+    transVectors.insert(transVectors.begin() + index, aux);
+
+    //Insert vertex
     v.insert( v.begin() + index, vertex );
     transV.insert( transV.begin() + index, vertex );
     vScalated.insert(vScalated.begin() + index, vertex*0.25);
     transVScalated.insert(transVScalated.begin() + index, vertex*0.25);
-    Vertex vector( 0, 1 );
-    vectors.insert(vectors.begin() + index, vector);
-    transVectors.insert(transVectors.begin() + index, vector);
 }
 
 //--------------------------------------------------------------
