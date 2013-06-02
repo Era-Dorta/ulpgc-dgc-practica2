@@ -77,9 +77,13 @@ void Fractal::divide()
     }
 
     Vertex newVertex, normal;
+    float normalFactor;
     //Divide line as many times as divisions says
     for(int i = 0; i < divisions; i++){
         for(unsigned int j = 0; j < v.size() - 1; j++){
+            //This factor defines the height of the middle vertex
+            normalFactor = v[j].distance(v[j+1])*0.25;
+
             //Add three new vertices for each old vertex
             newVertex = (v[j+1] - v[j])*INV4 + v[j];
             j++;
@@ -92,7 +96,7 @@ void Fractal::divide()
             normal.normalize();
             //Normal length is inversely proportional to the number of
             //divisions
-            normal = normal*(20.0/(i + 1));
+            normal = normal*normalFactor;
             //Calculate a vertex between the two original vertices
             newVertex = (v[j+1] - v[j - 1])*INV4*2 + v[j - 1];
             //Add the normal length to this vertex
