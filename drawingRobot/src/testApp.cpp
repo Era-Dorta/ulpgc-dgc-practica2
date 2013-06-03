@@ -305,7 +305,7 @@ void testApp::guiEvent( ofxUIEventArgs &e )
                 currentPolygon = polygons.begin();
                 //Copy loaded poligons to send to server
                 for(unsigned int i = 0; i < polygons.size(); i++){
-                    toServerPolygons.push_back( *(polygons[i]) );
+                    toServerPolygons.push_back( polygons[i] );
                 }
                 fileNotFoundLabel->setVisible( false );
             }else{
@@ -467,7 +467,7 @@ bool testApp::pointOnRenderWindow( const int& x, const int& y )
 void testApp::addPolygon( Polygon polygon ){
     ofPtr<Polygon> polygonPtr( new Polygon(polygon) );
     currentPolygon = polygons.insert( polygons.end(), polygonPtr );
-    toServerPolygons.push_back(*(polygons.back()));
+    toServerPolygons.push_back(polygons.back());
 }
 
 void testApp::deleteLastPolygon()

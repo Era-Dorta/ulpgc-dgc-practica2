@@ -73,7 +73,7 @@ class testApp : public ofBaseApp
         std::vector< ofPtr<Polygon> >::iterator currentPolygon;
 
         // Container for polygons waiting to be copied to the NXT server.
-        std::vector< Polygon > toServerPolygons;
+        std::vector< ofPtr<Polygon> > toServerPolygons;
 
         // Current app mode.
         AppMode appMode;

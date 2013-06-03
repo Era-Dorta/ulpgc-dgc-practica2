@@ -139,22 +139,22 @@ void Server::waitAck() const
     system(command);
 }
 
-void Server::drawPolygon( Polygon polygon )
+void Server::drawPolygon( ofPtr<Polygon> polygon )
 {
     Vertex currentVertex;
     Vertex prevVertex; //= currentPolygon->getScalatedVertex(0);
     float distance;
 
-    prevVertex = polygon.getScalatedVertex(0);
+    prevVertex = polygon->getScalatedVertex(0);
 
     // Place brick in the first position of the poligon
-    moveForNextPoint(prevVertex, polygon.getVector(0) );
+    moveForNextPoint(prevVertex, polygon->getVector(0) );
     unsigned int i = 1;
 
     // Iterate for all other vertices, but last one
-    for(; i < polygon.getSize() - 1; i++){
+    for(; i < polygon->getSize() - 1; i++){
         //Advance until next vertex
-        currentVertex = polygon.getScalatedVertex(i);
+        currentVertex = polygon->getScalatedVertex(i);
         distance = prevVertex.distance(currentVertex);
 
         sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
@@ -162,12 +162,12 @@ void Server::drawPolygon( Polygon polygon )
         brickPosition[Y] += brickAngle[Y]*distance;
 
         //Move the brick so it can draw next line
-        moveForNextPoint(currentVertex, polygon.getVector(i));
+        moveForNextPoint(currentVertex, polygon->getVector(i));
         prevVertex = currentVertex;
     }
 
     //Advance to draw the last line
-    currentVertex = polygon.getScalatedVertex(i);
+    currentVertex = polygon->getScalatedVertex(i);
     distance = prevVertex.distance(currentVertex);
     sendMessage(distance*MOVE_FACTOR, distance*MOVE_FACTOR, PEN_DOWN);
 
