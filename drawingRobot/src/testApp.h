@@ -4,6 +4,7 @@
 #pragma once
 
 #include "polygon.hpp"
+#include "fractal.hpp"
 #include "server.hpp"
 #include "polygonsFile.hpp"
 #include <semaphore.h>
@@ -33,6 +34,7 @@ const unsigned int RENDER_WINDOW_BORDER = 60;
 // Different app modes.
 enum AppMode {
     MODE_POLYGON_CREATION = 0,
+    MODE_FRACTAL_CREATION,
     MODE_TRANSLATION,
     MODE_ROTATION,
     MODE_SCALE,
@@ -46,6 +48,7 @@ enum AppMode {
 const string appModeStr[N_APP_MODES] =
 {
     "Create Polygon",
+    "Create Fractal",
     "Translate",
     "Rotate",
     "Scale"
@@ -83,7 +86,7 @@ class testApp : public ofBaseApp
         Server* server;
 
         // Polygon which the user is creating.
-        Polygon tempPolygon;
+        ofPtr<Polygon> tempPolygon;
 
         // Vertex lastMousePress;
         Vertex currentMousePos;
@@ -150,7 +153,7 @@ class testApp : public ofBaseApp
 	private:
 
         // 6. Polygons administration
-        void addPolygon( Polygon polygon );
+        void addPolygon( ofPtr<Polygon> polygon );
         void deleteLastPolygon();
         void deleteCurrentPolygon();
         void selectPreviousPolygon();

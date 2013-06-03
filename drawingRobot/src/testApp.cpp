@@ -46,6 +46,9 @@ void testApp::setup()
     // Initialize currentPolygon iterator to the begin of the polygons container.
     currentPolygon = polygons.begin();
 
+    //Initialise tempPolygon
+    tempPolygon = (ofPtr<Polygon>)( new Polygon());
+
     // Setup GUI panel.
     setupGUI();
 
@@ -245,12 +248,12 @@ void testApp::mousePressed(int x, int y, int button)
     Vertex position, vector, currentVertex, prevVertex;
     switch(button){
     case L_MOUSE:
-        tempPolygon.addVertexFromPixel( x, y );
+        tempPolygon->addVertexFromPixel( x, y );
     break;
     case R_MOUSE:
         addPolygon( tempPolygon );
 
-        tempPolygon.clear();
+        tempPolygon->clear();
     break;
     default:
     break;
@@ -333,6 +336,14 @@ void testApp::guiEvent( ofxUIEventArgs &e )
             // Button is pressed
             selectNextPolygon();
         }
+    }else if( e.widget->getName() == appModeSelector->getActive()->getName() ){
+        if( !e.widget->getName().compare("Create Polygon") ){
+            tempPolygon = (ofPtr<Polygon>)( new Polygon());
+        }else{
+            if(!e.widget->getName().compare("Create Fractal")){
+                tempPolygon = (ofPtr<Polygon>)( new Fractal());
+            }
+        }
     }
 }
 
@@ -404,14 +415,14 @@ void testApp::draw()
         ofSetColor( ofColor::white );
     }
 
-    tempPolygon.draw();
+    tempPolygon->draw();
     Vertex origin = Polygon::getOrigin();
 
     //Vertex currentMouseWorldPos( currentMousePos[X]-origin[X], -currentMousePos[Y]+origin[Y]  );
     Vertex currentMouseWorldPos( lastMouseX-origin[X], -lastMouseY+origin[Y]  );
 
-    if( (appMode == MODE_POLYGON_CREATION) && tempPolygon.getSize() ){
-        Polygon::drawLine( tempPolygon.getLastVertex(), currentMouseWorldPos );
+    if( (appMode == MODE_POLYGON_CREATION) && tempPolygon->getSize() ){
+        Polygon::drawLine( tempPolygon->getLastVertex(), currentMouseWorldPos );
     }
 
     server->drawBrick();
@@ -464,10 +475,17 @@ bool testApp::pointOnRenderWindow( const int& x, const int& y )
     6. Polygons administration
 ***/
 
-void testApp::addPolygon( Polygon polygon ){
-    ofPtr<Polygon> polygonPtr( new Polygon(polygon) );
-    currentPolygon = polygons.insert( polygons.end(), polygonPtr );
-    toServerPolygons.push_back(polygons.back());
+void testApp::addPolygon( ofPtr<Polygon> polygon ){
+    if(polygon->getType() == POLYGON){
+        Polygon p = (Polygon)(*polygon);
+        ofPtr<Polygon> polygonPtr( new Polygon(p) );
+        currentPolygon = polygons.insert( polygons.end(), polygonPtr );
+        toServerPolygons.push_back(polygons.back());
+    }else{
+        //Fractal f = (Fractal)(*polygon);
+        //ofPtr<Polygon> polygonPtr( new Fractal(f) );
+    }
+
 }
 
 void testApp::deleteLastPolygon()

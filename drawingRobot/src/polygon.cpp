@@ -18,6 +18,7 @@ int Polygon::maxY = 0;
 
 Polygon::Polygon()
 {
+    type = POLYGON;
     robotDrawingErrors = NONE;
 }
 
