@@ -20,6 +20,12 @@ enum RobotDrawingErrors
     IMPOSSIBLE_ANGLE
 };
 
+enum PolygonType
+{
+  POLYGON = 0,
+  FRACTAL
+};
+
 class Polygon
 {
 
@@ -59,6 +65,9 @@ class Polygon
         // This atribute indicates whether the polygon can be drawn by the
         // robot in real world or exists any problem.
         RobotDrawingErrors robotDrawingErrors;
+
+        //Type
+        PolygonType type;
 
     public:
         /***
@@ -127,7 +136,7 @@ class Polygon
         ***/
         void showPolygon() const;
         static Vertex pixelToWorld( const int& x, const int& y );
-
+        PolygonType getType() const { return type; };
 };
 
 #endif // POLYGON_HPP

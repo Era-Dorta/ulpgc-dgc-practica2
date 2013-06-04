@@ -39,7 +39,9 @@ void Fractal::copyToCore()
 
 //--------------------------------------------------------------
 Fractal::Fractal(int divisions_)
+:Polygon()
 {
+    type = FRACTAL;
     Vertex aux;
     divisions = divisions_;
     for(int i = 0; i < 3; i++){

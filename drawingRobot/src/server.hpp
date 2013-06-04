@@ -49,7 +49,7 @@ class Server : public ofThread
         void release( sem_t* mutex_ );
 
     public:
-        std::vector< Polygon > polygons;
+        std::vector< ofPtr<Polygon> > polygons;
 
 
     public:
@@ -63,7 +63,7 @@ class Server : public ofThread
 
         void waitAck() const ;
 
-        void drawPolygon( Polygon polygon ) ;
+        void drawPolygon( ofPtr<Polygon> polygon ) ;
 
         void drawBrick() const;
 

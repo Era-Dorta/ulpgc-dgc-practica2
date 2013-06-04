@@ -5,6 +5,7 @@
 
 #include "fractal.hpp"
 #include "polygon.hpp"
+#include "fractal.hpp"
 #include "server.hpp"
 #include "polygonsFile.hpp"
 #include <semaphore.h>
@@ -15,8 +16,8 @@ using namespace std;
 // file.
 #define OFX_UI_NO_XML
 
-#include "ofxUI.h"
-//#include "../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUI.h"
+//#include "ofxUI.h"
+#include "../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUI.h"
 #include "ofTypes.h"
 
 // User Interface Library/Addon for openFrameworks created by rezaali :
@@ -77,7 +78,7 @@ class testApp : public ofBaseApp
         std::vector< ofPtr<Polygon> >::iterator currentPolygon;
 
         // Container for polygons waiting to be copied to the NXT server.
-        std::vector< Polygon > toServerPolygons;
+        std::vector< ofPtr<Polygon> > toServerPolygons;
 
         // Current app mode.
         AppMode appMode;
@@ -87,7 +88,7 @@ class testApp : public ofBaseApp
         Server* server;
 
         // Polygon which the user is creating.
-        Polygon tempPolygon;
+        ofPtr<Polygon> tempPolygon;
 
         // Vertex lastMousePress;
         Vertex currentMousePos;
@@ -161,6 +162,7 @@ class testApp : public ofBaseApp
         // 6. Polygons administration
         void addPolygon( Polygon polygon );
         void addFractal( Fractal fractal );
+        void addPolygon( ofPtr<Polygon> polygon );
         void deleteLastPolygon();
         void deleteCurrentPolygon();
         void selectPreviousPolygon();
