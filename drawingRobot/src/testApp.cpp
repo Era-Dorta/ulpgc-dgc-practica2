@@ -63,6 +63,8 @@ void testApp::setupGUI()
 {
     unsigned int i;
     const float widthGuiElement = (float)((guiW >> 1)-10);
+    char str[10];
+    vector<string> vnames;
 
     // Set the GUI canvas. It will take up a vertical space to the left.
     gui = new ofxUICanvas( 0, 0, guiW, appH );
@@ -74,7 +76,7 @@ void testApp::setupGUI()
     gui->addLabel("APP MODE", OFX_UI_FONT_MEDIUM);
 
     gui->addSpacer();
-    vector<string> vnames;
+
     // Feed radio options from appModeStr array of strings.
     for( i=0; i<N_APP_MODES; i++ ){
         vnames.push_back( appModeStr[i] );
@@ -82,8 +84,28 @@ void testApp::setupGUI()
 
     // Add the radio selector to the GUI and activate by default the option
     // "POLYGON CREATION".
-    appModeSelector = gui->addRadio("VR", vnames, OFX_UI_ORIENTATION_VERTICAL);
+    appModeSelector = gui->addRadio("App Mode Selector", vnames, OFX_UI_ORIENTATION_VERTICAL);
     appModeSelector->activateToggle( appModeStr[MODE_POLYGON_CREATION] );
+    gui->addSpacer();
+
+    /***
+    Add to the GUI a radio element for selecting the current number
+    of divisions.
+    ***/
+    // Add a label to the radio options.
+    vnames.clear();
+    gui->addLabel("FRACTAL DIVISIONS", OFX_UI_FONT_MEDIUM);
+    gui->addSpacer();
+    // Feed radio integer options.
+    for( i=0; i<6; i++ ){
+        sprintf( str, "%d", i );
+        vnames.push_back( str );
+    }
+
+    // Add the radio selector to the GUI and activate by default the option
+    // "2".
+    fractalDivisionsSelector = gui->addRadio("Fractal Divisions Selector", vnames, OFX_UI_ORIENTATION_HORIZONTAL);
+    fractalDivisionsSelector->activateToggle( "2" );
     gui->addSpacer();
 
     /***
@@ -132,6 +154,12 @@ void testApp::setupGUI()
     gui->addSpacer();
 
     ofAddListener(gui->newGUIEvent,this,&testApp::guiEvent);
+
+    //gui->addSlider("RED", 1.0, 2.0, 1.0 );
+    //gui->addWidgetDown(new ofxUIRotarySlider(200, 0, 100, 50, "R2SLIDER"));
+
+    gui->addRangeSlider( "Fractal division", 1, 5, 2, 2 );
+    //gui->addWidgetDown(new ofxUIMinimalSlider(200, 200, 0, 100, 50.0, "MINIMAL",OFX_UI_FONT_MEDIUM));
 }
 
 
@@ -260,7 +288,8 @@ void testApp::mousePressed(int x, int y, int button)
             fractalRefVertexes[fractalCurrentRefVertex] = Polygon::pixelToWorld( x, y );
             if( fractalCurrentRefVertex == 1 ) {
                 cout << "Metiendo fractal" << endl;
-                tempFractal = new Fractal( 4 );
+
+                tempFractal = new Fractal( atoi( ((fractalDivisionsSelector->getActive())->getName()).c_str() ) );
 
                 tempFractal->setVertices( fractalRefVertexes[0], fractalRefVertexes[1] );
                 tempFractal->divide();
@@ -468,6 +497,11 @@ void testApp::draw()
 
     if( (appMode == MODE_POLYGON_CREATION) && tempPolygon->getSize() ){
         Polygon::drawLine( tempPolygon->getLastVertex(), currentMouseWorldPos );
+    }
+
+    if( ( appMode == MODE_FRACTAL_CREATION ) && (fractalCurrentRefVertex == 1) ){
+        Polygon::drawLine( fractalRefVertexes[0],
+                           currentMouseWorldPos );
     }
 
     server->drawBrick();

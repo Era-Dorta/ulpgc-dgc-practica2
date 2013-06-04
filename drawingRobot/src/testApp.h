@@ -50,7 +50,7 @@ enum AppMode {
 const string appModeStr[N_APP_MODES] =
 {
     "Create Polygon",
-    "Create Awesome Fractal",
+    "Create Fractal",
     "Translate",
     "Rotate",
     "Scale"
@@ -94,6 +94,11 @@ class testApp : public ofBaseApp
         Vertex currentMousePos;
         Vertex currentMouseWorldPos;
 
+
+        /***
+        Pointers to GUI elements
+        ***/
+
         // Pointer to GUI.
         ofxUICanvas* gui;
 
@@ -120,11 +125,26 @@ class testApp : public ofBaseApp
         ofxUILabelButton* previousPolygonButton;
         ofxUILabelButton* nextPolygonButton;
 
+        // Pointer to GUI radio for selecting number of divisions for fractal
+        // in creation.
+        ofxUIRadio* fractalDivisionsSelector;
+
         sem_t* mutex;
 
+
+        /***
+        Auxiliar info for fractal creation
+        ***/
+
+        // Pointer to fractal being creating by user.
         Polygon* tempFractal;
 
+        // Fractals are created taking a user-defined segment as reference.
+        // This array keeps the 2 ends of the segment.
         Vertex fractalRefVertexes[2];
+
+        // This is used for knowing whether the user is defining the first or
+        // the second vertex of the fractal's reference segment.
         unsigned int fractalCurrentRefVertex;
 
 	public:

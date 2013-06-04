@@ -136,6 +136,7 @@ class Polygon
         ***/
         void showPolygon() const;
         static Vertex pixelToWorld( const int& x, const int& y );
+        static Vertex pixelToWorld( const Vertex& pixel );
         PolygonType getType() const { return type; };
 };
 
