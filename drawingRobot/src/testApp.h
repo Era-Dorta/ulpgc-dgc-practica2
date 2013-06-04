@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "fractal.hpp"
 #include "polygon.hpp"
 #include "server.hpp"
 #include "polygonsFile.hpp"
@@ -15,6 +16,7 @@ using namespace std;
 #define OFX_UI_NO_XML
 
 #include "ofxUI.h"
+//#include "../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUI.h"
 #include "ofTypes.h"
 
 // User Interface Library/Addon for openFrameworks created by rezaali :
@@ -33,6 +35,7 @@ const unsigned int RENDER_WINDOW_BORDER = 60;
 // Different app modes.
 enum AppMode {
     MODE_POLYGON_CREATION = 0,
+    MODE_FRACTAL_CREATION,
     MODE_TRANSLATION,
     MODE_ROTATION,
     MODE_SCALE,
@@ -46,6 +49,7 @@ enum AppMode {
 const string appModeStr[N_APP_MODES] =
 {
     "Create Polygon",
+    "Create Awesome Fractal",
     "Translate",
     "Rotate",
     "Scale"
@@ -117,6 +121,11 @@ class testApp : public ofBaseApp
 
         sem_t* mutex;
 
+        Polygon* tempFractal;
+
+        Vertex fractalRefVertexes[2];
+        unsigned int fractalCurrentRefVertex;
+
 	public:
         // 1. Initializations
         testApp( const unsigned int& w, const unsigned int& h, const unsigned int& guiW );
@@ -151,6 +160,7 @@ class testApp : public ofBaseApp
 
         // 6. Polygons administration
         void addPolygon( Polygon polygon );
+        void addFractal( Fractal fractal );
         void deleteLastPolygon();
         void deleteCurrentPolygon();
         void selectPreviousPolygon();

@@ -110,7 +110,7 @@ class Polygon
         /***
         7. Drawing
         ***/
-        void draw() const;
+        virtual void draw() const;
         static void drawLine( const Vertex& v0, const Vertex& vy );
 
 
@@ -126,7 +126,7 @@ class Polygon
         9. Auxiliar methods
         ***/
         void showPolygon() const;
-        static void PixelToWorld( float& x, float &y );
+        static Vertex pixelToWorld( const int& x, const int& y );
 
 };
 

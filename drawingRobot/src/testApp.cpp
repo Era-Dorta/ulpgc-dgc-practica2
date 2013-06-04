@@ -51,6 +51,9 @@ void testApp::setup()
 
     // Default app mode is polygon creation.
     appMode = MODE_POLYGON_CREATION;
+
+
+    fractalCurrentRefVertex = 0;
 }
 
 void testApp::setupGUI()
@@ -226,7 +229,9 @@ void testApp::mouseDragged(int x, int y, int button)
 void testApp::mousePressed(int x, int y, int button)
 {
     bool exit = false;
-    if( appMode != MODE_POLYGON_CREATION ){
+    Fractal* tempFractal = NULL;
+
+    if( (appMode != MODE_POLYGON_CREATION) && (appMode != MODE_FRACTAL_CREATION) ){
         return;
     }
 
@@ -245,12 +250,34 @@ void testApp::mousePressed(int x, int y, int button)
     Vertex position, vector, currentVertex, prevVertex;
     switch(button){
     case L_MOUSE:
-        tempPolygon.addVertexFromPixel( x, y );
+        if( appMode == MODE_POLYGON_CREATION ){
+            tempPolygon.addVertexFromPixel( x, y );
+        }else{
+            cout << "Creando fractal" << endl;
+            fractalRefVertexes[fractalCurrentRefVertex] = Polygon::pixelToWorld( x, y );
+            if( fractalCurrentRefVertex == 1 ) {
+                cout << "Metiendo fractal" << endl;
+                tempFractal = new Fractal( 4 );
+
+                tempFractal->setVertices( fractalRefVertexes[0], fractalRefVertexes[1] );
+                tempFractal->divide();
+
+                addFractal( *tempFractal );
+
+                delete tempFractal;
+
+                fractalCurrentRefVertex = 0;
+            }else{
+                fractalCurrentRefVertex++;
+            }
+        }
     break;
     case R_MOUSE:
-        addPolygon( tempPolygon );
+        if( appMode == MODE_POLYGON_CREATION ){
+            addPolygon( tempPolygon );
 
-        tempPolygon.clear();
+            tempPolygon.clear();
+        }
     break;
     default:
     break;
@@ -333,7 +360,19 @@ void testApp::guiEvent( ofxUIEventArgs &e )
             // Button is pressed
             selectNextPolygon();
         }
-    }
+    }/*else if( e.widget->getName() == createFractalButton->getName() ){
+        if( createFractalButton->getValue() ){
+            // Button is pressed
+            // TODO: Pruebas de fractales. Eliminar cuando se integren con el programa.
+            Vertex v0, v1;
+            v0.set( -50, 0 );
+            v1.set(  50, 0 );
+
+            tempFractal = new Fractal( 4 );
+            (dynamic_cast<Fractal *>(tempFractal))->setVertices( v0, v1 );
+            (dynamic_cast<Fractal *>(tempFractal))->divide();
+        }
+    }*/
 }
 
 
@@ -371,8 +410,12 @@ void testApp::update(){
 
     ofxUIToggle* appModeSelection = appModeSelector->getActive();
     for( unsigned int i=0; i<N_APP_MODES; i++ ){
-        if( !appModeSelection->getName().compare( appModeStr[i] ) ){
+        if( !appModeSelection->getName().compare( appModeStr[i] ) && ( appMode != (AppMode)i ) ){
             appMode = (AppMode)i;
+
+            // Whether user has changed from/to fractal creation mode or not,
+            // we take the opportunity to reset this for fractal creation.
+            fractalCurrentRefVertex = 0;
         }
     }
 }
@@ -417,6 +460,8 @@ void testApp::draw()
     server->drawBrick();
     //polygon.Draw();
     //drawGUI();
+
+    //tempFractal->draw();
 }
 
 
@@ -435,6 +480,9 @@ void testApp::exit()
 
     //gui->saveSettings("GUI/guiSettings.xml");
     delete gui;
+
+
+    //delete tempFractal;
 }
 
 //--------------------------------------------------------------
@@ -464,8 +512,18 @@ bool testApp::pointOnRenderWindow( const int& x, const int& y )
     6. Polygons administration
 ***/
 
-void testApp::addPolygon( Polygon polygon ){
+void testApp::addPolygon( Polygon polygon )
+{
     ofPtr<Polygon> polygonPtr( new Polygon(polygon) );
+    currentPolygon = polygons.insert( polygons.end(), polygonPtr );
+    toServerPolygons.push_back(*(polygons.back()));
+}
+
+void testApp::addFractal( Fractal fractal )
+{
+    // polygons.push_back( ofPtr<Polygon>(dynamic_cast<Polygon *>( new Fractal( *tempFractal ) ) ) );
+
+    ofPtr<Polygon> polygonPtr(dynamic_cast<Polygon *>( new Fractal( fractal ) ) );
     currentPolygon = polygons.insert( polygons.end(), polygonPtr );
     toServerPolygons.push_back(*(polygons.back()));
 }

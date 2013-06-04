@@ -278,9 +278,9 @@ void Polygon::showPolygon() const{
 }
 
 
-void Polygon::PixelToWorld( float& x, float &y )
+Vertex Polygon::pixelToWorld( const int& x, const int& y )
 {
     // Convert point from screen to world coordinates.
-    x = x-ox;
-    y = -y+oy;
+    Vertex worldVertex( x-ox, -y+oy );
+    return worldVertex;
 }
