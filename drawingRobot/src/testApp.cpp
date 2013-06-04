@@ -364,7 +364,7 @@ void testApp::guiEvent( ofxUIEventArgs &e )
             // Button is pressed
             selectNextPolygon();
         }
-    /*}/*else if( e.widget->getName() == createFractalButton->getName() ){
+    }/*else if( e.widget->getName() == createFractalButton->getName() ){
         if( createFractalButton->getValue() ){
             // Button is pressed
             // TODO: Pruebas de fractales. Eliminar cuando se integren con el programa.
@@ -377,7 +377,7 @@ void testApp::guiEvent( ofxUIEventArgs &e )
             (dynamic_cast<Fractal *>(tempFractal))->divide();
         }
     }*/
-    }else if( e.widget->getName() == appModeSelector->getActive()->getName() ){
+    /*}else if( e.widget->getName() == appModeSelector->getActive()->getName() ){
         if( !e.widget->getName().compare("Create Polygon") ){
             tempPolygon = (ofPtr<Polygon>)( new Polygon());
         }else{
@@ -385,7 +385,7 @@ void testApp::guiEvent( ofxUIEventArgs &e )
                 tempPolygon = (ofPtr<Polygon>)( new Fractal());
             }
         }
-    }
+    }*/
 }
 
 

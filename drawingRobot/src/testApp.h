@@ -16,8 +16,8 @@ using namespace std;
 // file.
 #define OFX_UI_NO_XML
 
-//#include "ofxUI.h"
-#include "../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUI.h"
+#include "ofxUI.h"
+//#include "../../../../../opt/of_v0.7.4_linux64_release/addons/ofxUI/src/ofxUI.h"
 #include "ofTypes.h"
 
 // User Interface Library/Addon for openFrameworks created by rezaali :
