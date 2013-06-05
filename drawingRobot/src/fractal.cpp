@@ -53,14 +53,16 @@ Fractal::Fractal(int divisions_)
 //--------------------------------------------------------------
 void Fractal::setVertices( const Vertex& vertex0, const Vertex& vertex1){
     clear();
-    Vertex aux;
-    aux[X] = (vertex0[X] + vertex1[X])*0.5;
-    aux[Y] = vertex0[Y] + vertex0[X] - vertex1[X];
+    Vertex v0, v1, v2;
+    float distance = vertex0.distance(vertex1);
+    v0.set(-1 - distance*0.5, 0);
+    v1.set(0, 1 +  distance);
+    v2.set(1 + distance*0.5, 0);
 
-    Polygon::addVertex(vertex0);
-    Polygon::addVertex(aux);
-    Polygon::addVertex(vertex1);
-    Polygon::addVertex(vertex0);
+    Polygon::addVertex(v0);
+    Polygon::addVertex(v2);
+    Polygon::addVertex(v1);
+    Polygon::addVertex(v0);
 
     copyToCore();
 
