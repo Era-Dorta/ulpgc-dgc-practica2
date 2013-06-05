@@ -170,10 +170,15 @@ void testApp::setupGUI()
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
     switch( key ){
-        /*
+
         case 'c':
-            appMode = MODE_POLYGON_CREATION;
+        cout << "aki 0\n";
+            (dynamic_cast<Fractal *>(tempFractal))->setDivisions( atoi( ((fractalDivisionsSelector->getActive())->getName()).c_str() ) );
+            cout << "aki 1\n";
+            (dynamic_cast<Fractal *>(tempFractal))->divide();
+            cout << "aki 2\n";
         break;
+        /*
         case 't':
             appMode = MODE_TRANSLATION;
         break;
