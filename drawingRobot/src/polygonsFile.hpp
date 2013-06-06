@@ -3,6 +3,7 @@
 
 #include <string>
 #include "polygon.hpp"
+#include "fractal.hpp"
 #include <fstream>
 using namespace std;
 

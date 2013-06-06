@@ -50,6 +50,22 @@ Fractal::Fractal(int divisions_)
     copyToCore();
 }
 
+
+void Fractal::set( const std::vector< Vertex >* coreTransVertexes_, int divisions_ )
+{
+    //Delete previous information about vertices
+    clear();
+
+    divisions = divisions_;
+    //for( unsigned int i = 0; i < 3; i++ ){
+    for( unsigned int i = 0; i < coreTransVertexes_->size(); i++ ){
+        Polygon::addVertex( (*coreTransVertexes_)[i] );
+    }
+    copyToCore();
+
+    divide();
+}
+
 //--------------------------------------------------------------
 void Fractal::setVertices( const Vertex& vertex0, const Vertex& vertex1){
     clear();
@@ -126,5 +142,12 @@ void Fractal::Update()
     for( unsigned int i=0; i<coreVertices.size(); i++ ){
         transCoreVertices[i] = coreVertices[i]*transMatrix;
     }
+}
+
+
+
+const std::vector< Vertex >* Fractal::getTransCoreVertices()
+{
+    return &transCoreVertices;
 }
 

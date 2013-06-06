@@ -18,11 +18,14 @@ class Fractal : public Polygon
         Fractal( int divisions_ = 0 );
         void setVertices( const Vertex& vertex0, const Vertex& vertex1);
         void divide();
+        void set( const std::vector< Vertex >* coreTransVertexes_, int divisions_ );
 
         virtual void Update();
 
         int getDivisions() const { return divisions; };
         void setDivisions( const int& divisions_ ){ divisions = divisions_; };
+
+        const std::vector< Vertex >* getTransCoreVertices();
 };
 
 #endif // FRACTAL_H

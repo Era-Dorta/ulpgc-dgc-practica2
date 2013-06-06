@@ -23,6 +23,9 @@ int PolygonsFile::load( string filePath, vector< ofPtr<Polygon> >* polygons )
     unsigned int i, nVertexes;
     Vertex currentVertex;
     Polygon currentPolygon;
+    Fractal currentFractal;
+
+    std::vector< Vertex > coreTransVertexes;
 
     ifstream file( filePath.c_str() );
 
@@ -33,19 +36,52 @@ int PolygonsFile::load( string filePath, vector< ofPtr<Polygon> >* polygons )
     polygons->clear();
 
     while( file.getline( line, LINE_SIZE ) ){
-        // Read the number of vertexes for current polygon.
-        nVertexes = atoi( line );
-
-        // Read all vertexes for current polygon.
-        for( i=0; i<nVertexes; i++ ){
+        if( line[0] == 'P' ){
+            // Read the number of vertexes for current polygon.
             file.getline( line, LINE_SIZE );
+            nVertexes = atoi( line );
 
-            currentVertex = loadVertexFromLine( line );
+            // Read all vertexes for current polygon.
+            for( i=0; i<nVertexes; i++ ){
+                file.getline( line, LINE_SIZE );
 
-            currentPolygon.addVertex( currentVertex );
+                currentVertex = loadVertexFromLine( line );
+
+                currentPolygon.addVertex( currentVertex );
+            }
+            polygons->push_back( (ofPtr<Polygon>)( new Polygon( currentPolygon ) ) );
+            currentPolygon.clear();
+        }else{
+            // Read the number of core vertexes for current fractal.
+            file.getline( line, LINE_SIZE );
+            nVertexes = atoi( line );
+
+            cout << "nCoreVertices: " << nVertexes << endl;
+
+            // Read all core vertexes for current fractal.
+            cout << "Leyendo coreVertices ..." << endl;
+            coreTransVertexes.clear();
+            for( i=0; i<nVertexes; i++ ){
+                file.getline( line, LINE_SIZE );
+
+                currentVertex = loadVertexFromLine( line );
+
+                coreTransVertexes.push_back( currentVertex );
+                //currentFractal.addVertex( currentVertex );
+            }
+            cout << "Leyendo coreVertices ...OK" << endl;
+
+            // Read the number of divisions for current fractal.
+            file.getline( line, LINE_SIZE );
+            //currentFractal.setDivisions( atoi( line ) );
+
+            cout << "divisions: " << atoi( line ) << endl;
+
+            currentFractal.set( &coreTransVertexes, atoi( line ) );
+
+            polygons->push_back( (ofPtr<Polygon>)( dynamic_cast<Polygon *>( new Fractal( currentFractal ) ) ) );
+            currentFractal.clear();
         }
-        polygons->push_back( (ofPtr<Polygon>)( new Polygon( currentPolygon ) ) );
-        currentPolygon.clear();
     }
 
     file.close();
@@ -59,6 +95,8 @@ int PolygonsFile::save( string filePath, vector< ofPtr<Polygon> >* polygons )
     unsigned int i, j;
     Vertex currentVertex;
     Polygon currentPolygon;
+    Fractal currentFractal;
+    const std::vector< Vertex >* coreVertices;
 
     ofstream file( filePath.c_str() );
 
@@ -67,14 +105,32 @@ int PolygonsFile::save( string filePath, vector< ofPtr<Polygon> >* polygons )
     }
 
     for( i=0; i<polygons->size(); i++ ){
-        currentPolygon = *((*polygons)[i]);
+        if( ((*polygons)[i])->getType() == POLYGON ){
+            currentPolygon = *((*polygons)[i]);
 
-        file << currentPolygon.getSize() << endl;
+            file << "P" << endl
+                 << currentPolygon.getSize() << endl;
 
-        for( j=0; j<currentPolygon.getSize(); j++ ){
-            currentVertex = currentPolygon.getTransVertex( j );
+            for( j=0; j<currentPolygon.getSize(); j++ ){
+                currentVertex = currentPolygon.getTransVertex( j );
 
-            file << currentVertex[X] << " " << currentVertex[Y] << endl;
+                file << currentVertex[X] << " " << currentVertex[Y] << endl;
+            }
+        }else{
+            currentFractal = *(dynamic_cast<Fractal *>( ( (*polygons)[i] ).get() ) );
+
+            coreVertices = currentFractal.getTransCoreVertices();
+
+            // Mark 'F' for Fractal.
+            file << "F" << endl
+                 << coreVertices->size() << endl;
+
+            for( j=0; j<coreVertices->size(); j++ ){
+                currentVertex = (*coreVertices)[j];
+                file << currentVertex[X] << " " << currentVertex[Y] << endl;
+            }
+
+            file << currentFractal.getDivisions() << endl;
         }
     }
 

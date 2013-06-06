@@ -171,16 +171,6 @@ void testApp::setupGUI()
 void testApp::keyPressed(int key){
     Fractal* fractal = NULL;
     switch( key ){
-        case 'c':
-            if( (*currentPolygon)->getType() == FRACTAL ){
-                fractal = (dynamic_cast<Fractal *>((*currentPolygon).get()));
-                cout << "aki 0\n";
-                fractal->setDivisions( atoi( ((fractalDivisionsSelector->getActive())->getName()).c_str() ) );
-                cout << "aki 1\n";
-                fractal->divide();
-                cout << "aki 2\n";
-            }
-        break;
         /*
         case 't':
             appMode = MODE_TRANSLATION;
