@@ -169,14 +169,17 @@ void testApp::setupGUI()
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
+    Fractal* fractal = NULL;
     switch( key ){
-
         case 'c':
-        cout << "aki 0\n";
-            (dynamic_cast<Fractal *>(tempFractal))->setDivisions( atoi( ((fractalDivisionsSelector->getActive())->getName()).c_str() ) );
-            cout << "aki 1\n";
-            (dynamic_cast<Fractal *>(tempFractal))->divide();
-            cout << "aki 2\n";
+            if( (*currentPolygon)->getType() == FRACTAL ){
+                fractal = (dynamic_cast<Fractal *>((*currentPolygon).get()));
+                cout << "aki 0\n";
+                fractal->setDivisions( atoi( ((fractalDivisionsSelector->getActive())->getName()).c_str() ) );
+                cout << "aki 1\n";
+                fractal->divide();
+                cout << "aki 2\n";
+            }
         break;
         /*
         case 't':
@@ -350,6 +353,8 @@ void testApp::dragEvent(ofDragInfo dragInfo)
 void testApp::guiEvent( ofxUIEventArgs &e )
 {
     PolygonsFile polygonsFile;
+    int newFractalDivisions;
+    Fractal* currentFractal = NULL;
 
     if( e.widget->getName() == savingButton->getName() ){
         if( savingButton->getValue() ){
@@ -398,7 +403,35 @@ void testApp::guiEvent( ofxUIEventArgs &e )
             // Button is pressed
             selectNextPolygon();
         }
-    }/*else if( e.widget->getName() == createFractalButton->getName() ){
+    }else if( e.widget->getParent()->getName() == fractalDivisionsSelector->getName() ){
+        // User has selected a number of divisions in the "Fractal Divisions"
+        // selector. We check if current polygon is a fractal and if the
+        // new number of divisions selected by user is different from that of
+        // the current polygon.
+        if( (polygons.size() > 0) && (*currentPolygon)->getType() == FRACTAL ){
+            newFractalDivisions = atoi( ((fractalDivisionsSelector->getActive())->getName()).c_str() );
+            currentFractal = (dynamic_cast<Fractal *>((*currentPolygon).get()));
+
+            if( newFractalDivisions != currentFractal->getDivisions() ){
+                currentFractal->setDivisions( atoi( ((fractalDivisionsSelector->getActive())->getName()).c_str() ) );
+                currentFractal->divide();
+            }
+        }
+    }
+
+    /*
+    case 'c':
+            if( (*currentPolygon)->getType() == FRACTAL ){
+                fractal = (dynamic_cast<Fractal *>((*currentPolygon).get()));
+                cout << "aki 0\n";
+                fractal->setDivisions( atoi( ((fractalDivisionsSelector->getActive())->getName()).c_str() ) );
+                cout << "aki 1\n";
+                fractal->divide();
+                cout << "aki 2\n";
+            }
+        break;
+        */
+    /*else if( e.widget->getName() == createFractalButton->getName() ){
         if( createFractalButton->getValue() ){
             // Button is pressed
             // TODO: Pruebas de fractales. Eliminar cuando se integren con el programa.
@@ -574,15 +607,10 @@ void testApp::addPolygon( Polygon polygon )
 
 
 void testApp::addPolygon( ofPtr<Polygon> polygon ){
-    if(polygon->getType() == POLYGON){
-        Polygon p = (Polygon)(*polygon);
-        ofPtr<Polygon> polygonPtr( new Polygon(p) );
-        currentPolygon = polygons.insert( polygons.end(), polygonPtr );
-        toServerPolygons.push_back(polygons.back());
-    }else{
-        //Fractal f = (Fractal)(*polygon);
-        //ofPtr<Polygon> polygonPtr( new Fractal(f) );
-    }
+    Polygon p = (Polygon)(*polygon);
+    ofPtr<Polygon> polygonPtr( new Polygon(p) );
+    currentPolygon = polygons.insert( polygons.end(), polygonPtr );
+    toServerPolygons.push_back(polygons.back());
 }
 
 void testApp::addFractal( Fractal fractal )
@@ -597,14 +625,20 @@ void testApp::addFractal( Fractal fractal )
 void testApp::deleteLastPolygon()
 {
     polygons.pop_back();
+
+    currentPolygon = polygons.begin();
 }
 
 void testApp::deleteCurrentPolygon()
 {
     if( polygons.size() ){
-        polygons.erase( currentPolygon );
+        currentPolygon = polygons.erase( currentPolygon );
+
+        // If deleted polygon was the last of the vector, currentPolygon will
+        // point to invalid position "polygons.end()". Change it to
+        // polygons.begin().
         if( currentPolygon == polygons.end() ){
-            polygons.begin();
+            currentPolygon = polygons.begin();
         }
     }
 }

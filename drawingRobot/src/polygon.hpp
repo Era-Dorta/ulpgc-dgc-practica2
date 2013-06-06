@@ -28,7 +28,6 @@ enum PolygonType
 
 class Polygon
 {
-
     protected:
         // Coordinates system origin (for all polygons).
         static int ox, oy;
