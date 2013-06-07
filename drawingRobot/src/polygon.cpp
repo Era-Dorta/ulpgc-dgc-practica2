@@ -162,7 +162,7 @@ void Polygon::translate( int tx, int ty )
     transMatrix = transMatrix*translationMatrix;
 
     // Update transformed vertexes.
-    Update();
+    update();
 }
 
 void Polygon::rotate( float angle )
@@ -175,7 +175,7 @@ void Polygon::rotate( float angle )
     rotationsMatrix = rotationsMatrix*rotMatrix;
 
     // Update transformed vertexes
-    Update();
+    update();
 
     //Update vectors
     for( unsigned int i=0; i<transVectors.size(); i++ ){
@@ -192,7 +192,7 @@ void Polygon::scale( float sx, float sy )
     transMatrix = transMatrix*scaleMatrix;
 
     // Update transformed vertexes.
-    Update();
+    update();
 }
 
 
@@ -200,7 +200,7 @@ void Polygon::scale( float sx, float sy )
     6. Updating
 ***/
 
-void Polygon::Update()
+void Polygon::update()
 {
     unsigned int i;
 

@@ -20,7 +20,7 @@ class Fractal : public Polygon
         void divide();
         void set( const std::vector< Vertex >* coreTransVertexes_, int divisions_ );
 
-        virtual void Update();
+        virtual void update();
 
         int getDivisions() const { return divisions; };
         void setDivisions( const int& divisions_ ){ divisions = divisions_; };

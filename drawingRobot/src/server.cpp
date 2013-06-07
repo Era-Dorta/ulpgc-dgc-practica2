@@ -178,7 +178,7 @@ void Server::drawPolygon( ofPtr<Polygon> polygon )
         polygons.erase(polygons.begin());
         unlock();
     }else{
-        cout << "Server: se supone que son bloqueantes error nooooo\n";
+        cout << "Server: lock is supposed to be bloking, noooo\n";
     }
 }
 
@@ -220,7 +220,7 @@ void Server::threadedFunction()
     while( isThreadRunning() != 0 ){
         if( lock() ){
             if(polygons.size() > 0){
-                cout << "Server: Dibujando poligono\n";
+                cout << "Server: Drawing polygon\n";
 
                 unlock();
                 wait(mutex);

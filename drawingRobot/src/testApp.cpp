@@ -171,17 +171,6 @@ void testApp::setupGUI()
 void testApp::keyPressed(int key){
     Fractal* fractal = NULL;
     switch( key ){
-        /*
-        case 't':
-            appMode = MODE_TRANSLATION;
-        break;
-        case 'r':
-            appMode = MODE_ROTATION;
-        break;
-        case 's':
-            appMode = MODE_SCALE;
-        break;
-        */
         case KEY_LEFT_ARROW:
             // Select previous polygon in the list.
             selectPreviousPolygon();
@@ -282,11 +271,8 @@ void testApp::mousePressed(int x, int y, int button)
         if( appMode == MODE_POLYGON_CREATION ){
             tempPolygon->addVertexFromPixel( x, y );
         }else{
-            cout << "Creando fractal" << endl;
             fractalRefVertexes[fractalCurrentRefVertex] = Polygon::pixelToWorld( x, y );
             if( fractalCurrentRefVertex == 1 ) {
-                cout << "Metiendo fractal" << endl;
-
                 tempFractal = new Fractal( atoi( ((fractalDivisionsSelector->getActive())->getName()).c_str() ) );
 
                 tempFractal->setVertices( fractalRefVertexes[0], fractalRefVertexes[1] );
@@ -408,41 +394,6 @@ void testApp::guiEvent( ofxUIEventArgs &e )
             }
         }
     }
-
-    /*
-    case 'c':
-            if( (*currentPolygon)->getType() == FRACTAL ){
-                fractal = (dynamic_cast<Fractal *>((*currentPolygon).get()));
-                cout << "aki 0\n";
-                fractal->setDivisions( atoi( ((fractalDivisionsSelector->getActive())->getName()).c_str() ) );
-                cout << "aki 1\n";
-                fractal->divide();
-                cout << "aki 2\n";
-            }
-        break;
-        */
-    /*else if( e.widget->getName() == createFractalButton->getName() ){
-        if( createFractalButton->getValue() ){
-            // Button is pressed
-            // TODO: Pruebas de fractales. Eliminar cuando se integren con el programa.
-            Vertex v0, v1;
-            v0.set( -50, 0 );
-            v1.set(  50, 0 );
-
-            tempFractal = new Fractal( 4 );
-            (dynamic_cast<Fractal *>(tempFractal))->setVertices( v0, v1 );
-            (dynamic_cast<Fractal *>(tempFractal))->divide();
-        }
-    }*/
-    /*}else if( e.widget->getName() == appModeSelector->getActive()->getName() ){
-        if( !e.widget->getName().compare("Create Polygon") ){
-            tempPolygon = (ofPtr<Polygon>)( new Polygon());
-        }else{
-            if(!e.widget->getName().compare("Create Fractal")){
-                tempPolygon = (ofPtr<Polygon>)( new Fractal());
-            }
-        }
-    }*/
 }
 
 
@@ -546,18 +497,12 @@ void testApp::draw()
 
 void testApp::exit()
 {
-    cout << "cerrando 0\n";
     server->exit();
     server->stopThread();
     sem_close(mutex);
     sem_unlink("mutexForServer");
-    cout << "cerrando 1\n";
 
-    //gui->saveSettings("GUI/guiSettings.xml");
     delete gui;
-
-
-    //delete tempFractal;
 }
 
 //--------------------------------------------------------------
@@ -656,7 +601,6 @@ void testApp::sendToServer()
 {
     // If there are polygons to copy to the server, copy them.
     if(toServerPolygons.size() > 0){
-        cout << "To server poligons > 0\n";
         if(server->lock()){
             cout << "Copying polygons to server\n";
             for( unsigned int i = 0; i < toServerPolygons.size(); i++ ){

@@ -16,8 +16,7 @@
 enum RobotDrawingErrors
 {
     NONE = 0,
-    VERTEX_OUT_OF_BORDERS,
-    IMPOSSIBLE_ANGLE
+    VERTEX_OUT_OF_BORDERS
 };
 
 enum PolygonType
@@ -112,7 +111,7 @@ class Polygon
         /***
         6. Updating
         ***/
-        virtual void Update();
+        virtual void update();
 
 
         /***

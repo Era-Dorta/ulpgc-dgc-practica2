@@ -56,10 +56,7 @@ int PolygonsFile::load( string filePath, vector< ofPtr<Polygon> >* polygons )
             file.getline( line, LINE_SIZE );
             nVertexes = atoi( line );
 
-            cout << "nCoreVertices: " << nVertexes << endl;
-
             // Read all core vertexes for current fractal.
-            cout << "Leyendo coreVertices ..." << endl;
             coreTransVertexes.clear();
             for( i=0; i<nVertexes; i++ ){
                 file.getline( line, LINE_SIZE );
@@ -69,13 +66,9 @@ int PolygonsFile::load( string filePath, vector< ofPtr<Polygon> >* polygons )
                 coreTransVertexes.push_back( currentVertex );
                 //currentFractal.addVertex( currentVertex );
             }
-            cout << "Leyendo coreVertices ...OK" << endl;
 
             // Read the number of divisions for current fractal.
             file.getline( line, LINE_SIZE );
-            //currentFractal.setDivisions( atoi( line ) );
-
-            cout << "divisions: " << atoi( line ) << endl;
 
             currentFractal.set( &coreTransVertexes, atoi( line ) );
 

@@ -84,8 +84,7 @@ void Fractal::setVertices( const Vertex& vertex0, const Vertex& vertex1){
 
     copyToCore();
 
-    showPolygon();
-
+    //showPolygon();
 }
 
 //--------------------------------------------------------------
@@ -134,9 +133,9 @@ void Fractal::divide()
 }
 
 //--------------------------------------------------------------
-void Fractal::Update()
+void Fractal::update()
 {
-    Polygon::Update();
+    Polygon::update();
 
     //Override update methods to also update core vertices
     for( unsigned int i=0; i<coreVertices.size(); i++ ){
