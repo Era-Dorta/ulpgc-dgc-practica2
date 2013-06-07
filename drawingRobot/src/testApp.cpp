@@ -560,6 +560,8 @@ void testApp::addFractal( Fractal fractal )
 void testApp::deleteLastPolygon()
 {
     polygons.pop_back();
+    //Maybe ww should not do this
+    toServerPolygons.pop_back();
 
     currentPolygon = polygons.begin();
 }
@@ -567,7 +569,16 @@ void testApp::deleteLastPolygon()
 void testApp::deleteCurrentPolygon()
 {
     if( polygons.size() ){
+
+        //If polygon is in toServerPolygons delete it also
+        std::vector< ofPtr<Polygon> >::iterator aux;
+        for(aux = toServerPolygons.begin(); aux < toServerPolygons.end(); aux++ ){
+            if(*aux == *currentPolygon){
+                toServerPolygons.erase( aux );
+            }
+        }
         currentPolygon = polygons.erase( currentPolygon );
+
 
         // If deleted polygon was the last of the vector, currentPolygon will
         // point to invalid position "polygons.end()". Change it to
