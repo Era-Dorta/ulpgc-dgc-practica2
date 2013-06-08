@@ -1,3 +1,9 @@
+/***
+    Class Test
+    ===
+    Auxiliar class used while implementing 2D transformation for testing them.
+***/
+
 #ifndef TESTS_H
 #define TESTS_H
 

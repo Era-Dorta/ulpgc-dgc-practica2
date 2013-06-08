@@ -1,6 +1,16 @@
+/***
+    Vertex
+    ===
+    Class used for defining and transforming 2D vertexes.
+***/
+
 #ifndef VERTEX_HPP
 #define VERTEX_HPP
 
+
+/***
+    Includes
+***/
 #include "ofMain.h"
 #include "matrix.hpp"
 #include <cstdlib>
@@ -11,30 +21,40 @@
 #include <cmath>
 using namespace std;
 
+
+/***
+    Auxiliar types
+***/
 enum COORDINATES {
     X = 0,
     Y,
     H
 };
 
-enum POLAR {
-    R = 0,
-    A
-};
+
+/***
+    Main class
+***/
 
 class Vertex {
 	private:
+        // Vertex coordinates.
 		float *v;
     public:
-        // 1. Initialization
+        /***
+        1. Initialization and destruction.
+        ***/
         Vertex();
+        Vertex( float x, float y, float h = 1 );
         Vertex( const Vertex& b );
+        void set( float x, float y, float h = 1);
+
         ~Vertex();
 
-		Vertex( float x, float y, float h = 1 );
-		void set( float x, float y, float h = 1);
 
-        // 2. Operators
+        /***
+        2. Operators
+        ***/
         void operator = (const Vertex& b);
         Vertex operator * (const Matrix& m) const ;
         Vertex operator + (const Vertex& b ) const ;
@@ -47,17 +67,25 @@ class Vertex {
 		float& operator[](int i){ return v[i]; }
 		Vertex rotate( const float angle ) const;
 
+
+        /***
+        3. Utilities
+        ***/
         float getNorm() const ;
         float getNorm3() const ;
 		Vertex getUnitVector() const ;
 		void normalize();
 		float distance( const Vertex& b ) const;
 
-        // 3. << operator
+        /***
+        4. I/O
+        ***/
 		friend ostream& operator<< (ostream &out, const Vertex &vertex);
 };
 
-
+/***
+    5. Dot product
+***/
 float dotProduct( const Vertex& a, const Vertex& b );
 
 #endif

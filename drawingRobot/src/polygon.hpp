@@ -1,16 +1,23 @@
 /***
     Polygon
     ===
-    Class used for defining and transforming 2D polygons, drawable by NXT
+    Class used for defining and transforming open 2D polygons, drawable by NXT
     robot.
 ***/
 
 #ifndef POLYGON_HPP
 #define POLYGON_HPP
 
+/***
+    Includes
+***/
 #include <vector>
 #include "vertex.hpp"
 
+
+/***
+    Auxiliar types
+***/
 // Enum type for any type of error that prevents robot from drawing a polygon
 // in real world.
 enum RobotDrawingErrors
@@ -19,12 +26,17 @@ enum RobotDrawingErrors
     VERTEX_OUT_OF_BORDERS
 };
 
+// Instances of Polygon and its derived classes uses this enum for telling
+// which type of polygon they are.
 enum PolygonType
 {
   POLYGON = 0,
   FRACTAL
 };
 
+/***
+    Main class
+***/
 class Polygon
 {
     protected:

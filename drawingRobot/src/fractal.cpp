@@ -1,8 +1,16 @@
 #include "fractal.hpp"
 
+// Macro for swapping 2 variables
 #define swap(type, i, j) {type t = i; i = j; j = t;}
+
+// Auxiliar macro with value 1/4.
 #define INV4 0.25
-//--------------------------------------------------------------
+
+
+/***
+    1. Auxiliar methods
+***/
+
 void Fractal::addVertex( const Vertex& vertex, const unsigned int& index )
 {
     //Vector from previous vertex to the new one
@@ -25,7 +33,7 @@ void Fractal::addVertex( const Vertex& vertex, const unsigned int& index )
     transVScalated.insert(transVScalated.begin() + index, vertex*0.25);
 }
 
-//--------------------------------------------------------------
+
 void Fractal::copyToCore()
 {
     coreVertices.clear();
@@ -37,8 +45,12 @@ void Fractal::copyToCore()
     }
 }
 
-//--------------------------------------------------------------
-Fractal::Fractal(int divisions_)
+
+/***
+    2. Initialization
+***/
+
+Fractal::Fractal( int divisions_ )
 :Polygon()
 {
     type = FRACTAL;
@@ -50,23 +62,6 @@ Fractal::Fractal(int divisions_)
     copyToCore();
 }
 
-
-void Fractal::set( const std::vector< Vertex >* coreTransVertexes_, int divisions_ )
-{
-    //Delete previous information about vertices
-    clear();
-
-    divisions = divisions_;
-    //for( unsigned int i = 0; i < 3; i++ ){
-    for( unsigned int i = 0; i < coreTransVertexes_->size(); i++ ){
-        Polygon::addVertex( (*coreTransVertexes_)[i] );
-    }
-    copyToCore();
-
-    divide();
-}
-
-//--------------------------------------------------------------
 void Fractal::setVertices( const Vertex& vertex0, const Vertex& vertex1){
     clear();
     Vertex orig = (vertex1 + vertex0)*0.5;
@@ -83,11 +78,23 @@ void Fractal::setVertices( const Vertex& vertex0, const Vertex& vertex1){
     Polygon::addVertex(v0);
 
     copyToCore();
-
-    //showPolygon();
 }
 
-//--------------------------------------------------------------
+void Fractal::set( const std::vector< Vertex >* coreTransVertexes_, int divisions_ )
+{
+    //Delete previous information about vertices
+    clear();
+
+    divisions = divisions_;
+    //for( unsigned int i = 0; i < 3; i++ ){
+    for( unsigned int i = 0; i < coreTransVertexes_->size(); i++ ){
+        Polygon::addVertex( (*coreTransVertexes_)[i] );
+    }
+    copyToCore();
+
+    divide();
+}
+
 void Fractal::divide()
 {
     //Delete previous information about vertices
@@ -132,18 +139,24 @@ void Fractal::divide()
     }
 }
 
-//--------------------------------------------------------------
+
+/***
+    3. Updating
+***/
 void Fractal::update()
 {
     Polygon::update();
 
-    //Override update methods to also update core vertices
+    // Override update methods to also update core vertices
     for( unsigned int i=0; i<coreVertices.size(); i++ ){
         transCoreVertices[i] = coreVertices[i]*transMatrix;
     }
 }
 
 
+/***
+    4. Getters and setters
+***/
 
 const std::vector< Vertex >* Fractal::getTransCoreVertices()
 {

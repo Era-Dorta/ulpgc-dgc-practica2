@@ -1,7 +1,6 @@
 #include "polygonsFile.hpp"
 
-
-Vertex PolygonsFile::loadVertexFromLine( char* line )
+Vertex PolygonsFile::loadVertexFromLine( char* line ) const
 {
     char *strValue;
     Vertex vertex;
@@ -16,7 +15,7 @@ Vertex PolygonsFile::loadVertexFromLine( char* line )
 }
 
 
-int PolygonsFile::load( string filePath, vector< ofPtr<Polygon> >* polygons )
+int PolygonsFile::load( string filePath, vector< ofPtr<Polygon> >* polygons ) const
 {
     const unsigned int LINE_SIZE = 250;
     char line[LINE_SIZE];
@@ -83,7 +82,7 @@ int PolygonsFile::load( string filePath, vector< ofPtr<Polygon> >* polygons )
 }
 
 
-int PolygonsFile::save( string filePath, vector< ofPtr<Polygon> >* polygons )
+int PolygonsFile::save( string filePath, vector< ofPtr<Polygon> >* polygons ) const
 {
     unsigned int i, j;
     Vertex currentVertex;

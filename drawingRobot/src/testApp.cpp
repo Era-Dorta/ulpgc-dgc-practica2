@@ -33,10 +33,6 @@ void testApp::setup()
     lastMouseX = guiW+RENDER_WINDOW_BORDER;
     lastMouseY = RENDER_WINDOW_BORDER;
 
-    // Load polygons from file.
-    //PolygonsFile polygonsFile;
-    //polygonsFile.load( "data/foo.txt", &polygons ); // TODO: Copiar tambien en toServerPolygons.
-
     // Initialize NXT server. The server thread will be waiting for new
     // polygons to send to the NXT.
     server = Server::getInstance();
@@ -57,6 +53,7 @@ void testApp::setup()
 
     fractalCurrentRefVertex = 0;
 }
+
 
 void testApp::setupGUI()
 {
@@ -153,12 +150,6 @@ void testApp::setupGUI()
     gui->addSpacer();
 
     ofAddListener(gui->newGUIEvent,this,&testApp::guiEvent);
-
-    //gui->addSlider("RED", 1.0, 2.0, 1.0 );
-    //gui->addWidgetDown(new ofxUIRotarySlider(200, 0, 100, 50, "R2SLIDER"));
-
-    gui->addRangeSlider( "Fractal division", 1, 5, 2, 2 );
-    //gui->addWidgetDown(new ofxUIMinimalSlider(200, 200, 0, 100, 50.0, "MINIMAL",OFX_UI_FONT_MEDIUM));
 }
 
 
@@ -198,12 +189,7 @@ void testApp::mouseDragged(int x, int y, int button)
         return;
     }
 
-    //Convert (x, y) from screen space to world space.
-    //Polygon::PixelToWorld( x, y );
-
-	//renderer->PointToSpace( x, y );
-
-    // Set one transformation or another according to pressed key.
+    // Set one transformation or another according to current app mode
     switch( appMode ){
 		case MODE_TRANSLATION:
 		    (*currentPolygon)->translate( x-lastMouseX, -y+lastMouseY );
@@ -396,34 +382,9 @@ void testApp::guiEvent( ofxUIEventArgs &e )
 }
 
 
-void testApp::drawEdges()
-{
-    ofSetColor(ofColor::black);
-    ofFill();
-    //Draw a rectangle that shows the user drawable area
-    //Top
-    ofRect( guiW, 0, guiW+appW-RENDER_WINDOW_BORDER, RENDER_WINDOW_BORDER );
-    //Right
-    ofRect( guiW+appW-RENDER_WINDOW_BORDER, RENDER_WINDOW_BORDER, RENDER_WINDOW_BORDER, appH-RENDER_WINDOW_BORDER );
-    //Bottom
-    //ofRect(0, 410, 602, 60);
-    ofRect( guiW, appH-RENDER_WINDOW_BORDER, guiW+appW-RENDER_WINDOW_BORDER, RENDER_WINDOW_BORDER );
-    //Left
-    ofRect( guiW, RENDER_WINDOW_BORDER, RENDER_WINDOW_BORDER, appH-(RENDER_WINDOW_BORDER<<1) );
-
-    ofSetColor( ofColor::white );
-}
-
-
 /***
     3. Updating and drawing
 ***/
-
-//--------------------------------------------------------------
-
-
-//--------------------------------------------------------------
-
 
 void testApp::update(){
     int w, h;
@@ -440,7 +401,6 @@ void testApp::update(){
     }
 }
 
-//--------------------------------------------------------------
 
 void testApp::draw()
 {
@@ -483,10 +443,25 @@ void testApp::draw()
     }
 
     server->drawBrick();
-    //polygon.Draw();
-    //drawGUI();
+}
 
-    //tempFractal->draw();
+
+void testApp::drawEdges()
+{
+    ofSetColor(ofColor::black);
+    ofFill();
+    //Draw a rectangle that shows the user drawable area
+    //Top
+    ofRect( guiW, 0, guiW+appW-RENDER_WINDOW_BORDER, RENDER_WINDOW_BORDER );
+    //Right
+    ofRect( guiW+appW-RENDER_WINDOW_BORDER, RENDER_WINDOW_BORDER, RENDER_WINDOW_BORDER, appH-RENDER_WINDOW_BORDER );
+    //Bottom
+    //ofRect(0, 410, 602, 60);
+    ofRect( guiW, appH-RENDER_WINDOW_BORDER, guiW+appW-RENDER_WINDOW_BORDER, RENDER_WINDOW_BORDER );
+    //Left
+    ofRect( guiW, RENDER_WINDOW_BORDER, RENDER_WINDOW_BORDER, appH-(RENDER_WINDOW_BORDER<<1) );
+
+    ofSetColor( ofColor::white );
 }
 
 
@@ -505,13 +480,7 @@ void testApp::exit()
 }
 
 //--------------------------------------------------------------
-void testApp::release( sem_t* mutex_)
-{
-    if(sem_post(mutex) < 0) {
-      perror("main thread: error on post semaphore");
-      _Exit(EXIT_FAILURE);
-    }
-}
+
 
 
 /***
@@ -549,8 +518,6 @@ void testApp::addPolygon( ofPtr<Polygon> polygon ){
 
 void testApp::addFractal( Fractal fractal )
 {
-    // polygons.push_back( ofPtr<Polygon>(dynamic_cast<Polygon *>( new Fractal( *tempFractal ) ) ) );
-
     ofPtr<Polygon> polygonPtr(dynamic_cast<Polygon *>( new Fractal( fractal ) ) );
     currentPolygon = polygons.insert( polygons.end(), polygonPtr );
     toServerPolygons.push_back(polygons.back());
@@ -559,7 +526,7 @@ void testApp::addFractal( Fractal fractal )
 void testApp::deleteLastPolygon()
 {
     polygons.pop_back();
-    //Maybe ww should not do this
+    // Maybe we should not do this
     toServerPolygons.pop_back();
 
     currentPolygon = polygons.begin();
@@ -631,6 +598,10 @@ void testApp::selectNextPolygon()
 }
 
 
+/***
+    7. Server communication
+***/
+
 void testApp::sendToServer()
 {
     // If there are polygons to copy to the server, copy them.
@@ -645,5 +616,14 @@ void testApp::sendToServer()
             server->unlock();
             toServerPolygons.clear();
         }
+    }
+}
+
+
+void testApp::release( sem_t* mutex_)
+{
+    if(sem_post(mutex) < 0) {
+      perror("main thread: error on post semaphore");
+      _Exit(EXIT_FAILURE);
     }
 }

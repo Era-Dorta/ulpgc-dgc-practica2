@@ -1,13 +1,15 @@
 
 #include "server.hpp"
 
+// Initialize the pointer (Singlenton pattern).
+Server* Server::instance = 0;
 
-Server* Server::instance = 0;// Inicializar el puntero
 
+/***
+    1. Private constructors (Singlenton pattern).
+***/
 Server::Server()
 {
-    //serverScript = "server.py"
-
     yAxis.set(0,1);
     brickPosition.set(0,0);
     brickAngle.set(0,1);
@@ -23,7 +25,11 @@ Server::Server()
     }
 }
 
-//--------------------------------------------------------------
+
+/***
+    2. Shared data access control.
+***/
+
 void Server::wait( sem_t* mutex_)
 {
     if(sem_wait(mutex_) < 0){
@@ -32,7 +38,6 @@ void Server::wait( sem_t* mutex_)
     }
 }
 
-//--------------------------------------------------------------
 void Server::release( sem_t* mutex_)
 {
     if(sem_post(mutex) < 0) {
@@ -40,6 +45,11 @@ void Server::release( sem_t* mutex_)
       _Exit(EXIT_FAILURE);
     }
 }
+
+
+/***
+    3. Initializations.
+***/
 
 Server* Server::getInstance()
 {
@@ -49,27 +59,10 @@ Server* Server::getInstance()
     return instance;
 }
 
-//--------------------------------------------------------------
-float Server::calculateAngle( const Vertex& vector0, const Vertex& vector1) const
-{
 
-    Vertex vertexCopy0 = vector0, vertexCopy1 = vector1;
-    vertexCopy0[H] = 0;
-    vertexCopy1[H] = 0;
-
-    //Cross product between final vector0 and vector1
-    Vertex aux = vertexCopy0*vertexCopy1;
-
-    //Arc sin gives us the angle between the vectors
-    float resAngle = acos(dotProduct(vertexCopy0, vertexCopy1));
-
-    //Use third coordinate to control if it is clockwise or
-    //anticlockwise
-    if(aux[H] > 0){
-        resAngle = -resAngle;
-    }
-    return resAngle*TO_DEGREES;
-}
+/***
+    4. NXT communication
+***/
 
 void Server::moveForNextPoint( const Vertex& finalPosition, const Vertex& finalVector )
 {
@@ -138,6 +131,11 @@ void Server::waitAck() const
     sprintf(command, "python server.py wait %d", WAIT_TIME);
     system(command);
 }
+
+
+/***
+    5. Drawing
+***/
 
 void Server::drawPolygon( ofPtr<Polygon> polygon )
 {
@@ -215,6 +213,11 @@ void Server::drawBrick() const
     ofSetColor(ofColor::white);
 }
 
+
+/***
+    6. Server main loop
+***/
+
 void Server::threadedFunction()
 {
     while( isThreadRunning() != 0 ){
@@ -237,7 +240,36 @@ void Server::threadedFunction()
     }
 }
 
+
+/***
+    7. Finalization
+***/
 void Server::exit()
 {
     sem_close(mutex);
+}
+
+
+/***
+    8. Auxiliar methods
+***/
+float Server::calculateAngle( const Vertex& vector0, const Vertex& vector1 ) const
+{
+
+    Vertex vertexCopy0 = vector0, vertexCopy1 = vector1;
+    vertexCopy0[H] = 0;
+    vertexCopy1[H] = 0;
+
+    //Cross product between final vector0 and vector1
+    Vertex aux = vertexCopy0*vertexCopy1;
+
+    //Arc sin gives us the angle between the vectors
+    float resAngle = acos(dotProduct(vertexCopy0, vertexCopy1));
+
+    //Use third coordinate to control if it is clockwise or
+    //anticlockwise
+    if(aux[H] > 0){
+        resAngle = -resAngle;
+    }
+    return resAngle*TO_DEGREES;
 }

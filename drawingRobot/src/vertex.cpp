@@ -2,7 +2,9 @@
 #include "vertex.hpp"
 
 
-/*                                 1. Initialization                         */
+/***
+    1. Initialization and destruction.
+***/
 
 Vertex::Vertex()
 {
@@ -13,23 +15,18 @@ Vertex::Vertex()
 	v[2] = 1;
 }
 
-Vertex::Vertex( const Vertex& b )
-{
-    v = new float[3];
-	for( unsigned int i=0; i<3; i++ ){
-		v[i] = b[i];
-	}
-}
-
 Vertex::Vertex( float x, float y, float h )
 {
     v = new float[3];
 	set( x, y , h);
 }
 
-Vertex::~Vertex()
+Vertex::Vertex( const Vertex& b )
 {
-    delete [] v;
+    v = new float[3];
+	for( unsigned int i=0; i<3; i++ ){
+		v[i] = b[i];
+	}
 }
 
 void Vertex::set( float x, float y, float h )
@@ -39,8 +36,15 @@ void Vertex::set( float x, float y, float h )
 	v[2] = h;
 }
 
+Vertex::~Vertex()
+{
+    delete [] v;
+}
 
-/*                                  2. Operators                             */
+
+/***
+    2. Operators
+***/
 
 void Vertex::operator = (const Vertex& b)
 {
@@ -114,6 +118,11 @@ Vertex Vertex::rotate( const float angle ) const
     return res;
 }
 
+
+/***
+    3. Utilities
+***/
+
 float Vertex::getNorm() const
 {
     return( sqrt( v[X]*v[X]+v[Y]*v[Y] ) );
@@ -131,17 +140,22 @@ Vertex Vertex::getUnitVector() const
     return res;
 }
 
-void Vertex::normalize(){
+void Vertex::normalize()
+{
     float invNorm = 1.0/getNorm();
     set( v[X]*invNorm, v[Y]*invNorm);
 }
 
-float Vertex::distance( const Vertex& b ) const{
+float Vertex::distance( const Vertex& b ) const
+{
     return sqrt( (v[X] - b[X])*(v[X] - b[X]) +
                 (v[Y] - b[Y])*(v[Y] - b[Y]) );
 }
 
-/*                                 3. << operator                            */
+
+/***
+    4. I/O
+***/
 
 ostream& operator << (ostream &out, const Vertex &vertex)
 {
@@ -153,6 +167,9 @@ ostream& operator << (ostream &out, const Vertex &vertex)
 }
 
 
+/***
+    5. Dot product
+***/
 float dotProduct( const Vertex& a, const Vertex& b )
 {
     return a[X]*b[X]+a[Y]*b[Y];

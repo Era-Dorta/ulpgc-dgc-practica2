@@ -3,7 +3,10 @@
 
 const unsigned N = 3;
 
-/*                              1. Initialization                            */
+
+/***
+    1. Initialization
+***/
 
 Matrix::Matrix()
 {
@@ -31,7 +34,9 @@ void Matrix::setZeros(){
 }
 
 
-/*                             2. Transformations                            */
+/***
+    2. Transformations
+***/
 
 void Matrix::setTranslation( float tx, float ty )
 {
@@ -58,7 +63,9 @@ void Matrix::setScale( float sx, float sy )
 }
 
 
-/*                                  3, Operators                             */
+/***
+    3, Operators
+***/
 
 Matrix& Matrix::operator * (const Matrix& b)
 {
@@ -75,7 +82,9 @@ Matrix& Matrix::operator * (const Matrix& b)
 }
 
 
-/*                                 4. << operator                            */
+/***
+    4. I/O
+***/
 
 ostream& operator << (ostream &out, const Matrix &matrix)
 {

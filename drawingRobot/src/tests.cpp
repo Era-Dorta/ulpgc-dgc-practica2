@@ -13,17 +13,18 @@ void Test::testAll()
 void Test::testTranslations()
 {
     for( unsigned int i=0; i<100; i++ ){
+        // Set random original 2D vertex and transformation
         x = -250+rand()%500;
         y = -250+rand()%500;
         tx = -250+rand()%500;
         ty = -250+rand()%500;
 
+        // Translate previous vertex.
         originalVertex.set( x, y );
-
         transMatrix.setTranslation( tx, ty );
-
         resultVertex = originalVertex*transMatrix;
 
+        // Check if resulting vertex equals to expected result.
         assert( (resultVertex[X] == x+tx)
                && (resultVertex[Y] == y+ty)
                && (resultVertex[H] == 1) );
@@ -36,17 +37,18 @@ void Test::testTranslations()
 void Test::testScales()
 {
     for( unsigned int i=0; i<100; i++ ){
+        // Set random original 2D vertex and transformation
         x = -250+rand()%500;
         y = -250+rand()%500;
         sx = -250+rand()%500;
         sy = -250+rand()%500;
 
+        // Scale previous vertex.
         originalVertex.set( x, y );
-
         transMatrix.setScale( sx, sy );
-
         resultVertex = originalVertex*transMatrix;
 
+        // Check if resulting vertex equals to expected result.
         assert( (resultVertex[X] == x*sx)
                && (resultVertex[Y] == y*sy)
                && (resultVertex[H] == 1) );
@@ -59,17 +61,17 @@ void Test::testScales()
 void Test::testRotations()
 {
     for( unsigned int i=0; i<100; i++ ){
+        // Set random original 2D vertex and transformation
         x = -250+rand()%500;
         y = -250+rand()%500;
         angle = -250+rand()%500;
 
-
+        // Rotate previous vertex.
         originalVertex.set( x, y );
-
         transMatrix.setRotation( angle );
-
         resultVertex = originalVertex*transMatrix;
 
+        // Check if resulting vertex equals to expected result.
         angle *= PI/180;
         assert( (resultVertex[X] == x*cos(angle)+y*sin(angle))
                && (resultVertex[Y] == -x*sin(angle)+y*cos(angle))
@@ -86,6 +88,7 @@ void Test::testCompoundTrasnformations()
     float aux;
 
     for( unsigned int i=0; i<100; i++ ){
+        // Set random original 2D vertex and transformations
         x = -250+rand()%500;
         y = -250+rand()%500;
         tx = -250+rand()%500;
@@ -94,8 +97,8 @@ void Test::testCompoundTrasnformations()
         sy = -250+rand()%500;
         angle = -250+rand()%500;
 
+        // Transform 2D vertex.
         originalVertex.set( x, y );
-
         transMatrix.setTranslation( tx, ty );
 
         auxMatrix.setScale( sx, sy );
@@ -106,14 +109,10 @@ void Test::testCompoundTrasnformations()
 
         resultVertex = originalVertex*transMatrix;
 
+
+        // Compute expected result.
         angle *= PI/180;
-/*
-	angle *= PI/180;
-	m[0][0] = cos(angle);
-	m[0][1] = -sin(angle);
-    m[1][0] = sin(angle);
-    m[1][1] = cos(angle);
-    */
+
         x = x+tx;
         y = y+ty;
 
@@ -124,6 +123,8 @@ void Test::testCompoundTrasnformations()
         x = x*cos(angle)+y*sin(angle);
         y = -aux*sin(angle)+y*cos(angle);
 
+
+        // Check if resulting vertex equals to expected result.
         assert( (resultVertex[X] == x)
                && (resultVertex[Y] == y)
                && (resultVertex[H] == 1) );
