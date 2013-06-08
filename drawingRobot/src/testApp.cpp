@@ -168,19 +168,6 @@ void testApp::setupGUI()
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
-    switch( key ){
-        case KEY_LEFT_ARROW:
-            // Select previous polygon in the list.
-            selectPreviousPolygon();
-        break;
-        case KEY_RIGHT_ARROW:
-            // Select next polygon in the list.
-            selectNextPolygon();
-        break;
-        default:
-            cout << "key: " << key << endl;
-        break;
-    }
 }
 
 //--------------------------------------------------------------
