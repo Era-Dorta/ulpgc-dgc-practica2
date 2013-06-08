@@ -1,5 +1,4 @@
 #include "testApp.h"
-using namespace std;
 
 // Indexes for handle left arrow and right arrow key strokes (tested in
 // Ubuntu).
@@ -169,7 +168,6 @@ void testApp::setupGUI()
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
-    Fractal* fractal = NULL;
     switch( key ){
         case KEY_LEFT_ARROW:
             // Select previous polygon in the list.
@@ -596,6 +594,17 @@ void testApp::selectPreviousPolygon()
         currentPolygon = polygons.end();
     }
     currentPolygon--;
+
+    if( (polygons.size() > 0) && (*currentPolygon)->getType() == FRACTAL ){
+        int newFractalDivisions = atoi( ((fractalDivisionsSelector->getActive())->getName()).c_str() );
+        Fractal* currentFractal = currentFractal = (dynamic_cast<Fractal *>((*currentPolygon).get()));
+        char str[10];
+
+        if( newFractalDivisions != currentFractal->getDivisions() ){
+            sprintf( str, "%d", currentFractal->getDivisions() );
+            fractalDivisionsSelector->activateToggle( str );
+        }
+    }
 }
 
 
@@ -604,6 +613,17 @@ void testApp::selectNextPolygon()
     currentPolygon++;
     if( currentPolygon == polygons.end() ){
         currentPolygon = polygons.begin();
+    }
+
+    if( (polygons.size() > 0) && (*currentPolygon)->getType() == FRACTAL ){
+        int newFractalDivisions = atoi( ((fractalDivisionsSelector->getActive())->getName()).c_str() );
+        Fractal* currentFractal = currentFractal = (dynamic_cast<Fractal *>((*currentPolygon).get()));
+        char str[10];
+
+        if( newFractalDivisions != currentFractal->getDivisions() ){
+            sprintf( str, "%d", currentFractal->getDivisions() );
+            fractalDivisionsSelector->activateToggle( str );
+        }
     }
 }
 

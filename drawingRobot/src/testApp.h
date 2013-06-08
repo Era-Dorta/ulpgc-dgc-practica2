@@ -11,6 +11,8 @@
 #include <semaphore.h>
 #include <fcntl.h> //O_CREAT and SEM_FAILED
 #include <cstdlib> //exit function
+#include <string>
+#include <iostream>
 using namespace std;
 // This macro tells the GUI not to load or save its current state to a XML
 // file.
@@ -22,7 +24,7 @@ using namespace std;
 
 // User Interface Library/Addon for openFrameworks created by rezaali :
 // https://github.com/rezaali/ofxUI
-#include <string>
+
 
 // Auxiliar macros for handling mouse button strokes.
 #define L_MOUSE 0
