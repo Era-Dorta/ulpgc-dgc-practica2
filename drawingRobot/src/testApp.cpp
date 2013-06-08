@@ -351,6 +351,20 @@ void testApp::guiEvent( ofxUIEventArgs &e )
                 for(unsigned int i = 0; i < polygons.size(); i++){
                     toServerPolygons.push_back( polygons[i] );
                 }
+
+                //If current is Fractal show appropiate nº of divisions on
+                //the user interface
+                if( (polygons.size() > 0) && (*currentPolygon)->getType() == FRACTAL ){
+                    newFractalDivisions = atoi( ((fractalDivisionsSelector->getActive())->getName()).c_str() );
+                    currentFractal = currentFractal = (dynamic_cast<Fractal *>((*currentPolygon).get()));
+                    char str[10];
+
+                    if( newFractalDivisions != currentFractal->getDivisions() ){
+                        sprintf( str, "%d", currentFractal->getDivisions() );
+                        fractalDivisionsSelector->activateToggle( str );
+                    }
+                }
+
                 fileNotFoundLabel->setVisible( false );
             }else{
                 fileNotFoundLabel->setVisible( true );
@@ -595,6 +609,7 @@ void testApp::selectPreviousPolygon()
     }
     currentPolygon--;
 
+    //If current is Fractal show appropiate nº of divisions on the UI
     if( (polygons.size() > 0) && (*currentPolygon)->getType() == FRACTAL ){
         int newFractalDivisions = atoi( ((fractalDivisionsSelector->getActive())->getName()).c_str() );
         Fractal* currentFractal = currentFractal = (dynamic_cast<Fractal *>((*currentPolygon).get()));
@@ -615,6 +630,7 @@ void testApp::selectNextPolygon()
         currentPolygon = polygons.begin();
     }
 
+    //If current is Fractal show appropiate nº of divisions on the UI
     if( (polygons.size() > 0) && (*currentPolygon)->getType() == FRACTAL ){
         int newFractalDivisions = atoi( ((fractalDivisionsSelector->getActive())->getName()).c_str() );
         Fractal* currentFractal = currentFractal = (dynamic_cast<Fractal *>((*currentPolygon).get()));
